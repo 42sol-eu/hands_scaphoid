@@ -3,11 +3,11 @@
 Simple test of PowerShell command translation.
 """
 
-from hands_scaphoid import PowerShellShell
+from hands_scaphoid import PowerShell
 
 def test_powershell_translation():
     """Test PowerShell command translation."""
-    shell = PowerShellShell()
+    shell = PowerShell()
     
     print("=== PowerShell Command Translation Test ===")
     print()

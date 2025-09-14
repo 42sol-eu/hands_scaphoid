@@ -9,7 +9,7 @@ The `Shell` class is the core of Hands Trapezium, providing secure command execu
 ### Creating a Shell Instance
 
 ```python
-from hands_trapezium import Shell
+from hands_scaphoid import Shell
 
 # Basic shell with current directory
 shell = Shell()
@@ -96,7 +96,7 @@ The `ShellContext` provides a cleaner way to use Shell functionality.
 ### Basic Context Usage
 
 ```python
-from hands_trapezium import ShellContext
+from hands_scaphoid import ShellContext
 
 with ShellContext() as shell:
     shell.allow("echo")
@@ -192,7 +192,7 @@ except subprocess.TimeoutExpired:
 ### Simple Script Runner
 
 ```python
-from hands_trapezium import ShellContext
+from hands_scaphoid import ShellContext
 
 def run_tests():
     """Run project tests."""

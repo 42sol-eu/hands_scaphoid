@@ -7,15 +7,15 @@ import platform
 import pytest
 from unittest.mock import patch, MagicMock
 
-from hands_scaphoid.WindowsShells import PowerShellShell, WslShell, create_powershell_shell, create_wsl_shell
+from hands_scaphoid.WindowsShells import PowerShell, WslShell, create_powershell_shell, create_wsl_shell
 
 
-class TestPowerShellShell:
+class TestPowerShell:
     """Test PowerShell shell command translation and execution."""
 
     def test_command_translation_ls(self):
         """Test ls command translation to Get-ChildItem."""
-        shell = PowerShellShell()
+        shell = PowerShell()
         
         # Basic ls
         translated = shell._translate_command("ls")
@@ -28,7 +28,7 @@ class TestPowerShellShell:
         
     def test_command_translation_cp(self):
         """Test cp command translation to Copy-Item."""
-        shell = PowerShellShell()
+        shell = PowerShell()
         
         # Basic copy
         translated = shell._translate_command("cp source.txt dest.txt")
@@ -41,7 +41,7 @@ class TestPowerShellShell:
         
     def test_command_translation_rm(self):
         """Test rm command translation to Remove-Item."""
-        shell = PowerShellShell()
+        shell = PowerShell()
         
         # Basic remove
         translated = shell._translate_command("rm file.txt")
@@ -55,7 +55,7 @@ class TestPowerShellShell:
         
     def test_command_translation_common_commands(self):
         """Test translation of common Unix commands."""
-        shell = PowerShellShell()
+        shell = PowerShell()
         
         test_cases = {
             "cat file.txt": "Get-Content file.txt",
@@ -71,7 +71,7 @@ class TestPowerShellShell:
             
     def test_untranslated_commands(self):
         """Test that unknown commands are not translated."""
-        shell = PowerShellShell()
+        shell = PowerShell()
         
         unknown_cmd = "some_unknown_command arg1 arg2"
         translated = shell._translate_command(unknown_cmd)
@@ -85,18 +85,18 @@ class TestPowerShellShell:
         
         # Test pwsh available
         mock_run.return_value = MagicMock(returncode=0)
-        shell = PowerShellShell()
+        shell = PowerShell()
         assert shell.shell_executable == "pwsh.exe"
         
         # Test pwsh not available, fallback to powershell
         mock_run.side_effect = FileNotFoundError()
-        shell = PowerShellShell()
+        shell = PowerShell()
         assert shell.shell_executable == "powershell.exe"
         
     def test_create_powershell_shell_convenience(self):
         """Test the convenience function for creating PowerShell shells."""
         shell = create_powershell_shell()
-        assert isinstance(shell, PowerShellShell)
+        assert isinstance(shell, PowerShell)
 
 
 class TestWslShell:
@@ -225,7 +225,7 @@ class TestWindowsShellIntegration:
     @pytest.mark.skipif(platform.system() != "Windows", reason="Windows-specific test")
     def test_powershell_real_command(self):
         """Test real PowerShell command execution on Windows."""
-        shell = PowerShellShell()
+        shell = PowerShell()
         shell.allow("echo")
         shell.allow("powershell.exe")
         shell.allow("pwsh.exe")

@@ -6,7 +6,7 @@ This module provides Windows PowerShell and WSL shell execution classes
 that extend the base Shell functionality with platform-specific features.
 
 Classes:
-    PowerShellShell: Translates Unix commands to PowerShell equivalents
+    PowerShell: Translates Unix commands to PowerShell equivalents
     WslShell: Executes commands in Windows Subsystem for Linux
 """
 
@@ -19,7 +19,7 @@ from typing import Dict, List, Optional, Union
 from .Shell import Shell
 
 
-class PowerShellShell(Shell):
+class PowerShell(Shell):
     """
     A PowerShell-compatible shell executor that translates Unix commands to PowerShell.
     
@@ -78,7 +78,7 @@ class PowerShellShell(Shell):
     }
 
     def __init__(self, *args, **kwargs):
-        """Initialize PowerShellShell with PowerShell as the default shell."""
+        """Initialize PowerShell with PowerShell as the default shell."""
         super().__init__(*args, **kwargs)
         self.shell_executable = "powershell.exe"
         if platform.system() == "Windows":
@@ -337,14 +337,14 @@ class WslShell(Shell):
 
 
 # Convenience functions for creating shell instances
-def create_powershell_shell(**kwargs) -> PowerShellShell:
+def create_powershell_shell(**kwargs) -> PowerShell:
     """
     Create a PowerShell shell instance.
     
     Returns:
-        PowerShellShell instance
+        PowerShell instance
     """
-    return PowerShellShell(**kwargs)
+    return PowerShell(**kwargs)
 
 
 def create_wsl_shell(distribution: str = "wsl", **kwargs) -> WslShell:

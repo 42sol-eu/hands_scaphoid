@@ -2,12 +2,12 @@
 """
 Example usage of Windows-specific shell classes.
 
-This example demonstrates how to use PowerShellShell and WslShell
+This example demonstrates how to use PowerShell and WslShell
 for cross-platform command execution on Windows systems.
 """
 
 import platform
-from hands_scaphoid import Shell, PowerShellShell, WslShell, create_powershell_shell, create_wsl_shell
+from hands_scaphoid import Shell, PowerShell, WslShell, create_powershell_shell, create_wsl_shell
 
 
 def demo_regular_shell():

@@ -2,17 +2,17 @@
 
 Hands Scaphoid provides specialized shell classes for Windows environments that make cross-platform development easier.
 
-## PowerShellShell
+## PowerShell
 
-The `PowerShellShell` class automatically translates common Unix commands to their PowerShell equivalents, allowing you to write cross-platform scripts using familiar Unix command syntax.
+The `PowerShell` class automatically translates common Unix commands to their PowerShell equivalents, allowing you to write cross-platform scripts using familiar Unix command syntax.
 
 ### Basic Usage
 
 ```python
-from hands_scaphoid import PowerShellShell
+from hands_scaphoid import PowerShell
 
 # Create a PowerShell shell
-shell = PowerShellShell()
+shell = PowerShell()
 
 # Allow commands (both Unix and PowerShell versions work)
 shell.allow("ls")         # Automatically translated to Get-ChildItem
@@ -115,13 +115,13 @@ distributions = get_available_wsl_distributions()
 
 ```python
 import platform
-from hands_scaphoid import Shell, PowerShellShell, WslShell
+from hands_scaphoid import Shell, PowerShell, WslShell
 
 def cross_platform_example():
     # Choose shell based on platform and requirements
     if platform.system() == "Windows":
         # Option 1: Use PowerShell for Windows compatibility
-        shell = PowerShellShell()
+        shell = PowerShell()
         
         # Option 2: Use WSL for Linux compatibility
         # shell = WslShell()
@@ -153,7 +153,7 @@ try:
 except RuntimeError as e:
     print(f"WSL not available: {e}")
     # Fallback to PowerShell or regular shell
-    shell = PowerShellShell()
+    shell = PowerShell()
     shell.allow("ls")
     result = shell.run("ls")
 ```
@@ -167,7 +167,7 @@ Both Windows shell classes inherit the same security model as the base `Shell` c
 
 ## Requirements
 
-- **PowerShellShell**: Works on any Windows system with PowerShell installed
+- **PowerShell**: Works on any Windows system with PowerShell installed
 - **WslShell**: Requires Windows Subsystem for Linux (WSL) to be installed and configured
 
 ## Platform Behavior

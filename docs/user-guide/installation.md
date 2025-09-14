@@ -17,14 +17,14 @@ pip install hands-trapezium
 You can also install directly from the GitHub repository:
 
 ```bash
-pip install git+https://github.com/42sol-eu/hands_trapezium.git
+pip install git+https://github.com/42sol-eu/hands_scaphoid.git
 ```
 
 Or clone the repository and install in development mode:
 
 ```bash
-git clone https://github.com/42sol-eu/hands_trapezium.git
-cd hands_trapezium
+git clone https://github.com/42sol-eu/hands_scaphoid.git
+cd hands_scaphoid
 pip install -e .
 ```
 
@@ -33,8 +33,8 @@ pip install -e .
 If you want to contribute to Hands Trapezium, install it in development mode with testing dependencies:
 
 ```bash
-git clone https://github.com/42sol-eu/hands_trapezium.git
-cd hands_trapezium
+git clone https://github.com/42sol-eu/hands_scaphoid.git
+cd hands_scaphoid
 pip install -e ".[dev]"
 ```
 
@@ -77,14 +77,14 @@ uv add hands-trapezium
 After installation, verify that Hands Trapezium is installed correctly:
 
 ```python
-import hands_trapezium
-print(hands_trapezium.__version__)
+import hands_scaphoid
+print(hands_scaphoid.__version__)
 ```
 
 Or use the command-line interface:
 
 ```bash
-python -m hands_trapezium --version
+python -m hands_scaphoid --version
 ```
 
 ## Dependencies

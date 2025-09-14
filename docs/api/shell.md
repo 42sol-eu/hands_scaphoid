@@ -1,3 +1,3 @@
 # Shell API Reference
 
-::: hands_trapezium.Shell
+::: hands_scaphoid.Shell
