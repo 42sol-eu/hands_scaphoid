@@ -59,6 +59,10 @@ jobs:
     - name: Install UV
       uses: astral-sh/setup-uv@v2
         
+    - name: Install dependencies
+      run: |
+        uv sync --extra docs
+        
     - name: Configure Git
       run: |
         git config --global user.name "github-actions[bot]"
@@ -67,9 +71,18 @@ jobs:
       run: |
         uv run pip show mkdocs-material || (echo "mkdocs-material missing from docs extra" && exit 1)
 
+    - name: Validate mkdocs config
+      run: |
+        uv run python -c "import yaml; yaml.safe_load(open('mkdocs.yml')); print('mkdocs.yml syntax is valid')"
+
     - name: Build documentation
       run: |
-        uv run mkdocs build
+        uv run mkdocs build --strict
+    
+    - name: Create .nojekyll file
+      run: |
+        touch site/.nojekyll
+        
     - name: Deploy documentation
       run: |
         uv run mkdocs gh-deploy --force

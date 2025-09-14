@@ -815,8 +815,7 @@ with ShellContext() as shell:
 Now that you understand the basics, explore these advanced topics:
 
 - [Basic Usage](user-guide/basic-usage.md) - Detailed usage examples
-- [Advanced Features](user-guide/advanced-features.md) - Advanced configuration options
-- [Docker Integration](user-guide/docker-integration.md) - Working with containers
+- [Windows Shells](windows-shells.md) - Windows PowerShell and WSL support
 - [API Reference](api/shell.md) - Complete API documentation
 # Hands Scaphoid
 
