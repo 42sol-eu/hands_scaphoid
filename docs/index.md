@@ -1,4 +1,4 @@
-# Examples
+# Scaphoid Examples
 
 This page provides practical examples of using Hands Scaphoid in real-world scenarios.
 
