@@ -44,14 +44,6 @@ theme:
 
 plugins:
   - search
-  - mkdocstrings:
-      handlers:
-        python:
-          options:
-            show_source: true
-            show_root_heading: true
-            show_root_toc_entry: false
-            docstring_style: google
 
 markdown_extensions:
   - admonition
