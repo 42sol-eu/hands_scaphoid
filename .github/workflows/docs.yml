@@ -73,4 +73,4 @@ jobs:
         uv run mkdocs build --strict        
     - name: Deploy documentation
       run: |
-        uv run mkdocs deploy --push --update-aliases main latest
+        uv run mkdocs gh-deploy --force
