@@ -1,10 +1,12 @@
 site_name: Hands scaphoid
 site_description: Secure shell execution context manager for Python
 site_author: Andreas Felix Häberle
-site_url: https://42sol-eu.github.io/hands_scaphoid
+site_url: https://42sol-eu.github.io/hands_scaphoid/
 
 repo_name: 42sol-eu/hands_scaphoid
 repo_url: https://github.com/42sol-eu/hands_scaphoid
+theme:
+  name: material
 
 nav:
   - Home: index.md

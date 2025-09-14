@@ -21,6 +21,7 @@ Projects: ["hands/palm/trapezium"]
 from __future__ import annotations
 
 import os
+import platform
 import subprocess
 import sys
 import time
@@ -111,8 +112,29 @@ class Shell:
 
             # check if available
             if do_check:
-                result = self.run(f'which {cmd}', timeout=2)
-                add = result.returncode == 0
+                # Use a different approach for checking command availability
+                # to avoid recursive call to run()
+                try:
+                    if platform.system() == "Windows":
+                        # On Windows, try 'where' command instead of 'which'
+                        check_result = subprocess.run(
+                            ['where', cmd], 
+                            capture_output=True, 
+                            timeout=2,
+                            env=self.env
+                        )
+                    else:
+                        # On Unix systems, use 'which'
+                        check_result = subprocess.run(
+                            ['which', cmd], 
+                            capture_output=True, 
+                            timeout=2,
+                            env=self.env
+                        )
+                    add = check_result.returncode == 0
+                except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError):
+                    add = True  # If we can't check, assume it's available
+                    console.print(f"⚠️ Could not verify availability of command: {cmd}")
             else:   
                 add = True
                 console.print(f"⚠️ Skipping availability check for command: {cmd}")

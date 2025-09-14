@@ -14,14 +14,14 @@ def demo_regular_shell():
     """Demonstrate regular shell usage."""
     print("=== Regular Shell Demo ===")
     
-    with Shell() as shell:
-        shell.allow("echo")
-        if platform.system() == "Windows":
-            shell.allow("cmd")
-        
-        result = shell.run("echo 'Hello from regular shell'")
-        print(f"Output: {result.stdout.strip()}")
-        print(f"Return code: {result.returncode}")
+    shell = Shell()
+    shell.allow("echo")
+    if platform.system() == "Windows":
+        shell.allow("cmd")
+    
+    result = shell.run("echo 'Hello from regular shell'")
+    print(f"Output: {result.stdout.strip()}")
+    print(f"Return code: {result.returncode}")
 
 
 def demo_powershell():
