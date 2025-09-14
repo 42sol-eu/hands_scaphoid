@@ -1,6 +1,6 @@
 [project]
 name = "hands-scaphoid"
-version = "2025.0.1"
+version = "2025.0.2"
 description = "Secure shell execution context manager *for Python with ease*"
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -28,7 +28,7 @@ docs = [
     "mkdocs>=1.5",
     "mkdocs-material>=9.0",
     "mkdocstrings[python]>=0.20",
-    "mkdocs-include-markdown-plugin>=0.9",  # <- add this line
+    "mkdocs-include-markdown-plugin>=0.9",
 ]
 [project.scripts]
 hands-scaphoid = "hands_scaphoid.main:main"

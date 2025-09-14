@@ -5,8 +5,6 @@ site_url: https://42sol-eu.github.io/hands_scaphoid/
 
 repo_name: 42sol-eu/hands_scaphoid
 repo_url: https://github.com/42sol-eu/hands_scaphoid
-theme:
-  name: material
 
 nav:
   - Home: index.md
@@ -14,14 +12,11 @@ nav:
   - User Guide:
     - Installation: user-guide/installation.md
     - Basic Usage: user-guide/basic-usage.md
-    - Advanced Features: user-guide/advanced-features.md
-    - Docker Integration: user-guide/docker-integration.md
+    - Windows Shells: windows-shells.md
   - API Reference:
     - Shell: api/shell.md
     - ShellContext: api/shell-context.md
   - Examples: examples.md
-  - Contributing: contributing.md
-  - Changelog: changelog.md
 
 theme:
   name: material

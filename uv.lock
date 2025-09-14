@@ -223,11 +223,10 @@ wheels = [
 
 [[package]]
 name = "hands-scaphoid"
-version = "2025.0.1"
+version = "2025.0.2"
 source = { editable = "." }
 dependencies = [
     { name = "click" },
-    { name = "mkdocs-material" },
     { name = "rich" },
 ]
 
@@ -262,7 +261,6 @@ requires-dist = [
     { name = "mkdocs", marker = "extra == 'docs'", specifier = ">=1.5" },
     { name = "mkdocs-include-markdown-plugin", marker = "extra == 'docs'", specifier = ">=0.9" },
     { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=9.0" },
-    { name = "mkdocs-material", extras = ["docs"], specifier = ">=9.6.19" },
     { name = "mkdocstrings", extras = ["python"], marker = "extra == 'docs'", specifier = ">=0.20" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0.0" },
     { name = "pytest", marker = "extra == 'test'", specifier = ">=7.0.0" },

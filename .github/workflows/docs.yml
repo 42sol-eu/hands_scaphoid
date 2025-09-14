@@ -26,6 +26,13 @@ jobs:
       run: |
         uv sync --extra docs
         
+    - name: Verify mkdocs dependencies
+      run: |
+        uv run pip show mkdocs
+        uv run pip show mkdocs-material
+        uv run pip show mkdocs-include-markdown-plugin
+        uv run mkdocs --version
+        
     - name: Build documentation
       run: |
         uv run mkdocs build --strict
