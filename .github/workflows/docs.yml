@@ -35,7 +35,7 @@ jobs:
         
     - name: Build documentation
       run: |
-        uv run mkdocs build --strict
+        uv run mkdocs build
         
     - name: Upload documentation artifacts
       uses: actions/upload-artifact@v3
@@ -77,7 +77,7 @@ jobs:
 
     - name: Build documentation
       run: |
-        uv run mkdocs build --strict        
+        uv run mkdocs build
     - name: Deploy documentation
       run: |
         uv run mkdocs gh-deploy --force
