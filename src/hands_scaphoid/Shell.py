@@ -103,7 +103,7 @@ class Shell:
         """
         do_check: bool = True
         
-        if command is str:
+        if isinstance(command, str):
             command = [command]
 
         for cmd in command:

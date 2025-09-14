@@ -64,7 +64,13 @@ jobs:
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        
+    - name: Verify mkdocs-material installed
+      run: |
+        uv run pip show mkdocs-material || (echo "mkdocs-material missing from docs extra" && exit 1)
+
+    - name: Build documentation
+      run: |
+        uv run mkdocs build --strict        
     - name: Deploy documentation
       run: |
-        uv run mike deploy --push --update-aliases main latest
+        uv run mkdocs deploy --push --update-aliases main latest

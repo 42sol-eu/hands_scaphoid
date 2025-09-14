@@ -10,6 +10,7 @@ authors = [
 requires-python = ">=3.11"
 dependencies = [
     "click>=8.0.0",
+    "mkdocs-material[docs]>=9.6.19",
     "rich>=13.0.0",
 ]
 
