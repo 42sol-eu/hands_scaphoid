@@ -1,0 +1,70 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch full history for mike versioning
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+        
+    - name: Install UV
+      uses: astral-sh/setup-uv@v2
+      
+    - name: Install dependencies
+      run: |
+        uv sync --extra docs
+        
+    - name: Build documentation
+      run: |
+        uv run mkdocs build --strict
+        
+    - name: Upload documentation artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: docs
+        path: site/
+
+  deploy-docs:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: build-docs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+        
+    - name: Install UV
+      uses: astral-sh/setup-uv@v2
+      
+    - name: Install dependencies
+      run: |
+        uv sync --extra docs
+        
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+    - name: Deploy documentation
+      run: |
+        uv run mike deploy --push --update-aliases main latest

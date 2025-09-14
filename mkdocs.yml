@@ -1,0 +1,78 @@
+site_name: Hands scaphoid
+site_description: Secure shell execution context manager for Python
+site_author: Andreas Felix Häberle
+site_url: https://42sol-eu.github.io/hands_scaphoid
+
+repo_name: 42sol-eu/hands_scaphoid
+repo_url: https://github.com/42sol-eu/hands_scaphoid
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - User Guide:
+    - Installation: user-guide/installation.md
+    - Basic Usage: user-guide/basic-usage.md
+    - Advanced Features: user-guide/advanced-features.md
+    - Docker Integration: user-guide/docker-integration.md
+  - API Reference:
+    - Shell: api/shell.md
+    - ShellContext: api/shell-context.md
+  - Examples: examples.md
+  - Contributing: contributing.md
+  - Changelog: changelog.md
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+
+plugins:
+  - search
+  - include-markdown  
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: true
+            show_root_heading: true
+            show_root_toc_entry: false
+            docstring_style: google
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/42sol-eu/hands_scaphoid
+  version:
+    provider: mike

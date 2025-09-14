@@ -1,0 +1,47 @@
+[project]
+name = "hands-scaphoid"
+version = "2025.0.1"
+description = "Secure shell execution context manager *for Python with ease*"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Andreas Felix Häberle", email = "felix@42sol.eu"},
+]
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.0.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+]
+test = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+]
+
+[project.scripts]
+hands-scaphoid = "hands_scaphoid.main:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "--cov=hands_scaphoid",
+    "--cov-report=term-missing",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "pytest-mock>=3.15.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
