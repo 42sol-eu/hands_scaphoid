@@ -1,4 +1,4 @@
-# Hands Scaphoid - shell commands and Pythonic handling of interactions with data 
+# Hands Scaphoid - Hierarchical File System Operations with Context Management
 
 [![PyPI version](https://badge.fury.io/py/hands-scaphoid.svg)](https://badge.fury.io/py/hands-scaphoid)
 [![Python Support](https://img.shields.io/pypi/pyversions/hands-scaphoid.svg)](https://pypi.org/project/hands-scaphoid/)
@@ -6,17 +6,20 @@
 [![Tests](https://github.com/42sol-eu/hands_scaphoid/workflows/Tests/badge.svg)](https://github.com/42sol-eu/hands_scaphoid/actions)
 [![Documentation Status](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://42sol-eu.github.io/hands_scaphoid/)
 
-A secure shell execution context manager for Python that provides controlled command execution with environment management, command allowlisting
+A Python library for hierarchical file system operations with context management. Provides both standalone operations classes and context managers for files, directories, and archives with path resolution and rich console output.
 
 ## 🚀 Features
 
-- **🔒 Secure Command Execution**: Allowlist-based command execution for enhanced security
-- **🌍 Environment Management**: Load and manage environment variables from files
-- **🎯 Context Management**: Clean global function injection for script-like usage
+- **� File Operations**: Read, write, append, and manipulate files with context management
+- **📂 Directory Operations**: Create, navigate, copy, and manage directories hierarchically
+- **📦 Archive Support**: Create, extract, and manipulate ZIP and TAR archives
+- **🔗 Hierarchical Context**: Automatic path resolution based on context stack
 - **✨ Rich Output**: Beautiful console output using Rich library
+- **🔄 Method Chaining**: Fluent API for chaining operations
 - **🔍 Type Safety**: Full type hints for better development experience
-- **⚡ Easy to Use**: Both object-oriented and functional interfaces
-- **🐳 Docker Integration**: - via `hands-traphezium`
+- **🎯 Dual Interface**: Both operations classes and context managers
+- **🧪 Dry Run Mode**: Test operations without making changes
+- **🌍 Global Functions**: Optional global function injection for script-like usage
 
 ## 📦 Installation
 
@@ -26,147 +29,249 @@ pip install hands-scaphoid
 
 ## 🏃‍♂️ Quick Start
 
-### Basic Usage
+### File Operations
 
 ```python
-from hands_scaphoid import ShellContext
+from hands_scaphoid import FileContext, File
 
-# Basic usage with context manager
-with ShellContext() as shell:
-    # Allow specific commands for security
-    shell.allow(["echo", "ls"])
-    
-    # Execute commands securely
-    result = shell.run("echo 'Hello, World!'")
-    print(result.stdout)  # Output: Hello, World!
-    
-    # Change directory
-    shell.cd("/tmp")
-    
-    # List files
-    result = shell.run("ls -la")
-    print(result.stdout)
+# Using context manager for hierarchical operations
+with DirectoryContext('~') as home:
+    with DirectoryContext('projects/myproject') as project:
+        # Context-aware file operations
+        with FileContext('config.txt') as config:
+            config.write_content('debug=true\nversion=1.0')
+            config.add_heading('Settings')
+            
+        # Read file with automatic path resolution
+        with FileContext('README.md') as readme:
+            content = readme.read_content()
+            print(content)
+
+# Using operations class directly
+File.write_content('path/to/file.txt', 'Hello, World!')
+content = File.read_content('path/to/file.txt')
 ```
 
-### Script-style usage
+### Directory Operations
 
 ```python
-from hands_scaphoid import ShellContext
+from hands_scaphoid import DirectoryContext, Directory
+
+# Context manager with hierarchical navigation
+with DirectoryContext('~') as home:
+    with DirectoryContext('projects') as projects:
+        # All operations are relative to current context
+        projects.create_directory('newproject')
+        
+        with DirectoryContext('newproject') as project:
+            # Nested context - operations are relative to projects/newproject
+            project.create_file('main.py', '#!/usr/bin/env python3\nprint("Hello, World!")')
+            
+            files = project.list_contents()
+            print(f"Project files: {files}")
+
+# Direct operations without context
+Directory.create_directory('path/to/new/dir')
+contents = Directory.list_contents('path/to/dir')
+```
+
+### Archive Operations
+
+```python
+from hands_scaphoid import ArchiveContext, Archive
+
+# Context manager for archive operations
+with DirectoryContext('~/projects') as projects:
+    # Create a ZIP archive
+    with ArchiveContext(source='myproject', target='backup.zip') as archive:
+        archive.add_file('README.md')
+        archive.add_directory('src')
+        
+        # List archive contents
+        contents = archive.list_contents()
+        print(f"Archive contains: {contents}")
+    
+    # Extract archive
+    with ArchiveContext(target='backup.zip') as archive:
+        archive.extract_all('restored_project')
+
+# Direct archive operations
+Archive.create_zip_archive('backup.zip', 'source_directory')
+Archive.extract_archive('backup.zip', 'extracted_files')
+```
+
+### Script-style Usage with Global Functions
+
+```python
+from hands_scaphoid import DirectoryContext
 
 # Use global functions for script-like experience
-with ShellContext():
+with DirectoryContext('~/projects', enable_globals=True):
     # Functions are available globally within the context
-    allow(["git", "echo"])
+    create_directory('newproject')
+    change_directory('newproject')
+    
+    # Create files with content
+    create_file('setup.py', '''
+from setuptools import setup, find_packages
 
-    cd("/path/to/project")
-    run("git status")
-    run("echo 'Build complete'")
+setup(
+    name="myproject",
+    version="0.1.0",
+    packages=find_packages(),
+)
+''')
+    
+    # Create project structure
+    create_directory('src/myproject')
+    create_file('src/myproject/__init__.py', '# My Project Package')
+    create_file('README.md', '# My Project\n\nA sample project.')
+    
+    # List project structure
+    files = list_contents('.')
+    print(f"Project structure: {files}")
 ```
 
-### Docker integration
-
-> [!Note]
-> Docker integration has moved to `hands_trapezium`.
+### Archive Management
 
 ```python
-from hands_scaphoid import ShellContext
+from hands_scaphoid import DirectoryContext, ArchiveContext
 
-with ShellContext() as shell:
-    allow("docker")
+# Create project backups with compression
+with DirectoryContext('~/projects') as projects:
+    # Create multiple archive formats
+    with ArchiveContext(source='myproject', target='backup.tar.gz', archive_type='tar.gz') as archive:
+        # Archive automatically includes the entire directory
+        info = archive.get_archive_info()
+        print(f"Compression ratio: {info['compression_ratio']:.2f}")
     
-    # Execute commands in containers
-    result = run_in("mycontainer", "ls /app")
-    
-    # Check if containers are running
-    depends_on(["web", "database"])
+    # Selective archiving
+    with ArchiveContext(target='important_files.zip') as archive:
+        archive.add_file('myproject/README.md')
+        archive.add_file('myproject/setup.py')
+        archive.add_directory('myproject/src')
 ```
 
-### Environment management
+## 🏗️ Architecture
 
-```python
-from hands_scaphoid import ShellContext
+Hands Scaphoid follows a clean separation of concerns:
 
-# Load environment from file
-with ShellContext(env_file=".env") as shell:
-    db_url = shell.get_env_var("DATABASE_URL")
-    
-    # Set additional variables
-    set_env_var("DEPLOYMENT", "production")
-```
+### Operations Classes (Pure Functions)
+- **`File`**: Static methods for file I/O operations
+- **`Directory`**: Static methods for directory operations  
+- **`Archive`**: Static methods for archive operations
 
-## Security model
+### Context Classes (Context Managers)
+- **`FileContext`**: Context manager that delegates to File operations
+- **`DirectoryContext`**: Context manager that delegates to Directory operations
+- **`ArchiveContext`**: Context manager that delegates to Archive operations
 
-Hands scaphoid uses an allowlist-based security model:
+This design allows you to use either approach:
+- **Direct operations**: `File.read_content('path')` for simple tasks
+- **Context managers**: `with FileContext('path') as f: f.read_content()` for hierarchical operations
 
-1. **No commands are allowed by default** 🚫
-2. **Commands must be explicitly allowed** using `allow()` ✅
-3. **Only the command name is checked**, not arguments
-4. **Commands are validated** to exist on the system
+## 🎯 Use Cases
 
-```python
-with ShellContext() as shell:
-    # This will fail - command not allowed
-    try:   
-        run("rm -rf /")
-    except PermissionError:
-        print("Security working! 🛡️")
-    
-    # Allow the command first
-    allow("echo")
-    run("echo 'This works!'")  # ✅ This succeeds
-```
+- **Project Setup**: Create consistent project structures with files and directories
+- **File Processing**: Read, process, and write files with automatic path resolution
+- **Backup Systems**: Create and manage archive files with compression
+- **Build Tools**: Automate file operations in build processes
+- **Data Processing**: Handle file operations in data pipelines
+- **Configuration Management**: Manage configuration files across different environments
 
 ## 📚 Documentation
 
 For comprehensive documentation, visit: **[https://42sol-eu.github.io/hands_scaphoid](https://42sol-eu.github.io/hands_scaphoid)**
 
-## 🎯 Use Cases
+### Key Concepts
 
-- **Deployment scripts**: Secure automation scripts with command validation
-- **CI/CD pipelines**: Controlled command execution in build processes
-- **System administration**: Safe system management scripts
-- **Docker workflows**: Seamless container command execution
-- **Development tools**: Build tools and development automation
+- **Hierarchical Contexts**: Context managers maintain a stack of current directories
+- **Path Resolution**: All paths are resolved relative to the current context
+- **Method Chaining**: Most operations return `self` for fluent interfaces
+- **Rich Output**: Operations provide colored console feedback
+- **Dry Run Mode**: Test operations without making file system changes
 
-## Example: Deployment Script
+## Example: Project Generator
 
 ```python
 #!/usr/bin/env python3
 """
-Simple deployment script using Hands/Scaphoid
+Project generator using Hands/Scaphoid
 """
-from hands_scaphoid import ShellContext
+from hands_scaphoid import DirectoryContext, FileContext
 
-def deploy_application():
-    with ShellContext(cwd="/app") as shell:
-        commands = ["git", "docker", "echo"]
-        allow(commands)
-        # Allow required commands
-        
-        try:
-            # Deploy workflow
-            run("git pull origin main")
-            run("docker build -t eden:latest .")
-            depends_on(["database", "redis"])  # Check dependencies
-            run("docker run -d --name eden eden:latest")
-            
-            print("✅ Deployment successful!")
-            
-        except Exception as e:
-            print(f"❌ Deployment failed: {e}")
-            return False
+def create_python_project(project_name: str, base_dir: str = "~/projects"):
+    """Create a new Python project structure."""
     
-    return True
+    with DirectoryContext(base_dir) as projects:
+        with DirectoryContext(project_name, create=True) as project:
+            # Create project structure
+            project.create_directory('src')
+            project.create_directory('tests')
+            project.create_directory('docs')
+            
+            # Create setup files
+            with FileContext('pyproject.toml') as pyproject:
+                pyproject.write_content(f'''[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "{project_name}"
+version = "0.1.0"
+description = "A new Python project"
+authors = [{{name = "Your Name", email = "your.email@example.com"}}]
+''')
+            
+            with FileContext('README.md') as readme:
+                readme.write_content(f'# {project_name.title()}\n\nA new Python project.')
+            
+            # Create source package
+            with DirectoryContext('src') as src:
+                with DirectoryContext(project_name, create=True) as pkg:
+                    with FileContext('__init__.py') as init:
+                        init.write_content(f'"""The {project_name} package."""\n__version__ = "0.1.0"')
+                    
+                    with FileContext('main.py') as main:
+                        main.write_content('''#!/usr/bin/env python3
+"""Main module."""
+
+def main():
+    """Main function."""
+    print("Hello from {project_name}!")
 
 if __name__ == "__main__":
-    deploy_application()
+    main()
+''')
+            
+            # Create test file
+            with DirectoryContext('tests') as tests:
+                with FileContext('test_main.py') as test:
+                    test.write_content(f'''"""Tests for {project_name}."""
+import pytest
+from {project_name} import main
+
+def test_main():
+    """Test the main function."""
+    # Test implementation here
+    pass
+''')
+            
+            print(f"✅ Created Python project: {project_name}")
+            
+            # Create backup
+            with ArchiveContext(source='.', target=f'{project_name}_backup.zip') as backup:
+                print(f"✅ Created backup: {project_name}_backup.zip")
+
+if __name__ == "__main__":
+    create_python_project("my_awesome_project")
 ```
 
 ## 🔧 Requirements
 
 - Python 3.11+
 - Rich library for console output
-- Click for CLI interface
+- pathlib for path operations
 
 ## 🤝 Contributing
 

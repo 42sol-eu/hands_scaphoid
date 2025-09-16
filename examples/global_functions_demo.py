@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Example demonstrating global function access.
+Example demonstrating context manager usage with separated architecture.
 
-This example shows how to use the File, Directory, and Archive contexts
-with global function access enabled.
+This example shows how to use the DirectoryContext, FileContext, and ArchiveContext
+with the new separated architecture design.
 """
 
 import sys
@@ -13,165 +13,165 @@ from pathlib import Path
 src_path = Path(__file__).parent.parent / "src"
 sys.path.insert(0, str(src_path))
 
-from hands_scaphoid.Directory import Directory
-from hands_scaphoid.File import File
-from hands_scaphoid.Archive import Archive
+from hands_scaphoid import DirectoryContext, FileContext, ArchiveContext
+from hands_scaphoid import Directory, File, Archive
 
 
-def demo_global_functions():
-    """Demonstrate global function access without object prefixes."""
-    print("=== Global Function Access Demo ===")
+def demo_context_managers():
+    """Demonstrate context managers with the new separated architecture."""
+    print("=== Context Manager Demo ===")
     
-    # Directory context with global functions
-    print("\n1. Directory context with global functions:")
-    with Directory("test_dir", create=True, enable_globals=True):
-        # These functions are now available globally without the object prefix
-        print("  - Calling list_contents() globally...")
-        list_contents()  # Instead of dir_context.list_contents()
-        print("  - Calling create_subdirectory() globally...")
-        create_subdirectory("subdir")
-        print("  - Calling list_contents() again...")
-        list_contents()
-        print("  ✅ Directory global functions working!")
+    # Directory context
+    print("\n1. Directory context operations:")
+    with DirectoryContext("test_dir", create=True) as dir_ctx:
+        print("  - Listing contents...")
+        dir_ctx.list_contents()
+        print("  - Creating subdirectory...")
+        dir_ctx.create_directory("subdir")
+        print("  - Listing contents again...")
+        dir_ctx.list_contents()
+        print("  ✅ Directory context working!")
     
-    # File context with global functions
-    print("\n2. File context with global functions:")
-    with File("test_dir/example.txt", create=True, enable_globals=True):
-        print("  - Calling write_line() globally...")
-        write_line("Hello from global functions!")
-        print("  - Calling write_line() again...")
-        write_line("This is written using global access.")
-        print("  - Calling add_heading() globally...")
-        add_heading("Global Functions")
-        print("  - Calling write_content() globally...")
-        write_content("Content added via global function access.")
-        print("  ✅ File global functions working!")
+    # File context
+    print("\n2. File context operations:")
+    with FileContext("test_dir/example.txt", create=True) as file_ctx:
+        print("  - Appending line...")
+        file_ctx.append_line("Hello from context managers!")
+        print("  - Appending another line...")
+        file_ctx.append_line("This is written using context management.")
+        print("  - Adding heading...")
+        file_ctx.add_heading("Context Managers")
+        print("  - Writing content...")
+        file_ctx.write_content("Content added via context manager.")
+        print("  ✅ File context working!")
     
-    # Archive context with global functions
-    print("\n3. Archive context with global functions:")
-    with Archive("test_archive.zip", create=True, enable_globals=True):
-        print("  - Calling add_file() globally...")
-        add_file("test_dir/example.txt", "example.txt")
-        print("  - Calling add_directory() globally...")
-        add_directory("test_dir", "test_directory")
-        print("  - Calling list_contents() globally...")
-        list_contents()
-        print("  ✅ Archive global functions working!")
+    # Archive context
+    print("\n3. Archive context operations:")
+    with ArchiveContext(target="test_archive.zip") as archive_ctx:
+        print("  - Adding file...")
+        archive_ctx.add_file("test_dir/example.txt", "example.txt")
+        print("  - Adding directory...")
+        archive_ctx.add_directory("test_dir", "test_directory")
+        print("  - Listing contents...")
+        contents = archive_ctx.list_contents()
+        print(f"    Archive contains: {contents}")
+        print("  ✅ Archive context working!")
+
+
+def demo_direct_operations():
+    """Demonstrate direct operations without context managers."""
+    print("\n=== Direct Operations Demo ===")
+    
+    print("\n1. Direct directory operations:")
+    Directory.create_directory("direct_test")
+    Directory.create_directory("direct_test/subdir")
+    files = Directory.list_contents("direct_test")
+    print(f"  - Created directory with contents: {files}")
+    
+    print("\n2. Direct file operations:")
+    File.write_content("direct_test/direct_file.txt", "Direct operations content")
+    File.append_line("direct_test/direct_file.txt", "Additional line")
+    content = File.read_content("direct_test/direct_file.txt")
+    print(f"  - File content: {repr(content[:50])}...")
+    
+    print("\n3. Direct archive operations:")
+    Archive.create_zip_archive("direct_archive.zip", "direct_test")
+    contents = Archive.list_archive_contents("direct_archive.zip")
+    print(f"  - Archive contents: {contents}")
+    print("  ✅ Direct operations working!")
 
 
 def demo_nested_contexts():
-    """Demonstrate nested contexts with global functions."""
+    """Demonstrate nested contexts with the new architecture."""
     print("\n=== Nested Contexts Demo ===")
     
-    with Directory("nested_test", create=True, enable_globals=True):
+    with DirectoryContext("nested_test", create=True) as dir_ctx:
         print("In directory context...")
-        print("  - Available function: list_contents()")
-        list_contents()
+        dir_ctx.list_contents()
         
-        with File("outer_file.txt", create=True, enable_globals=True):
-            print("In file context (inner scope)...")
-            print("  - Available function: write_line()")
-            write_line("Outer file content")
+        with FileContext("outer_file.txt", create=True) as file_ctx:
+            print("In file context (nested)...")
+            file_ctx.append_line("Outer file content")
             
-            # Note: When contexts are nested, the inner context's globals take precedence
-            # Directory functions are temporarily overridden by File functions
-            
-        # Back to directory context - directory functions available again
+        # Back to directory context
         print("Back in directory context...")
-        print("  - Available function: create_subdirectory()")
-        create_subdirectory("nested_dir")
+        dir_ctx.create_directory("nested_dir")
         
-        with Archive("nested.zip", create=True, enable_globals=True):
-            print("In archive context (inner scope)...")
-            print("  - Available function: add_file()")
-            add_file("outer_file.txt", "outer.txt")
-            print("  - Available function: list_contents()")
-            list_contents()
+        with ArchiveContext(target="nested.zip") as archive_ctx:
+            print("In archive context (nested)...")
+            archive_ctx.add_file("outer_file.txt", "outer.txt")
+            contents = archive_ctx.list_contents()
+            print(f"    Archive contents: {contents}")
             
         print("Back in directory context...")
-        print("  - Available function: list_contents()")
-        list_contents()
+        final_contents = dir_ctx.list_contents()
+        print(f"  Final directory contents: {final_contents}")
         print("  ✅ Nested contexts working!")
 
 
-def demo_dry_run_with_globals():
-    """Demonstrate dry-run mode with global functions."""
-    print("\n=== Dry-Run with Global Functions Demo ===")
+def demo_dry_run_mode():
+    """Demonstrate dry-run mode with the new architecture."""
+    print("\n=== Dry-Run Mode Demo ===")
     
     print("\n1. Dry-run directory operations:")
-    with Directory("dry_run_test", create=True, dry_run=True, enable_globals=True):
-        print("  - Calling create_subdirectory() in dry-run mode...")
-        create_subdirectory("would_create")
-        print("  - Calling list_contents() in dry-run mode...")
-        list_contents()  # Shows what would be listed
+    with DirectoryContext("dry_run_test", create=True, dry_run=True) as dir_ctx:
+        print("  - Creating subdirectory in dry-run mode...")
+        dir_ctx.create_directory("would_create")
+        print("  - Listing contents in dry-run mode...")
+        dir_ctx.list_contents()
     
     print("\n2. Dry-run file operations:")
-    with File("dry_run_file.txt", create=True, dry_run=True, enable_globals=True):
-        print("  - Calling write_line() in dry-run mode...")
-        write_line("This would be written in dry-run mode")
-        print("  - Calling add_heading() in dry-run mode...")
-        add_heading("Dry Run Heading")
+    with FileContext("dry_run_file.txt", create=True, dry_run=True) as file_ctx:
+        print("  - Writing content in dry-run mode...")
+        file_ctx.write_content("This would be written in dry-run mode")
+        print("  - Adding heading in dry-run mode...")
+        file_ctx.add_heading("Dry Run Heading")
         
-    print("  ✅ Dry-run with global functions working!")
+    print("  ✅ Dry-run mode working!")
 
 
-def demo_standalone_vs_global():
-    """Demonstrate the difference between standalone and global function usage."""
-    print("\n=== Standalone vs Global Functions Demo ===")
+def demo_method_chaining():
+    """Demonstrate method chaining with the new architecture."""
+    print("\n=== Method Chaining Demo ===")
     
-    print("\n1. Standalone usage (without context):")
-    # Create directory using standalone method
-    print("  - Calling Directory.create_directory() as standalone method...")
-    Directory.create_directory("standalone_test")
-    # Add file using standalone method
-    print("  - Calling File.write_file() as standalone method...")
-    File.write_file("standalone_test/standalone_file.txt", "Standalone content")
-    # Create archive using standalone method
-    print("  - Calling Archive.create_archive() as standalone method...")
-    Archive.create_archive("standalone.zip", "standalone_test")
-    print("  ✅ Standalone methods working!")
-    
-    print("\n2. Global functions usage (within context):")
-    with Directory("global_test", create=True, enable_globals=True):
-        # Using global functions (no object prefix needed)
-        print("  - Calling create_subdirectory() as global function...")
-        create_subdirectory("global_subdir")
-        print("  - Calling list_contents() as global function...")
-        list_contents()
+    with DirectoryContext("chaining_test", create=True) as dir_ctx:
+        # Method chaining with file operations
+        with FileContext("chained_file.txt", create=True) as file_ctx:
+            file_ctx.write_content("Starting content")\
+                    .append_line("Chained line 1")\
+                    .append_line("Chained line 2")\
+                    .add_heading("Chained Heading")\
+                    .append_line("After heading")
+            
+            content = file_ctx.read_content()
+            lines = len(content.split('\n'))
+            print(f"  - Created file with {lines} lines using method chaining")
         
-        with File("global_file.txt", create=True, enable_globals=True):
-            print("  - Calling write_line() as global function...")
-            write_line("Global function content")
-            print("  - Calling add_heading() as global function...")
-            add_heading("Global Functions")
-            
-        with Archive("global.zip", create=True, enable_globals=True):
-            print("  - Calling add_file() as global function...")
-            add_file("global_file.txt")
-            print("  - Calling list_contents() as global function...")
-            list_contents()
-            
-    print("  ✅ Global functions working!")
+        dir_contents = dir_ctx.list_contents()
+        print(f"  - Directory contents: {dir_contents}")
+        print("  ✅ Method chaining working!")
 
 
 if __name__ == "__main__":
-    print("Global Functions Demonstration")
-    print("==============================")
+    print("Context Manager Demonstration (Separated Architecture)")
+    print("====================================================")
     
     try:
-        demo_global_functions()
+        demo_context_managers()
+        demo_direct_operations()
         demo_nested_contexts()
-        demo_dry_run_with_globals()
-        demo_standalone_vs_global()
+        demo_dry_run_mode()
+        demo_method_chaining()
         
         print("\n🎉 All demonstrations completed successfully!")
         print("\nKey Features Demonstrated:")
-        print("✅ Global function access (no object prefix needed)")
-        print("✅ Nested contexts with proper function scope")
-        print("✅ Dry-run mode with global functions")
-        print("✅ Standalone vs context-managed operations")
-        print("\nNote: Global functions are automatically cleaned up when exiting contexts.")
-        print("This prevents namespace pollution and ensures proper isolation.")
+        print("✅ Context managers with separated architecture")
+        print("✅ Direct operations without context overhead")
+        print("✅ Nested contexts with proper scope management")
+        print("✅ Dry-run mode for testing operations")
+        print("✅ Method chaining for fluent interfaces")
+        print("\nNote: The separated architecture provides both context managers")
+        print("and direct operations for maximum flexibility.")
         
     except Exception as e:
         print(f"\n❌ Error during demonstration: {e}")
@@ -181,8 +181,9 @@ if __name__ == "__main__":
     finally:
         # Cleanup test files
         import shutil
-        test_paths = ["test_dir", "test_archive.zip", "nested_test", 
-                     "nested.zip", "standalone_test", "standalone.zip", "global_test", "global.zip"]
+        test_paths = ["test_dir", "test_archive.zip", "direct_test", 
+                     "direct_archive.zip", "nested_test", "nested.zip", 
+                     "chaining_test"]
         for path in test_paths:
             path_obj = Path(path)
             if path_obj.exists():

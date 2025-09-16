@@ -1,6 +1,6 @@
 [project]
 name = "hands-scaphoid"
-version = "2025.0.2"
+version = "2025.0.3"
 description = "Secure shell execution context manager *for Python with ease*"
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -10,7 +10,9 @@ authors = [
 requires-python = ">=3.11"
 dependencies = [
     "click>=8.0.0",
+    "cog>=0.16.7",
     "rich>=13.0.0",
+    "ruff>=0.13.0",
 ]
 
 [project.optional-dependencies]
@@ -35,10 +37,10 @@ hands-scaphoid = "hands_scaphoid.main:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = [
-    "--cov=hands_scaphoid",
-    "--cov-report=term-missing",
-]
+# addopts = [
+#     "--cov=hands_scaphoid",
+#     "--cov-report=term-missing",
+# ]
 
 [dependency-groups]
 dev = [

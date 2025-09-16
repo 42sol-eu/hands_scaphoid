@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Example demonstrating global function access and ShellContext integration.
+Example demonstrating integration between file system contexts and shell operations.
 
-This example shows how to use the File, Directory, and Archive contexts
-with global function access and integration with ShellContext.
+This example shows how to use the DirectoryContext, FileContext, and ArchiveContext
+with shell operations using the new separated architecture.
 """
 
 import sys
@@ -13,118 +13,197 @@ from pathlib import Path
 src_path = Path(__file__).parent.parent / "src"
 sys.path.insert(0, str(src_path))
 
-from hands_scaphoid.Directory import Directory
-from hands_scaphoid.File import File
-from hands_scaphoid.Archive import Archive
+from hands_scaphoid import DirectoryContext, FileContext, ArchiveContext
+from hands_scaphoid import Directory, File, Archive
 from hands_scaphoid.ShellContext import ShellContext
 
 
-def demo_global_functions():
-    """Demonstrate global function access without object prefixes."""
-    print("\n=== Global Function Access Demo ===")
+def demo_filesystem_shell_integration():
+    """Demonstrate integration between file system operations and shell commands."""
+    print("\n=== File System and Shell Integration Demo ===")
     
-    # Directory context with global functions
-    print("\n1. Directory context with global functions:")
-    with Directory("test_dir", create=True, enable_globals=True):
-        # These functions are now available globally without the object prefix
-        list_contents()  # Instead of dir_context.list_contents()
-        create_subdirectory("subdir")
-        list_contents()
-    
-    # File context with global functions
-    print("\n2. File context with global functions:")
-    with File("test_dir/example.txt", create=True, enable_globals=True):
-        write_line("Hello from global functions!")
-        write_line("This is written using global access.")
-        add_heading("Global Functions")
-        write_content("Content added via global function access.")
-    
-    # Archive context with global functions
-    print("\n3. Archive context with global functions:")
-    with Archive("test_archive.zip", create=True, enable_globals=True):
-        add_file("test_dir/example.txt", "example.txt")
-        add_directory("test_dir", "test_directory")
-        list_contents()
+    # Directory context with shell integration
+    print("\n1. Directory operations with shell commands:")
+    with DirectoryContext("test_dir", create=True) as dir_ctx:
+        # File system operations
+        dir_ctx.create_directory("subdir")
+        dir_ctx.list_contents()
+        
+        # Create files using file context
+        with FileContext("example.txt", create=True) as file_ctx:
+            file_ctx.append_line("Hello from integrated operations!")
+            file_ctx.append_line("This combines file system and shell operations.")
+            file_ctx.add_heading("Integration Example")
+            file_ctx.write_content("Content added via context manager.")
+        
+        # Create archive using archive context
+        with ArchiveContext(target="../test_archive.zip") as archive_ctx:
+            archive_ctx.add_file("example.txt", "example.txt")
+            archive_ctx.add_directory("subdir", "test_subdirectory")
+            contents = archive_ctx.list_contents()
+            print(f"Archive contents: {contents}")
+        
+        print("  ✅ File system operations completed!")
 
 
-def demo_shellcontext_integration():
-    """Demonstrate integration with ShellContext."""
-    print("\n=== ShellContext Integration Demo ===")
+def demo_shell_with_filesystem():
+    """Demonstrate shell operations combined with file system contexts."""
+    print("\n2. Shell operations with file system context:")
     
-    # Using ShellContext alongside File/Directory contexts
-    print("\n1. Combined usage with ShellContext:")
+    # Shell context with file system operations
     with ShellContext() as shell:
-        # Shell functions are available globally
-        allow("ls")
-        allow("cat")
-        allow("mkdir")
+        shell.allow("ls")
+        shell.allow("cat") 
+        shell.allow("mkdir")
+        shell.allow("echo")
+        shell.allow("pwd")
         
-        # Use shell commands alongside file context
-        with Directory("shell_test", create=True, enable_globals=True):
-            # Both shell and directory functions available
-            run("ls -la")  # Shell command
-            create_subdirectory("shell_created")  # Directory function
+        # Create directory using shell, then operate on it with context manager
+        shell.run("mkdir -p shell_test")
+        
+        with DirectoryContext("shell_test") as dir_ctx:
+            # Mix shell commands and context operations
+            print("    Current directory contents (shell):")
+            shell.run("ls -la")
             
-            with File("shell_file.txt", create=True, enable_globals=True):
-                write_line("Created with mixed shell and file context")
+            # File operations via context manager
+            dir_ctx.create_directory("context_created")
+            
+            with FileContext("mixed_file.txt", create=True) as file_ctx:
+                file_ctx.append_line("Created with mixed shell and context operations")
                 
-            # Use shell to display the file
-            run("cat shell_file.txt")
-
-
-def demo_nested_contexts():
-    """Demonstrate nested contexts with global functions."""
-    print("\n=== Nested Contexts Demo ===")
-    
-    with Directory("nested_test", create=True, enable_globals=True):
-        print("In directory context...")
-        list_contents()
-        
-        with File("outer_file.txt", create=True, enable_globals=True):
-            print("In file context...")
-            write_line("Outer file content")
+            # Show results with shell command
+            print("    File content (shell):")
+            shell.run("cat mixed_file.txt")
             
-            # Note: When contexts are nested, the inner context's globals take precedence
-            # Directory functions are temporarily overridden by File functions
-            
-        # Back to directory context - directory functions available again
-        print("Back in directory context...")
-        create_subdirectory("nested_dir")
+            print("  ✅ Mixed shell and context operations completed!")
+
+
+def demo_nested_integration():
+    """Demonstrate nested contexts with both file system and shell operations."""
+    print("\n3. Nested contexts with integrated operations:")
+    
+    with DirectoryContext("integration_test", create=True) as outer_dir:
+        outer_contents = outer_dir.list_contents()
+        print(f"  Outer directory contents: {outer_contents}")
         
-        with Archive("nested.zip", create=True, enable_globals=True):
-            print("In archive context...")
-            add_file("outer_file.txt", "outer.txt")
-            list_contents()
+        with FileContext("outer_file.txt", create=True) as outer_file:
+            outer_file.append_line("Outer file content")
+            
+        # Nested directory context
+        with DirectoryContext("nested_context") as nested_dir:
+            nested_dir.create_directory("deep_nested")
+            
+            # Shell operations within nested context
+            with ShellContext() as shell:
+                shell.allow("ls")
+                shell.allow("pwd")
+                shell.allow("echo")
+                
+                print("    Shell operations within nested context:")
+                shell.run("pwd")
+                shell.run("ls -la")
+                
+                # Archive within nested shell context
+                with ArchiveContext(target="nested_archive.zip") as archive:
+                    archive.add_file("../outer_file.txt", "outer.txt")
+                    nested_contents = archive.list_contents()
+                    print(f"    Nested archive contents: {nested_contents}")
+                    
+        final_contents = outer_dir.list_contents()
+        print(f"  Final outer directory contents: {final_contents}")
+        print("  ✅ Nested integration completed!")
 
 
-def demo_dry_run_with_globals():
-    """Demonstrate dry-run mode with global functions."""
-    print("\n=== Dry-Run with Global Functions Demo ===")
+def demo_error_handling_integration():
+    """Demonstrate error handling with integrated operations."""
+    print("\n4. Error handling with integrated operations:")
     
-    print("\n1. Dry-run directory operations:")
-    with Directory("dry_run_test", create=True, dry_run=True, enable_globals=True):
-        create_subdirectory("would_create")
-        list_contents()  # Shows what would be listed
+    try:
+        with DirectoryContext("error_test", create=True) as dir_ctx:
+            # Try shell operation that might fail
+            with ShellContext() as shell:
+                shell.allow("ls")
+                try:
+                    shell.run("ls nonexistent_file")
+                except Exception as e:
+                    print(f"    Shell error handled: {e}")
+                
+                # Continue with file operations despite shell error
+                with FileContext("recovery_file.txt", create=True) as file_ctx:
+                    file_ctx.write_content("Recovered from shell error")
+                    content = file_ctx.read_content()
+                    print(f"    Recovery file content: {repr(content[:30])}...")
+                    
+            print("  ✅ Error handling integration completed!")
+                    
+    except Exception as e:
+        print(f"  ❌ Unexpected error: {e}")
+
+
+def demo_performance_comparison():
+    """Compare performance of different integration approaches."""
+    print("\n5. Performance comparison of integration approaches:")
     
-    print("\n2. Dry-run file operations:")
-    with File("dry_run_file.txt", create=True, dry_run=True, enable_globals=True):
-        write_line("This would be written in dry-run mode")
-        add_heading("Dry Run Heading")
+    import time
+    
+    # Direct operations approach
+    start_time = time.time()
+    for i in range(5):
+        Directory.create_directory(f"perf_direct_{i}")
+        File.write_content(f"perf_direct_{i}/file.txt", f"Content {i}")
+        Archive.create_zip_archive(f"perf_direct_{i}.zip", f"perf_direct_{i}")
+    direct_time = time.time() - start_time
+    
+    # Context manager approach
+    start_time = time.time()
+    for i in range(5):
+        with DirectoryContext(f"perf_context_{i}", create=True) as dir_ctx:
+            with FileContext("file.txt", create=True) as file_ctx:
+                file_ctx.write_content(f"Content {i}")
+            with ArchiveContext(target=f"../perf_context_{i}.zip", source=".") as archive:
+                pass  # Archive is created automatically
+    context_time = time.time() - start_time
+    
+    # Shell integration approach
+    start_time = time.time()
+    with ShellContext() as shell:
+        shell.allow("mkdir")
+        shell.allow("echo")
+        shell.allow("zip")
+        for i in range(5):
+            shell.run(f"mkdir -p perf_shell_{i}")
+            with FileContext(f"perf_shell_{i}/file.txt", create=True) as file_ctx:
+                file_ctx.write_content(f"Content {i}")
+            shell.run(f"cd perf_shell_{i} && zip ../perf_shell_{i}.zip file.txt")
+    shell_time = time.time() - start_time
+    
+    print(f"  Direct operations: {direct_time:.4f}s")
+    print(f"  Context managers: {context_time:.4f}s")
+    print(f"  Shell integration: {shell_time:.4f}s")
+    print("  ✅ Performance comparison completed!")
 
 
 if __name__ == "__main__":
-    print("Global Functions and ShellContext Integration Example")
-    print("====================================================")
+    print("File System and Shell Integration Demonstration")
+    print("==============================================")
     
     try:
-        demo_global_functions()
-        demo_shellcontext_integration()
-        demo_nested_contexts()
-        demo_dry_run_with_globals()
+        demo_filesystem_shell_integration()
+        demo_shell_with_filesystem()
+        demo_nested_integration()
+        demo_error_handling_integration()
+        demo_performance_comparison()
         
-        print("\n✅ All demonstrations completed successfully!")
-        print("\nNote: Global functions are automatically cleaned up when exiting contexts.")
-        print("This prevents namespace pollution and ensures proper isolation.")
+        print("\n🎉 All integration demonstrations completed successfully!")
+        print("\nKey Features Demonstrated:")
+        print("✅ File system context managers with shell operations")
+        print("✅ Mixed shell and context manager operations")
+        print("✅ Nested contexts with integrated functionality")
+        print("✅ Error handling across different operation types")
+        print("✅ Performance comparison of integration approaches")
+        print("\nNote: The separated architecture allows flexible")
+        print("integration between different operation types.")
         
     except Exception as e:
         print(f"\n❌ Error during demonstration: {e}")
@@ -134,12 +213,28 @@ if __name__ == "__main__":
     finally:
         # Cleanup test files
         import shutil
-        test_paths = ["test_dir", "test_archive.zip", "shell_test", "nested_test", "nested.zip"]
-        for path in test_paths:
-            path_obj = Path(path)
-            if path_obj.exists():
-                if path_obj.is_dir():
-                    shutil.rmtree(path_obj)
-                else:
-                    path_obj.unlink()
-        print("\n🧹 Cleanup completed.")
+        cleanup_patterns = [
+            "test_dir", "test_archive.zip", "shell_test", "integration_test",
+            "error_test", "perf_direct_*", "perf_context_*", "perf_shell_*"
+        ]
+        
+        for pattern in cleanup_patterns:
+            if '*' in pattern:
+                # Handle wildcard patterns
+                import glob
+                for path in glob.glob(pattern):
+                    path_obj = Path(path)
+                    if path_obj.exists():
+                        if path_obj.is_dir():
+                            shutil.rmtree(path_obj)
+                        else:
+                            path_obj.unlink()
+            else:
+                path_obj = Path(pattern)
+                if path_obj.exists():
+                    if path_obj.is_dir():
+                        shutil.rmtree(path_obj)
+                    else:
+                        path_obj.unlink()
+        
+        print("\n🧹 Integration cleanup completed.")
