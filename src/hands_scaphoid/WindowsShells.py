@@ -17,6 +17,7 @@ import subprocess
 from typing import Dict, List, Optional, Union
 
 from .Shell import Shell
+from .__base__ import console
 
 
 class PowerShell(Shell):
@@ -276,7 +277,7 @@ class WslShell(Shell):
             if base_command not in self.allow_commands:
                 raise PermissionError(f"Command '{base_command}' is not allowed. Use allow() first.")
             
-            print(f"$ (WSL) {command_with_args}")
+            console.print(f"[bold]$ (WSL) {command_with_args}[/bold]")
             
             # Execute the wrapped command
             return subprocess.run(

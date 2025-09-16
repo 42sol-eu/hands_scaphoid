@@ -21,10 +21,13 @@ Projects: ["hands/palm/trapezium"]
 """
 
 import os
+from pathlib import Path
+import zipfile
 import subprocess
 import sys
 import time
-from typing import Any
+from typing import Any, Union, Optional, IO
+PathLike = Union[str, Path]
 
 from rich import print
 from rich.console import Console

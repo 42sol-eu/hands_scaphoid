@@ -84,9 +84,9 @@ class Shell:
                                 key, value = line.split("=", 1)
                                 self.env[key.strip()] = value.strip()
                             except ValueError:
-                                print(f"Warning: Invalid line {line_num} in {self.env_file}: {line}")
+                                console.print(f"[yellow]Warning: Invalid line {line_num} in {self.env_file}: {line}[/yellow]")
             except IOError as e:
-                print(f"Warning: Could not read env file {self.env_file}: {e}")
+                console.print(f"[yellow]Warning: Could not read env file {self.env_file}: {e}[/yellow]")
 
     def allow(self, command: Union[str, List[str]]) -> bool:
         """
@@ -188,7 +188,7 @@ class Shell:
                     
         command_name = command_parts[0]
         
-        print(f"$ {command_with_args}")
+        console.print(f"[bold]$ {command_with_args}[/bold]")
         
         if command_name not in self.allow_commands:
             raise PermissionError(f"Command '{command_name}' is not allowed. Use allow() first.")
@@ -206,7 +206,7 @@ class Shell:
             )
             
             if result.stderr and capture_output:
-                print("Error:", result.stderr, file=sys.stderr)
+                console.print(f"[red]Error: {result.stderr}[/red]")
                 
             self.last_result = result
             return result
@@ -215,7 +215,7 @@ class Shell:
             self.last_result = e
             raise
         except subprocess.TimeoutExpired as e:
-            print(f"Command timed out after {timeout} seconds: {command_with_args}")
+            console.print(f"[red]Command timed out after {timeout} seconds: {command_with_args}[/red]")
             raise
 
     def run_in(
@@ -360,7 +360,7 @@ class Shell:
 
             for name in names:
                 if name not in running_containers:
-                    print(f"Container {name} is not running!")
+                    console.print(f"[red]Container {name} is not running![/red]")
                     sys.exit(2)
 
             return True
