@@ -16,10 +16,9 @@ project:
 """
 # %% [External imports]
 import ast               #!md| [docs](https://docs.python.org/3/library/ast.html)
-from Enums import Enum   #!md| [docs](https://docs.python.org/3/library/enum.html)
+from enum import Enum    #!md| [docs](https://docs.python.org/3/library/enum.html)
 from pathlib import (    #!md| [docs](https://docs.python.org/3/library/pathlib.html)
     Path as FsPath,
-    PurePath,
 )
 import subprocess        #!md| [docs](https://docs.python.org/3/library/subprocess.html)
 from typing import Any, Union, Optional
@@ -346,7 +345,7 @@ def check_cog_consistency(folder_path: PathLike, include_private: bool, cleanup:
 # %% [Main]
 @command()
 @argument("folder",          type=Path(exists=True, file_okay=False, dir_okay=True))
-@option("--all",             type=bool,
+@option("--all-files",       type=bool,
     is_flag=True,
     default=False,
     help="Scan all Python files in the folder and add all classes/functions to __init__.py.",
@@ -371,7 +370,7 @@ def check_cog_consistency(folder_path: PathLike, include_private: bool, cleanup:
     default=False,
     help="Check if COG-generated content matches what would be generated (requires existing COG checksums).",
 )
-def cli(folder, all, include_private, cleanup, group_by_file, cog_check):
+def cli(folder, all_files, include_private, cleanup, group_by_file, cog_check):
     """Semi-manual CLI for updating __init__.py files in a folder."""
     folder_path = FsPath(folder)
     
@@ -453,7 +452,7 @@ def cli(folder, all, include_private, cleanup, group_by_file, cog_check):
         return
 
     # Handle interactive mode vs all mode
-    if not all:
+    if not all_files:
         # Interactive mode - show file selection
         secho("Python files in folder:", fg="cyan")
         for idx, f in enumerate(py_files):
