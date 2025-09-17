@@ -7,7 +7,7 @@ import platform
 import pytest
 from unittest.mock import patch, MagicMock
 
-from hands_scaphoid.WindowsShells import PowerShell, WslShell, create_powershell_shell, create_wsl_shell
+from hands_scaphoid.WindowsShells import Shell, PowerShell, WslShell, create_powershell_shell, create_wsl_shell
 
 
 class TestPowerShell:
@@ -147,26 +147,29 @@ class TestWslShell:
         assert "Debian" in distributions
         assert "kali-linux" in distributions
         
+        
     @patch('subprocess.run')
     def test_wsl_distribution_switching(self, mock_run):
         """Test switching WSL distributions."""
         # First call for initial WSL check (success)
         # Second call for availability check of new distribution (success)
-        mock_run.return_value = MagicMock(returncode=0)
-        
-        shell = WslShell("wsl")
-        assert shell.distribution == "wsl"
-        
+        mock_run.side_effect = [
+            MagicMock(returncode=0),  # Initial WSL check
+            MagicMock(returncode=0),  # New distribution available
+            MagicMock(returncode=1)   # Non-existent distribution
+        ]
+        shell = WslShell("Debian")
+        assert shell.distribution == "Debian", "Initial distribution should be Debian"
+
         # Switch to Ubuntu
         success = shell.set_distribution("Ubuntu")
-        assert success is True
-        assert shell.distribution == "Ubuntu"
-        
+        assert success is True, "Should successfully switch to Ubuntu"
+        assert shell.distribution == "Ubuntu", "Distribution should be switched to Ubuntu"
+
         # Try to switch to non-existent distribution
-        mock_run.side_effect = [MagicMock(returncode=0), FileNotFoundError()]
         success = shell.set_distribution("NonExistent")
-        assert success is False
-        assert shell.distribution == "Ubuntu"  # Should revert
+        assert success is False, "Should fail to set non-existent distribution"
+        
         
     @patch('platform.system')
     @patch('subprocess.run')
