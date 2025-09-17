@@ -8,6 +8,7 @@ repo_url: https://github.com/42sol-eu/hands_scaphoid
 
 nav:
   - Home: index.md
+  - Summary: operations/summary.md
   - Getting Started: getting-started.md
   - User Guide:
     - Installation: user-guide/installation.md
@@ -17,6 +18,7 @@ nav:
     - Shell: api/shell.md
     - ShellContext: api/shell-context.md
   - Examples: examples.md
+  - Plugin Features Test: plugin-features-test.md
 
 theme:
   name: material
@@ -44,6 +46,16 @@ theme:
 
 plugins:
   - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_root_heading: true
+            show_source: true
+            members_order: source
+            group_by_category: true
+            show_category_heading: true
 
 markdown_extensions:
   - admonition

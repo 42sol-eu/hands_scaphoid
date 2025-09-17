@@ -51,7 +51,8 @@ Types of operations:
 | U      | update        | write-access that modifies existing meta data     |
 | C      | create        | write-access that creates new data (no overwrite) |
 | W      | write         | write-access that extends or over-writes data     |
-| D      | delete/remove | write-access that destroys data                   |
+| D      | delete/remove | delete-access that destroys data                   |
+| E      | execute       | unknown-access execute-access that runs a program or script      |
 
 
 === Generic Operations
@@ -83,6 +84,8 @@ Types of operations:
 | delete( path, recursive=false )    | D      | `rm {path}`             | Delete the object at the given path                    |
 | delete( path, recursive=true )     | D+     | `rm -r {path}`          | Recursively delete the object at the given path        |
 | unmount( mount_point )             | D      | `umount {path}`         | Unmount a remote file system from the given mount point |
+| execute( file_path, args )        | E      | `{file_path} {args}`    | Execute a file at the given path with optional arguments |
+
 === Generic commands
 
 | Operation                          | Bash                  | Description                                          |

@@ -2,7 +2,17 @@
 
 This page provides practical examples of using Hands Scaphoid in real-world scenarios.
 
-## Deployment scripts
+## Introduction
+
+Hands Scaphoid is a powerful tool for securely executing shell commands in Python. Below are several example scripts demonstrating its capabilities in various contexts, including deployment, development workflows, DevOps automation, and file processing.
+
+Learn more about the items and objects in [Operations Summary](operations/summary.md) and get started with the basics.
+
+Already a pro, go to [Getting Started](getting-started.md))
+
+## Example: Deployment scripts
+
+More examples can be found in [Examples](examples.md).
 
 ### Simple web app deployment
 
