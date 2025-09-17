@@ -15,13 +15,18 @@ Description:
 Authors: ["Andreas Häberle"]
 """
 
+
+from .Object import Object
+from .type_enums import ItemType
 from pathlib import Path
 from typing import List, Optional, Union
 from .__base__ import PathLike, console
+import shutil
 
 
-class File:
+class File(Object):
     """
+    Represents a file in the shell context.
     Pure file operations class without context management.
     
     This class provides static methods for file operations that can be used
@@ -33,7 +38,19 @@ class File:
         File.write_content(Path("config.txt"), "setting=value")
         content = File.read_content(Path("config.txt"))
         File.append_line(Path("log.txt"), "New log entry")
+    
+    Attributes:
+        name (str): The name of the file.
+        path (str): The path of the file in the filesystem.
     """
+
+    def __init__(self, name: str, path: str):
+        super().__init__(name, path, item_type=ItemType.FILE)
+
+    def __repr__(self):
+        return f"File(name={self.name}, path={self.path})"
+
+
     
     @staticmethod
     def read_content(file_path: PathLike) -> str:
@@ -253,7 +270,6 @@ class File:
             target_path: Path to the target file
             create_dirs: Whether to create target parent directories if they don't exist
         """
-        import shutil
         
         source = Path(source_path)
         target = Path(target_path)

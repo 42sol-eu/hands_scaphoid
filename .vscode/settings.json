@@ -1,7 +1,10 @@
 {
     "cSpell.words": [
         "addopts",
+        "contextlib",
+        "contextmanager",
         "dunder",
+        "Excalidraw",
         "mkdocstrings",
         "pytest",
         "secho",

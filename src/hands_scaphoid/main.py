@@ -13,8 +13,8 @@ import click
 from rich.console import Console
 
 from . import __version__
-from .Shell import Shell
-from .ShellContext import ShellContext
+from .objects.Shell import Shell
+from .contexts.ShellContext import ShellContext
 
 console = Console()
 

@@ -28,10 +28,10 @@ import time
 from pathlib import Path
 from typing import Dict, List, Optional, Union
 
-from .__base__ import *
+from ..__base__ import *
+from. Object import Object
 
-
-class Shell:
+class Shell(Object):
     """
     A secure shell command executor with environment management.
     
@@ -59,6 +59,8 @@ class Shell:
         Raises:
             FileNotFoundError: If the specified working directory doesn't exist.
         """
+        super().__init__(name="shell", path=str(cwd or os.getcwd()))
+        
         self.cwd = str(Path(cwd or os.getcwd()).resolve())
         if not os.path.isdir(self.cwd):
             raise FileNotFoundError(f"Working directory does not exist: {self.cwd}")

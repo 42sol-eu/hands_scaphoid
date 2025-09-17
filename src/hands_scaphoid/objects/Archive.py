@@ -1,29 +1,50 @@
 #!/usr/bin/env python3
 """
-Archive operations module for hands-scaphoid package.
+Archive module for hands-scaphoid package.
 
-This module provides the Archive class for pure archive operations
-without context management.
+This module provides the Archive class for managing archive operations
+with context manager support and hierarchical path resolution.
 
 File:
-    name: ArchiveOperations.py
+    name: Archive.py
     date: 2025-09-16
 
 Description:
-    Pure archive operations class - no context management
+    Archive context manager for hierarchical file system operations
 
 Authors: ["Andreas Häberle"]
 """
 
+from enum import Enum
+from pathlib import Path
+from typing import Optional, List, Dict, Any
 import zipfile
 import tarfile
 import shutil
-from pathlib import Path
-from typing import List, Optional, Union, Dict, Any
+
 from .__base__ import PathLike, console
 
+from .File import File 
+from .type_enums import ItemType
+from ..commands.core import get_file_extension
 
-class Archive:
+#from .contexts.Context import Context
+
+
+class CompressionType(str, Enum):
+    ZIP     = 'zip'
+    TAR     = 'tar'
+    GZIP    = 'gzip'
+    BZIP2   = 'bzip2'
+    XZ      = 'xz'
+    SEVEN_Z = '7z'
+    RAR     = 'rar'
+    TAR_GZ  = 'tar.gz'
+    TAR_BZ2 = 'tar.bz2'
+    UNKNOWN = 'unknown'
+
+
+class Archive(File):
     """
     Pure archive operations class without context management.
     
@@ -38,9 +59,46 @@ class Archive:
         Archive.create_zip_archive(Path("backup.zip"), Path("source_dir"))
         Archive.add_file_to_zip(Path("backup.zip"), Path("new_file.txt"))
         files = Archive.list_archive_contents(Path("backup.zip"))
-    """
     
-    @staticmethod
+    Attributes:
+        name (str): The name of the archive file.
+        path (str): The path of the archive file in the filesystem.
+    """
+
+    def __init__(self, name: str, path: str):
+        super().__init__(name, path)
+        self.item_type = ItemType.ARCHIVE
+
+    @classmethod
+    def compression_type(name: str) -> str:
+        """
+        Determines the compression type based on the file extension.
+
+        Args:
+            name (str): The name of the archive file.
+
+        Returns:
+            str: The compression type (e.g., 'zip', 'tar', 'gz', etc.) or 'unknown' if not recognized.
+        """
+        extension = get_file_extension(name.lower())
+        
+        compression_types = {
+            'zip': CompressionType.ZIP,
+            'tar': CompressionType.TAR,
+            'tar.gz': CompressionType.TAR_GZ,
+            'tar.bz2': CompressionType.TAR_BZ2,
+            'gz': CompressionType.GZIP,
+            'bz2': CompressionType.BZIP2,
+            'xz': CompressionType.XZ,
+            '7z': CompressionType.SEVEN_Z,
+            'rar': CompressionType.RAR
+        }
+        return compression_types.get(extension, CompressionType.UNKNOWN)
+
+    def __repr__(self):
+        return f"Archive(name={self.name}, path={self.path})"
+
+@staticmethod
     def detect_archive_type(archive_path: PathLike) -> str:
         """
         Detect the archive type from file extension.

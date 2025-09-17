@@ -17,7 +17,7 @@ import subprocess
 from typing import Dict, List, Optional, Union
 
 from .Shell import Shell
-from .__base__ import console
+from ..__base__ import console
 
 
 class PowerShell(Shell):

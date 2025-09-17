@@ -22,9 +22,9 @@ from unittest.mock import patch, MagicMock
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from hands_scaphoid.Context import Context
+from hands_scaphoid.contexts.Context import Context
 from hands_scaphoid.FileOperations import File
-from hands_scaphoid.DirectoryOperations import Directory
+from hands_scaphoid.objects.Directory import Directory
 from hands_scaphoid.ArchiveOperations import Archive
 from hands_scaphoid.FileContext import FileContext
 from hands_scaphoid.DirectoryContext import DirectoryContext

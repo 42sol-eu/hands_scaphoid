@@ -20,7 +20,7 @@ from typing import Optional, Union, List, Any, Dict
 from abc import ABC, abstractmethod
 import threading
 import builtins
-from .__base__ import PathLike, os, console
+from ..__base__ import PathLike, os, console
 
 
 class Context(ABC):

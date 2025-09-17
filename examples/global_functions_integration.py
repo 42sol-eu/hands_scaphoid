@@ -15,7 +15,7 @@ sys.path.insert(0, str(src_path))
 
 from hands_scaphoid import DirectoryContext, FileContext, ArchiveContext
 from hands_scaphoid import Directory, File, Archive
-from hands_scaphoid.ShellContext import ShellContext
+from hands_scaphoid.contexts.ShellContext import ShellContext
 
 
 def demo_filesystem_shell_integration():

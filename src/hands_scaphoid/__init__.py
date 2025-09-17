@@ -6,19 +6,23 @@ command allowlisting, and Docker integration. It also provides hierarchical cont
 managers for file system operations including directories, files, and archives.
 """
 
-from .__base__ import *  # noqa: F401, F403
-from .Shell import Shell
-from .ShellContext import ShellContext
-from .WindowsShells import PowerShell, WslShell, create_powershell_shell, create_wsl_shell
-from .Context import Context
-from .Directory import Directory
-from .File import File
-from .Archive import Archive
+from .__base__ import *
+from .main import (
+    console,
+    demo,
+    exec,
+    main,
+)
 
-__version__ = "0.1.0"
-__author__ = "Andreas Häberle"
 __all__ = [
-    "Shell", "ShellContext", "PowerShell", "WslShell", 
-    "create_powershell_shell", "create_wsl_shell",
-    "Context", "Directory", "File", "Archive"
+    "console",  # src\hands_scaphoid\__base__.py
+    "DEBUG_MODE",  # src\hands_scaphoid\__base__.py
+    "demo",  # src\hands_scaphoid\main.py
+    "ENABLE_TRACEBACK",  # src\hands_scaphoid\__base__.py
+    "exec",  # src\hands_scaphoid\main.py
+    "G_debug",  # src\hands_scaphoid\__base__.py
+    "main",  # src\hands_scaphoid\main.py
+    "no",  # src\hands_scaphoid\__base__.py
+    "PathLike",  # src\hands_scaphoid\__base__.py
+    "yes",  # src\hands_scaphoid\__base__.py
 ]

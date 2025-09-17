@@ -1,8 +1,8 @@
 from Typing import List, Optional, Any
 from pathlib import Path
 from rich.console import Console
-import ..Archive as ArchiveModule
-from ..Context import Context
+import hands_scaphoid.Archive_Old_Context as ArchiveModule
+from ..contexts.Context import Context
 #TODO: Use __base__ for os, zipfile, console, etc.
 console = Console()
 

@@ -26,7 +26,7 @@ from contextlib import contextmanager
 from typing import Dict, Generator, Optional, Union
 from pathlib import Path
 
-from .Shell import Shell
+from ..objects.Shell import Shell
 
 
 @contextmanager

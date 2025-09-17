@@ -15,8 +15,13 @@ nav:
     - Basic Usage: user-guide/basic-usage.md
     - Windows Shells: windows-shells.md
   - API Reference:
-    - Shell: api/shell.md
-    - ShellContext: api/shell-context.md
+    - Objects: 
+      - Objects: api/objects.md
+      - Shell: api/objects/shell.md
+    - Context Managers:
+      - Context Managers: api/context-managers.md
+      - ShellContext: api/contexts/shell-context.md
+      - Hierarchical Contexts: api/contexts/hierarchical-contexts.md
   - Examples: examples.md
   - Plugin Features Test: plugin-features-test.md
 

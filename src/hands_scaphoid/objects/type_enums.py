@@ -15,10 +15,10 @@ class ItemType(str, Enum):
 
 class SimpleCommandType(str, Enum):
     """Enum representing different types of simple commands."""
-    READ = "read"
-    WRITE = "write"
-    DELETE = "delete"
-    EXECUTE = "execute"
+    READ = "read-access"
+    WRITE = "write-access"
+    DELETE = "delete-access"
+    EXECUTE = "execute-access"
     # Additional command types can be added here as needed.
 
 class AccessCommandType(str, Enum):

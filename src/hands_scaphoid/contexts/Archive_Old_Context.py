@@ -1,27 +1,4 @@
-#!/usr/bin/env python3
-"""
-Archive module for hands-scaphoid package.
 
-This module provides the Archive class for managing archive operations
-with context manager support and hierarchical path resolution.
-
-File:
-    name: Archive.py
-    date: 2025-09-16
-
-Description:
-    Archive context manager for hierarchical file system operations
-
-Authors: ["Andreas Häberle"]
-"""
-
-from pathlib import Path
-from typing import Optional, List, Dict, Any
-import zipfile
-import tarfile
-import shutil
-from .Context import Context
-from .__base__ import PathLike, console
 
 
 class Archive(Context):

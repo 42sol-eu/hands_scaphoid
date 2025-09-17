@@ -7,7 +7,7 @@ import platform
 import pytest
 from unittest.mock import patch, MagicMock
 
-from hands_scaphoid.WindowsShells import Shell, PowerShell, WslShell, create_powershell_shell, create_wsl_shell
+from hands_scaphoid.objects.WindowsShells import Shell, PowerShell, WslShell, create_powershell_shell, create_wsl_shell
 
 
 class TestPowerShell:
