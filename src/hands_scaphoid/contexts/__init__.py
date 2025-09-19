@@ -6,6 +6,6 @@ from .Context import Context
 from .ShellContext import ShellContext
 
 __all__ = [
-    'Context',
-    'ShellContext',
+    "Context",
+    "ShellContext",
 ]

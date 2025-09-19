@@ -27,6 +27,7 @@ import subprocess
 import sys
 import time
 from typing import Any, Union, Optional, IO
+
 PathLike = Union[str, Path]
 
 from rich import print
@@ -38,6 +39,7 @@ ENABLE_TRACEBACK = DEBUG_MODE
 
 if ENABLE_TRACEBACK:
     from rich import traceback
+
     traceback.install()
 
 # Convenience constants
@@ -49,6 +51,15 @@ G_debug = DEBUG_MODE
 console = Console()
 
 __all__ = [
-    "os", "subprocess", "sys", "time", "print", "console",
-    "no", "yes", "G_debug", "DEBUG_MODE", "ENABLE_TRACEBACK"
+    "os",
+    "subprocess",
+    "sys",
+    "time",
+    "print",
+    "console",
+    "no",
+    "yes",
+    "G_debug",
+    "DEBUG_MODE",
+    "ENABLE_TRACEBACK",
 ]

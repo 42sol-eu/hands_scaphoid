@@ -2,7 +2,7 @@
 
 ## API Documentation
 
-::: hands_scaphoid.objects.Directory
+::: hands_scaphoid.objects.DirectoryCore
     options:
       show_root_heading: true
       show_source: true

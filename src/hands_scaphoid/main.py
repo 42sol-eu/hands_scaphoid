@@ -20,32 +20,32 @@ console = Console()
 
 
 @click.group(invoke_without_command=True)
-@click.option('--version', is_flag=True, help='Show version and exit')
+@click.option("--version", is_flag=True, help="Show version and exit")
 @click.pass_context
 def main(ctx: click.Context, version: bool) -> None:
     """
     Hands Scaphoid - Secure shell execution context manager.
-    
+
     A Python library for secure shell command execution with environment
     management, command allowlisting, and Docker integration.
     """
     if version:
         console.print(f"hands-scaphoid version {__version__}")
         sys.exit(0)
-    
+
     if ctx.invoked_subcommand is None:
         console.print("Hello from hands-scaphoid!")
         console.print("\nUse --help to see available commands.")
 
 
 @main.command()
-@click.option('--cwd', default=None, help='Working directory')
-@click.option('--env-file', default='~/.env', help='Environment file path')
-@click.argument('commands', nargs=-1, required=True)
+@click.option("--cwd", default=None, help="Working directory")
+@click.option("--env-file", default="~/.env", help="Environment file path")
+@click.argument("commands", nargs=-1, required=True)
 def exec(cwd: Optional[str], env_file: str, commands: List[str]) -> None:
     """
     Execute shell commands in a secure context.
-    
+
     Example:
         hands-trapezium exec "ls -la" "echo hello"
     """
@@ -56,17 +56,19 @@ def exec(cwd: Optional[str], env_file: str, commands: List[str]) -> None:
                 cmd_name = command.split()[0] if command.strip() else ""
                 if cmd_name:
                     if not shell.allow(cmd_name):
-                        console.print(f"[red]Error: Command '{cmd_name}' not found[/red]")
+                        console.print(
+                            f"[red]Error: Command '{cmd_name}' not found[/red]"
+                        )
                         sys.exit(1)
-                    
+
                     try:
                         result = shell.run(command)
                         if result.stdout:
-                            console.print(result.stdout, end='')
+                            console.print(result.stdout, end="")
                     except Exception as e:
                         console.print(f"[red]Error executing '{command}': {e}[/red]")
                         sys.exit(1)
-                        
+
     except Exception as e:
         console.print(f"[red]Error: {e}[/red]")
         sys.exit(1)
@@ -77,12 +79,12 @@ def demo() -> None:
     """Run a demonstration of hands-trapezium capabilities."""
     console.print("[bold]Hands Trapezium Demo[/bold]")
     console.print("\nDemonstrating secure shell execution...")
-    
+
     try:
         with ShellContext() as shell:
             # Allow safe commands
             commands_to_demo = ["echo", "pwd", "whoami"]
-            
+
             for cmd in commands_to_demo:
                 if shell.allow(cmd):
                     console.print(f"\n[green]Executing: {cmd}[/green]")
@@ -93,15 +95,19 @@ def demo() -> None:
                     except Exception as e:
                         console.print(f"[red]Error: {e}[/red]")
                 else:
-                    console.print(f"[yellow]Command '{cmd}' not available on this system[/yellow]")
-                    
+                    console.print(
+                        f"[yellow]Command '{cmd}' not available on this system[/yellow]"
+                    )
+
             # Demonstrate security - try to run a non-allowed command
-            console.print("\n[yellow]Demonstrating security - trying to run 'cat' without allowing it:[/yellow]")
+            console.print(
+                "\n[yellow]Demonstrating security - trying to run 'cat' without allowing it:[/yellow]"
+            )
             try:
                 shell.run("cat /etc/passwd")
             except PermissionError as e:
                 console.print(f"[green]Security working: {e}[/green]")
-                
+
     except Exception as e:
         console.print(f"[red]Demo error: {e}[/red]")
         sys.exit(1)

@@ -47,8 +47,4 @@ def shell_with_env(temp_dir, temp_env_file):
 @pytest.fixture
 def mock_env_vars():
     """Mock environment variables for testing."""
-    return {
-        "TEST_VAR": "test_value",
-        "PATH": "/usr/bin:/bin",
-        "HOME": "/home/test"
-    }
+    return {"TEST_VAR": "test_value", "PATH": "/usr/bin:/bin", "HOME": "/home/test"}

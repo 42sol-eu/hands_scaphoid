@@ -33,23 +33,23 @@ from ..objects.ShellExecutable import Shell
 def ShellContext(
     cwd: Optional[Union[str, Path]] = None,
     env: Optional[Dict[str, str]] = None,
-    env_file: str = "~/.env"
+    env_file: str = "~/.env",
 ) -> Generator[Shell, None, None]:
     """
     Context manager that provides global shell functions.
-    
+
     This context manager creates a Shell instance and exposes its methods
     as global functions for convenient script-like usage. The functions
     are automatically cleaned up when exiting the context.
-    
+
     Args:
         cwd: Working directory for command execution.
         env: Environment variables dictionary.
         env_file: Path to environment file to load variables from.
-        
+
     Yields:
         Shell: The Shell instance for advanced usage.
-        
+
     Example:
         with ShellContext() as shell:
             allow("ls")
@@ -59,15 +59,15 @@ def ShellContext(
             run("echo 'Hello World'")
     """
     ctx = Shell(cwd, env, env_file)
-    
+
     # Store original functions if they exist
     original_functions = {}
     function_names = ["cd", "run", "run_in", "sleep", "allow", "depends_on"]
-    
+
     for func_name in function_names:
         if hasattr(builtins, func_name):
             original_functions[func_name] = getattr(builtins, func_name)
-    
+
     # Set global functions
     builtins.cd = ctx.cd
     builtins.run = ctx.run
@@ -75,7 +75,7 @@ def ShellContext(
     builtins.sleep = ctx.sleep
     builtins.allow = ctx.allow
     builtins.depends_on = ctx.depends_on
-    
+
     try:
         yield ctx
     finally:

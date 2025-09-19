@@ -1,6 +1,7 @@
 from .ItemCore import ItemCore
 from .type_enums import ItemType
 
+
 class ObjectCore(ItemCore):
     """
     Represents an object in the shell context.
@@ -15,4 +16,3 @@ class ObjectCore(ItemCore):
 
     def __repr__(self):
         return f"ObjectCore(name={self.name}, path={self.value})"
-

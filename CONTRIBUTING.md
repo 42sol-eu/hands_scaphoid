@@ -109,7 +109,7 @@ We use Ruff for code formatting with these settings:
 
 Format your code before submitting:
 ```bash
-ruff src tests
+ruff format src tests
 isort src tests
 ```
 

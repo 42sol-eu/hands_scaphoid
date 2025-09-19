@@ -46,9 +46,9 @@ class TestModuleIntegration:
         """Test that we can create a Shell instance."""
         shell = Shell()
         assert shell is not None
-        assert hasattr(shell, 'run')
-        assert hasattr(shell, 'allow')
-        assert hasattr(shell, 'cd')
+        assert hasattr(shell, "run")
+        assert hasattr(shell, "allow")
+        assert hasattr(shell, "cd")
 
     def test_can_use_shell_context(self, temp_dir):
         """Test that we can use ShellContext."""

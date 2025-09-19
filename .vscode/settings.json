@@ -3,6 +3,7 @@
         "addopts",
         "contextlib",
         "contextmanager",
+        "docstrings",
         "dunder",
         "Excalidraw",
         "mkdocstrings",

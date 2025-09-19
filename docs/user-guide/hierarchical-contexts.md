@@ -132,7 +132,7 @@ Directory.create_directory('/tmp/standalone_dir')
 The `File` class provides file context management with automatic file handle management.
 
 ```python
-from hands_scaphoid.File import File
+from hands_scaphoid.FileCore import FileCore
 ```
 
 ### Constructor

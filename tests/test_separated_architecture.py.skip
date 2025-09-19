@@ -7,6 +7,19 @@ This module provides complete test coverage for:
 - Context classes (FileContext, DirectoryContext, ArchiveContext)
 - Context managers, global functions, and error handling
 """
+Init for commands folder
+----
+file:
+    name:        test_seperated_architecture.py  
+    uuid:        ba5bf586-781a-43f1-8f0a-cbc84a168c2e
+description:     test_seperated_architecture
+authors:         felix@42sol.eu
+project:
+project:
+    name:        hands_scaphoid
+    uuid:        TODO_uuid_scaphoid
+    url:         https://github.com/42sol-eu/hands_scaphoid
+"""
 
 import pytest
 import tempfile
@@ -24,7 +37,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from hands_scaphoid.contexts.Context import Context
 from hands_scaphoid.objects.File import File
-from hands_scaphoid.objects.Directory import Directory
+from hands_scaphoid.objects.DirectoryCore import DirectoryCore
 from hands_scaphoid.objects.Archive import Archive
 # from hands_scaphoid.contexts.FileContext import FileContext
 # from hands_scaphoid.contexts.DirectoryContext import DirectoryContext

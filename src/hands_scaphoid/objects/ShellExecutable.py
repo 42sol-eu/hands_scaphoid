@@ -29,12 +29,13 @@ from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 from ..__base__ import *
-from.ExecutableCore import ExecutableCore
+from .ExecutableCore import ExecutableCore
+
 
 class ShellExecutable(ExecutableCore):
     """
     A secure shell command executor with environment management.
-    
+
     This class provides a secure way to execute shell commands with features like:
     - Command allowlisting for security
     - Environment variable management
@@ -43,10 +44,10 @@ class ShellExecutable(ExecutableCore):
     """
 
     def __init__(
-        self, 
-        cwd: Optional[Union[str, Path]] = None, 
-        env: Optional[Dict[str, str]] = None, 
-        env_file: str = "~/.env"
+        self,
+        cwd: Optional[Union[str, Path]] = None,
+        env: Optional[Dict[str, str]] = None,
+        env_file: str = "~/.env",
     ) -> None:
         """
         Initialize the Shell instance.
@@ -60,11 +61,11 @@ class ShellExecutable(ExecutableCore):
             FileNotFoundError: If the specified working directory doesn't exist.
         """
         super().__init__(name="shell", path=str(cwd or os.getcwd()))
-        
+
         self.cwd = str(Path(cwd or os.getcwd()).resolve())
         if not os.path.isdir(self.cwd):
             raise FileNotFoundError(f"Working directory does not exist: {self.cwd}")
-            
+
         self.env = env or os.environ.copy()
         self.env_file = os.path.expanduser(env_file)
         self._load_env_file()
@@ -72,8 +73,8 @@ class ShellExecutable(ExecutableCore):
         self.last_result: Optional[subprocess.CompletedProcess] = None
 
         # define basic commands
-        self.allow_commands.append('which')
-        
+        self.allow_commands.append("which")
+
     def _load_env_file(self) -> None:
         """Load environment variables from the specified env file."""
         if os.path.exists(self.env_file):
@@ -86,9 +87,13 @@ class ShellExecutable(ExecutableCore):
                                 key, value = line.split("=", 1)
                                 self.env[key.strip()] = value.strip()
                             except ValueError:
-                                console.print(f"[yellow]Warning: Invalid line {line_num} in {self.env_file}: {line}[/yellow]")
+                                console.print(
+                                    f"[yellow]Warning: Invalid line {line_num} in {self.env_file}: {line}[/yellow]"
+                                )
             except IOError as e:
-                console.print(f"[yellow]Warning: Could not read env file {self.env_file}: {e}[/yellow]")
+                console.print(
+                    f"[yellow]Warning: Could not read env file {self.env_file}: {e}[/yellow]"
+                )
 
     def allow(self, command: Union[str, List[str]]) -> bool:
         """
@@ -104,12 +109,12 @@ class ShellExecutable(ExecutableCore):
             ValueError: If command is empty or invalid.
         """
         do_check: bool = True
-        
+
         if isinstance(command, str):
             command = [command]
 
         for cmd in command:
-            if not cmd or not cmd.split(' ')[0].strip():
+            if not cmd or not cmd.split(" ")[0].strip():
                 raise ValueError("Command cannot be empty")
 
             # check if available
@@ -120,27 +125,25 @@ class ShellExecutable(ExecutableCore):
                     if platform.system() == "Windows":
                         # On Windows, try 'where' command instead of 'which'
                         check_result = subprocess.run(
-                            ['where', cmd], 
-                            capture_output=True, 
-                            timeout=2,
-                            env=self.env
+                            ["where", cmd], capture_output=True, timeout=2, env=self.env
                         )
                     else:
                         # On Unix systems, use 'which'
                         check_result = subprocess.run(
-                            ['which', cmd], 
-                            capture_output=True, 
-                            timeout=2,
-                            env=self.env
+                            ["which", cmd], capture_output=True, timeout=2, env=self.env
                         )
                     add = check_result.returncode == 0
-                except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError):
+                except (
+                    subprocess.CalledProcessError,
+                    subprocess.TimeoutExpired,
+                    FileNotFoundError,
+                ):
                     add = True  # If we can't check, assume it's available
                     console.print(f"⚠️ Could not verify availability of command: {cmd}")
-            else:   
+            else:
                 add = True
                 console.print(f"⚠️ Skipping availability check for command: {cmd}")
-                
+
             if add:
                 # command is available
                 if cmd not in self.allow_commands:
@@ -149,18 +152,20 @@ class ShellExecutable(ExecutableCore):
                     pass
                 result = True
             else:
-                console.print(f"❌ Command not found: {cmd} in {self.env.get('PATH', '')}")
+                console.print(
+                    f"❌ Command not found: {cmd} in {self.env.get('PATH', '')}"
+                )
                 result = False
 
         return result
 
     def run(
-        self, 
-        command_with_args: str, 
-        timeout: Optional[int] = None, 
-        capture_output: bool = True, 
-        text: bool = True, 
-        check: bool = True
+        self,
+        command_with_args: str,
+        timeout: Optional[int] = None,
+        capture_output: bool = True,
+        text: bool = True,
+        check: bool = True,
     ) -> subprocess.CompletedProcess:
         """
         Execute a shell command with security checks.
@@ -186,16 +191,16 @@ class ShellExecutable(ExecutableCore):
             command_parts = command_with_args.strip().split()
         else:
             command_parts = command_with_args
-                
-                    
-        command_name = command_parts[0]
-        
-        console.print(f"[bold]$ {command_with_args}[/bold]")
-        
-        if command_name not in self.allow_commands:
-            raise PermissionError(f"Command '{command_name}' is not allowed. Use allow() first.")
 
-        
+        command_name = command_parts[0]
+
+        console.print(f"[bold]$ {command_with_args}[/bold]")
+
+        if command_name not in self.allow_commands:
+            raise PermissionError(
+                f"Command '{command_name}' is not allowed. Use allow() first."
+            )
+
         try:
             result = subprocess.run(
                 command_parts,
@@ -204,30 +209,32 @@ class ShellExecutable(ExecutableCore):
                 timeout=timeout,
                 capture_output=capture_output,
                 text=text,
-                check=check
+                check=check,
             )
-            
+
             if result.stderr and capture_output:
                 console.print(f"[red]Error: {result.stderr}[/red]")
-                
+
             self.last_result = result
             return result
-            
+
         except subprocess.CalledProcessError as e:
             self.last_result = e
             raise
         except subprocess.TimeoutExpired as e:
-            console.print(f"[red]Command timed out after {timeout} seconds: {command_with_args}[/red]")
+            console.print(
+                f"[red]Command timed out after {timeout} seconds: {command_with_args}[/red]"
+            )
             raise
 
     def run_in(
-        self, 
-        container_name: str, 
-        command_with_args: list[str] | str, 
-        timeout: Optional[int] = None, 
-        capture_output: bool = True, 
-        text: bool = True, 
-        check: bool = True
+        self,
+        container_name: str,
+        command_with_args: list[str] | str,
+        timeout: Optional[int] = None,
+        capture_output: bool = True,
+        text: bool = True,
+        check: bool = True,
     ) -> subprocess.CompletedProcess:
         """
         Execute a command inside a Docker container.
@@ -248,11 +255,11 @@ class ShellExecutable(ExecutableCore):
             subprocess.CalledProcessError: If check=True and command fails.
             ValueError: If container_name or command is empty.
         """
-                    
-        command_with_args.insert(0, container_name)  
-        command_with_args.insert(0, 'exec')  
-        command_with_args.insert(0, 'docker')          
-                
+
+        command_with_args.insert(0, container_name)
+        command_with_args.insert(0, "exec")
+        command_with_args.insert(0, "docker")
+
         return self.run(command_with_args, timeout, capture_output, text, check)
 
     def cd(self, path: str) -> None:
@@ -270,13 +277,15 @@ class ShellExecutable(ExecutableCore):
             raise ValueError("Path cannot be empty")
 
         if os.name == "nt":
-            new_path = Path('C:') / os.path.abspath(os.path.join(self.cwd, path.replace('/', '\\')))
-        
+            new_path = Path("C:") / os.path.abspath(
+                os.path.join(self.cwd, path.replace("/", "\\"))
+            )
+
         new_path = os.path.abspath(os.path.join(self.cwd, path))
-        
+
         if not os.path.isdir(new_path):
             raise NotADirectoryError(f"{new_path} is not a valid directory.")
-        
+
         self.cwd = new_path
 
     def get_env_var(self, var_name: str) -> Optional[str]:
@@ -294,7 +303,7 @@ class ShellExecutable(ExecutableCore):
         """
         if not var_name or not var_name.strip():
             raise ValueError("Variable name cannot be empty")
-            
+
         return self.env.get(var_name)
 
     def set_env_var(self, var_name: str, value: str) -> None:
@@ -310,7 +319,7 @@ class ShellExecutable(ExecutableCore):
         """
         if not var_name or not var_name.strip():
             raise ValueError("Variable name cannot be empty")
-            
+
         self.env[var_name] = value
 
     def sleep(self, seconds: Union[int, float]) -> None:
@@ -325,7 +334,7 @@ class ShellExecutable(ExecutableCore):
         """
         if seconds < 0:
             raise ValueError("Sleep duration cannot be negative")
-            
+
         time.sleep(seconds)
 
     def depends_on(self, names: Union[str, List[str]]) -> bool:
@@ -344,7 +353,7 @@ class ShellExecutable(ExecutableCore):
         """
         if isinstance(names, str):
             names = [names]
-        
+
         if not names:
             raise ValueError("Container names cannot be empty")
 
@@ -356,8 +365,7 @@ class ShellExecutable(ExecutableCore):
 
             result = self.run("docker ps --format '{{.Names}}'", check=True)
             running_containers = [
-                line.strip().replace("'", "") 
-                for line in result.stdout.splitlines()
+                line.strip().replace("'", "") for line in result.stdout.splitlines()
             ]
 
             for name in names:
@@ -366,7 +374,7 @@ class ShellExecutable(ExecutableCore):
                     sys.exit(2)
 
             return True
-            
+
         except subprocess.CalledProcessError as e:
             raise RuntimeError(f"Failed to check Docker containers: {e}")
 
@@ -391,6 +399,6 @@ class ShellExecutable(ExecutableCore):
         """
         if not command or not command.strip():
             return False
-            
+
         command_name = command.strip().split()[0]
         return command_name in self.allow_commands

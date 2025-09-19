@@ -33,7 +33,7 @@ from click import (      #!md| [docs](https://click.palletsprojects.com/en/8.1.x
     secho,
     echo,
     confirm,
-    Choice,
+#    Choice,
 )
 
 
@@ -41,6 +41,7 @@ from click import (      #!md| [docs](https://click.palletsprojects.com/en/8.1.x
 
 
 class Parameter:
+    """Parameter for execution.""" 
     init_file_name:     str = "__init__.py"
 
 P = Parameter()
@@ -57,7 +58,8 @@ class PrivacyLevel(Enum):
         PUBLIC: Indicates the entity is publicly accessible.
         INTERNAL: Indicates the entity is accessible within the internal scope.
         PRIVATE: Indicates the entity is private and should not be accessed externally.
-        DUNDER: Indicates the entity uses double underscore (dunder) naming, typically for special or magic methods.
+        DUNDER: Indicates the entity uses double underscore (dunder) naming, 
+                typically for special or magic methods.
     """
     PUBLIC = "public"
     INTERNAL = "internal"
@@ -95,7 +97,8 @@ def scan_init_file(folder: PathLike) -> list:
         return []
     with open(init_path, "r", encoding="utf-8") as f:
         lines = f.readlines()
-    imports = [line.strip() for line in lines if line.strip().startswith("from ") or line.strip().startswith("import ")]
+    imports = [line.strip() for line in lines \
+               if line.strip().startswith("from ") or line.strip().startswith("import ")]
     return imports
 
 
@@ -120,7 +123,8 @@ def scan_python_file(file_path: PathLike, include_private: bool = False) -> list
             if include_private or not n.name.startswith('_'):
                 elements.append(("class", n.name))
         elif isinstance(n, ast.FunctionDef):
-            # Include all functions if include_private=True, otherwise skip private ones and dunder methods
+            # Include all functions if include_private=True,
+            # otherwise skip private ones and dunder methods
             if include_private or not n.name.startswith('_'):
                 elements.append(("function", n.name))
         elif isinstance(n, ast.Assign):
@@ -143,17 +147,24 @@ def suggest_edit(init_imports: list, file_elements: list) -> list:
     """Suggest which elements to add to __init__.py."""
     suggestions = []
     for typ, name in file_elements:
-        import_stmt = f"from .{name.lower()} import {name}" if typ == "class" else f"from . import {name}"
+        import_stmt = f"from .{name.lower()} import {name}" \
+                    if typ == "class" else f"from . import {name}"
         if not any(name in imp for imp in init_imports):
             suggestions.append(import_stmt)
     return suggestions
 
 
-def update_init_file(folder: PathLike, new_imports: list, cleanup: bool = True, available_names: set = None, group_by_file: bool = False, element_sources: dict = None, element_order: list = None):
+def update_init_file(folder: PathLike,
+                     new_imports: list,
+                     cleanup: bool = True,
+                     available_names: set = None,
+                     group_by_file: bool = False,
+                     element_sources: dict = None,
+                     element_order: list = None
+    ):
     """Add new imports to __init__.py and sort, optionally cleaning up stale imports."""
     if isinstance(folder, str):
         folder = FsPath(folder)
-    
     if element_sources is None:
         element_sources = {}
     if element_order is None:
@@ -164,14 +175,14 @@ def update_init_file(folder: PathLike, new_imports: list, cleanup: bool = True, 
             content = f.read()
     else:
         content = ""
-    
+
     # Parse the AST to safely extract existing imports and __all__
     try:
         tree = ast.parse(content)
         existing_imports = []
         existing_all_names = []
         imported_names = {}  # Track what names are imported from which modules
-        
+
         for node in tree.body:
             if isinstance(node, ast.ImportFrom):
                 module = node.module or ""
@@ -203,7 +214,8 @@ def update_init_file(folder: PathLike, new_imports: list, cleanup: bool = True, 
                                 elif hasattr(elem, 's'):  # For backward compatibility
                                     existing_all_names.append(elem.s)
                         elif isinstance(node.value, ast.Constant):
-                            existing_all_names = node.value.value if isinstance(node.value.value, list) else []
+                            existing_all_names = node.value.value if isinstance(node.value.value, list)
+                                                                else []
     except SyntaxError:
         # Fallback to line-by-line parsing if AST fails
         lines = content.splitlines()
@@ -590,11 +602,12 @@ def cli(folder, all_files, include_private, cleanup, group_by_file, cog_check):
 
         # Format code
         init_path = folder_path / P.init_file_name
-        subprocess.run(["ruff", str(init_path)], check=False)
+        secho(f'ruff {str(init_path)}')
+        subprocess.run(["ruff", "format", str(init_path)], check=False)
 
         secho(f"Updated {P.init_file_name} with selected imports and __all__.", fg="green")
     else:
         secho("No changes made.", fg="yellow")
 
 if __name__ == "__main__":
-    cli()
+    cli() #-E1120
