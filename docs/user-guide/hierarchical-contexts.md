@@ -1,460 +1,461 @@
-# User Guide: Hierarchical File System Context Managers
+# API Reference: Hierarchical File System Context Managers
 
-## Introduction
+## Overview
 
-The hands-scaphoid package provides powerful hierarchical file system context managers that simplify working with directories, files, and archives. These context managers automatically handle resource management, support method chaining, and can integrate seamlessly with existing shell operations.
+The hands-scaphoid package provides hierarchical file system context managers that allow working with directories, files, and archives in a structured, chainable manner with support for global function access.
 
-## Quick Start
+## Base Classes
 
-### Basic Directory Operations
+### Context
+
+The `Context` class is the abstract base class for all hierarchical file system operations.
 
 ```python
-from hands_scaphoid import Directory
+from hands_scaphoid.Context import Context
+```
 
-# Navigate and work within directories
-with Directory('~/projects') as projects:
-    with Directory('myproject', create=True) as project:
+#### Constructor
+
+```python
+Context(path: PathLike, create: bool = True, dry_run: bool = False, enable_globals: bool = False)
+```
+
+**Parameters:**
+- `path`: The file system path (relative or absolute)
+- `create`: Whether to create the path if it doesn't exist (default: True)
+- `dry_run`: Whether to simulate operations without making actual changes (default: False)
+- `enable_globals`: Whether to enable global function access within context (default: False)
+
+#### Key Methods
+
+- `resolve_path() -> Path`: Resolve the absolute path for this context
+- `__enter__()`: Enter the context manager
+- `__exit__()`: Exit the context manager and cleanup
+
+---
+
+## Directory Class
+
+The `Directory` class provides directory context management with automatic working directory changes.
+
+```python
+from hands_scaphoid.Directory import Directory
+```
+
+### Constructor
+
+```python
+DirectoryCore(path: PathLike, create: bool = True, dry_run: bool = False, enable_globals: bool = False)
+```
+
+### Context Manager Usage
+
+```python
+with DirectoryCore('~/projects') as home_projects:
+    with DirectoryCore('myproject') as project:
         # Now working in ~/projects/myproject
-        project.create_subdirectory('src')
-        project.create_subdirectory('docs')
         project.list_contents()
+        project.create_subdirectory('src')
 ```
 
-### Basic File Operations
+### Global Functions Usage
+
+When `enable_globals=True`, methods can be called without object prefix:
 
 ```python
-from hands_scaphoid import File
-
-# Create and edit files
-with File('config.txt', create=True) as config:
-    config.add_heading('Configuration')
-    config.write_line('debug=true')
-    config.write_line('port=8080')
+with DirectoryCore('~/projects', enable_globals=True):
+    list_contents()  # Instead of directory.list_contents()
+    create_subdirectory('src')
+    list_contents()
 ```
 
-### Basic Archive Operations
+### Methods
 
+#### `list_contents() -> List[str]`
+List all items in the directory.
+
+**Returns:** List of file and directory names
+
+**Example:**
 ```python
-from hands_scaphoid import Archive
-
-# Create archives
-with Archive('backup.zip', create=True) as backup:
-    backup.add_file('config.txt')
-    backup.add_directory('src')
-    backup.list_contents()
+with DirectoryCore('/home/user') as home:
+    contents = home.list_contents()
+    print(contents)  # ['Documents', 'Downloads', 'Pictures', ...]
 ```
 
-## Advanced Features
+#### `create_subdirectory(name: str) -> 'Directory'`
+Create a subdirectory within the current context.
 
-### Global Functions
+**Parameters:**
+- `name`: Name of the subdirectory to create
 
-One of the most powerful features is the ability to call context methods without object prefixes by enabling global functions:
+**Returns:** New Directory instance for method chaining
+
+**Example:**
+```python
+with DirectoryCore('/tmp') as temp:
+    temp.create_subdirectory('project').create_subdirectory('src')
+```
+
+#### `list_files(extension: str = None) -> List[str]`
+List files in the directory, optionally filtered by extension.
+
+**Parameters:**
+- `extension`: File extension filter (optional, without dot)
+
+**Returns:** List of filenames
+
+**Example:**
+```python
+with DirectoryCore('/home/user/documents') as docs:
+    python_files = docs.list_files('py')
+    all_files = docs.list_files()
+```
+
+### Standalone Methods
+
+#### `Directory.create_directory(path: PathLike) -> None`
+Create a directory without using context manager.
+
+**Parameters:**
+- `path`: Directory path to create
+
+**Example:**
+```python
+Directory.create_directory('/tmp/standalone_dir')
+```
+
+---
+
+## File Class
+
+The `File` class provides file context management with automatic file handle management.
 
 ```python
-# Traditional approach
-with Directory('mydir') as d:
+from hands_scaphoid.File import File
+```
+
+### Constructor
+
+```python
+FileCore(path: PathLike, create: bool = True, mode: str = 'r+', 
+     encoding: str = 'utf-8', dry_run: bool = False, enable_globals: bool = False)
+```
+
+**Parameters:**
+- `path`: The file path (relative or absolute)
+- `create`: Whether to create the file if it doesn't exist (default: True)
+- `mode`: File open mode (default: 'r+' for read/write)
+- `encoding`: File encoding (default: 'utf-8')
+- `dry_run`: Whether to simulate operations without making actual changes
+- `enable_globals`: Whether to enable global function access within context
+
+### Context Manager Usage
+
+```python
+with FileCore('config.txt') as config:
+    config.write_line('# Configuration file')
+    config.add_heading('Database Settings')
+    config.write_line('host=localhost')
+    config.write_line('port=5432')
+```
+
+### Global Functions Usage
+
+```python
+with FileCore('config.txt', enable_globals=True):
+    write_line('# Configuration file')
+    add_heading('Database Settings')
+    write_content('host=localhost\nport=5432')
+```
+
+### Methods
+
+#### `write_line(content: str) -> 'File'`
+Write a line to the file with automatic newline.
+
+**Parameters:**
+- `content`: Text content to write
+
+**Returns:** Self for method chaining
+
+#### `write_content(content: str) -> 'File'`
+Write content to the file without automatic newline.
+
+**Parameters:**
+- `content`: Text content to write
+
+**Returns:** Self for method chaining
+
+#### `add_heading(title: str, level: int = 1) -> 'File'`
+Add a markdown-style heading to the file.
+
+**Parameters:**
+- `title`: Heading text
+- `level`: Heading level (1-6, default: 1)
+
+**Returns:** Self for method chaining
+
+#### `read_content() -> str`
+Read the entire file content.
+
+**Returns:** File content as string
+
+#### `read_lines() -> List[str]`
+Read all lines from the file.
+
+**Returns:** List of lines
+
+### Standalone Methods
+
+#### `File.write_file(path: PathLike, content: str) -> None`
+Write content to a file without using context manager.
+
+**Parameters:**
+- `path`: File path
+- `content`: Content to write
+
+#### `File.read_file(path: PathLike) -> str`
+Read content from a file without using context manager.
+
+**Parameters:**
+- `path`: File path
+
+**Returns:** File content
+
+---
+
+## Archive Class
+
+The `Archive` class provides archive context management supporting ZIP, TAR, TAR.GZ, and TAR.BZ2 formats.
+
+```python
+from hands_scaphoid.Archive import Archive
+```
+
+### Constructor
+
+```python
+ArchiveFile(source: Optional[PathLike] = None, target: Optional[PathLike] = None, 
+        archive_type: str = 'zip', create: bool = True, dry_run: bool = False, 
+        enable_globals: bool = False)
+```
+
+**Parameters:**
+- `source`: Source directory, file, or existing archive to work with (optional)
+- `target`: Target archive file path (defaults to source name with archive extension)
+- `archive_type`: Type of archive ('zip', 'tar', 'tar.gz', 'tar.bz2')
+- `create`: Whether to create the archive if it doesn't exist
+- `dry_run`: Whether to simulate operations without making actual changes
+- `enable_globals`: Whether to enable global function access within context
+
+### Context Manager Usage
+
+```python
+with ArchiveFile('project.zip', create=True) as archive:
+    archive.add_file('README.md')
+    archive.add_directory('src')
+    archive.list_contents()
+```
+
+### Global Functions Usage
+
+```python
+with ArchiveFile('project.zip', enable_globals=True):
+    add_file('README.md')
+    add_directory('src')
+    list_contents()
+```
+
+### Methods
+
+#### `add_file(file_path: PathLike, archive_path: str = None) -> 'Archive'`
+Add a file to the archive.
+
+**Parameters:**
+- `file_path`: Path to the file to add
+- `archive_path`: Path within archive (optional, defaults to filename)
+
+**Returns:** Self for method chaining
+
+#### `add_directory(dir_path: PathLike, archive_path: str = None) -> 'Archive'`
+Add a directory and its contents to the archive.
+
+**Parameters:**
+- `dir_path`: Path to the directory to add
+- `archive_path`: Path within archive (optional, defaults to directory name)
+
+**Returns:** Self for method chaining
+
+#### `list_contents() -> List[str]`
+List contents of the archive.
+
+**Returns:** List of file paths in the archive
+
+#### `extract_file(archive_path: str, target_path: PathLike = None) -> 'Archive'`
+Extract a specific file from the archive.
+
+**Parameters:**
+- `archive_path`: Path of file within archive
+- `target_path`: Target extraction path (optional)
+
+**Returns:** Self for method chaining
+
+#### `extract_all(target_path: PathLike = None) -> 'Archive'`
+Extract all contents from the archive.
+
+**Parameters:**
+- `target_path`: Target extraction directory (optional)
+
+**Returns:** Self for method chaining
+
+### Standalone Methods
+
+#### `Archive.create_archive(archive_path: PathLike, source_path: PathLike, archive_type: str = 'zip') -> None`
+Create an archive without using context manager.
+
+**Parameters:**
+- `archive_path`: Path for the new archive
+- `source_path`: Source directory or file to archive
+- `archive_type`: Type of archive to create
+
+---
+
+## Global Functions Feature
+
+When `enable_globals=True` is set on any context manager, the context's methods become available as global functions within the context scope.
+
+### How It Works
+
+```python
+# Traditional usage
+with DirectoryCore('mydir') as d:
     d.list_contents()
     d.create_subdirectory('subdir')
 
-# Global functions approach
-with Directory('mydir', enable_globals=True):
-    list_contents()           # Much cleaner!
+# Global functions usage
+with DirectoryCore('mydir', enable_globals=True):
+    list_contents()        # No object prefix needed
     create_subdirectory('subdir')
 ```
 
-#### How Global Functions Work
+### Nested Contexts
 
-When `enable_globals=True` is set on a context manager:
-
-1. **Function Injection**: Context methods are temporarily added to Python's built-in namespace
-2. **Automatic Cleanup**: Functions are removed when exiting the context
-3. **No Pollution**: Global namespace is restored to its original state
-4. **Thread-Safe**: Each thread maintains its own global function scope
-
-#### Nested Context Behavior
-
-When contexts are nested, the inner context's functions take precedence:
+When contexts are nested, the inner context's global functions take precedence:
 
 ```python
-with Directory('mydir', enable_globals=True):
+with DirectoryCore('mydir', enable_globals=True):
     list_contents()  # Directory.list_contents()
     
-    with File('myfile.txt', enable_globals=True):
-        write_line('Hello')  # File.write_line()
-        # Note: list_contents() would fail here (not available in File context)
+    with FileCore('myfile.txt', enable_globals=True):
+        write_line('text')    # File.write_line()
+        # list_contents() would fail here (not a File method)
     
-    # Back in directory context
     list_contents()  # Directory.list_contents() available again
 ```
 
-### ShellContext Integration
+### Cleanup
 
-The hierarchical contexts work seamlessly with the existing `ShellContext`:
+Global functions are automatically cleaned up when exiting contexts, preventing namespace pollution.
+
+---
+
+## Dry-Run Mode
+
+All classes support dry-run mode for testing operations without making actual changes.
 
 ```python
-from hands_scaphoid import Directory, File, ShellContext
+with DirectoryCore('test', dry_run=True, enable_globals=True):
+    create_subdirectory('would_create')  # Shows what would be created
+    list_contents()                      # Shows what would be listed
 
-# Combined shell and file operations
-with ShellContext() as shell:
-    # Shell functions available globally
-    allow("git")
-    allow("npm")
-    
-    with Directory('myproject', enable_globals=True):
-        # Both shell and directory functions available
-        run("git init")
-        create_subdirectory('src')
-        
-        with File('package.json', enable_globals=True):
-            write_line('{"name": "myproject"}')
-        
-        run("npm install")
+with FileCore('test.txt', dry_run=True, enable_globals=True):
+    write_line('would write this')       # Shows what would be written
 ```
 
-**Important Notes:**
-- Both contexts use the same global function injection mechanism
-- Functions from the most recently entered context take precedence
-- Proper cleanup ensures no conflicts between different context types
+---
 
-### Hierarchical Path Resolution
+## Method Chaining
 
-Contexts automatically resolve paths relative to their parent contexts:
+All mutation methods return `self` to enable method chaining:
 
 ```python
-with Directory('/home/user') as home:
-    with Directory('projects') as projects:      # /home/user/projects
-        with Directory('myapp') as app:          # /home/user/projects/myapp
-            with File('config.txt') as config:   # /home/user/projects/myapp/config.txt
-                config.write_line('Setting=Value')
-```
-
-### Dry-Run Mode
-
-Test your operations without making actual changes:
-
-```python
-# Preview what would happen
-with Directory('testdir', create=True, dry_run=True, enable_globals=True):
-    create_subdirectory('would_create')    # Shows: [DRY RUN] Would create...
-    
-    with File('test.txt', create=True, dry_run=True, enable_globals=True):
-        write_line('Would write this')     # Shows: [DRY RUN] Would append...
-        add_heading('Test Heading')
-    
-    list_contents()                        # Shows: [DRY RUN] Would list...
-```
-
-### Method Chaining
-
-All mutation methods return `self` for fluent interfaces:
-
-```python
-with File('config.txt') as config:
+with FileCore('config.txt') as config:
     config.add_heading('Settings') \
-          .write_line('debug=true') \
-          .write_line('port=8080') \
-          .add_heading('Database', 2) \
-          .write_line('host=localhost')
+          .write_line('key=value') \
+          .write_line('debug=true')
 
-with Archive('project.zip') as archive:
+with ArchiveFile('project.zip') as archive:
     archive.add_file('README.md') \
            .add_directory('src') \
-           .add_file('LICENSE') \
-           .list_contents()
+           .add_file('LICENSE')
 ```
 
-## Usage Patterns
+---
 
-### Project Scaffolding
+## Error Handling
 
-```python
-from hands_scaphoid import Directory, File
+All classes provide comprehensive error handling with descriptive messages using rich console output for better visibility.
 
-def create_python_project(name: str):
-    """Create a standard Python project structure."""
-    with Directory(name, create=True, enable_globals=True):
-        # Create directory structure
-        create_subdirectory('src')
-        create_subdirectory('tests')
-        create_subdirectory('docs')
-        
-        # Create main module
-        with File(f'src/{name}/__init__.py', enable_globals=True):
-            add_heading(f'{name} Package')
-            write_line(f'"""The {name} package."""')
-            write_line('')
-            write_line('__version__ = "0.1.0"')
-        
-        # Create main module
-        with File(f'src/{name}/main.py', enable_globals=True):
-            add_heading('Main Module')
-            write_line('#!/usr/bin/env python3')
-            write_line(f'"""Main module for {name}."""')
-        
-        # Create README
-        with File('README.md', enable_globals=True):
-            add_heading(name)
-            write_line(f'Description of {name} project.')
-        
-        # Create requirements
-        with File('requirements.txt', enable_globals=True):
-            write_line('# Add your dependencies here')
+Common exceptions:
+- `PermissionError`: When lacking permissions for file operations
+- `FileNotFoundError`: When referenced files don't exist
+- `ValueError`: When invalid parameters are provided
+- `RuntimeError`: When context management rules are violated
 
-# Usage
-create_python_project('myawesome_project')
-```
+---
 
-### Backup Creation
+## Examples
+
+### Basic Usage
 
 ```python
-from hands_scaphoid import Directory, Archive
-from datetime import datetime
+from hands_scaphoid import Directory, File, Archive
 
-def create_backup(source_dir: str):
-    """Create a timestamped backup archive."""
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    backup_name = f'backup_{timestamp}.tar.gz'
+# Create a project structure
+with DirectoryCore('myproject', create=True) as project:
+    with DirectoryCore('src') as src:
+        with FileCore('main.py') as main:
+            main.add_heading('Main Application', 1)
+            main.write_line('#!/usr/bin/env python3')
+            main.write_line('print("Hello, World!")')
     
-    with Directory(source_dir, enable_globals=True):
-        # List what will be backed up
-        files = list_contents()
-        print(f"Backing up {len(files)} items...")
-        
-        with Archive(f'../backups/{backup_name}', 
-                    archive_type='tar.gz', 
-                    create=True, 
-                    enable_globals=True):
-            # Add all files and directories
-            for item in files:
-                if Path(item).is_file():
-                    add_file(item)
-                else:
-                    add_directory(item)
-            
-            print(f"Backup created: {backup_name}")
-            list_contents()
-
-# Usage
-create_backup('/home/user/documents')
-```
-
-### Configuration Management
-
-```python
-from hands_scaphoid import File
-
-def create_config(env: str = 'development'):
-    """Create environment-specific configuration."""
-    config_file = f'config/{env}.txt'
+    with DirectoryCore('docs') as docs:
+        with FileCore('README.md') as readme:
+            readme.add_heading('My Project')
+            readme.write_line('This is my project description.')
     
-    with File(config_file, create=True, enable_globals=True):
-        add_heading(f'{env.title()} Configuration')
-        
-        if env == 'development':
-            write_line('debug=true')
-            write_line('host=localhost')
-            write_line('port=3000')
-        elif env == 'production':
-            write_line('debug=false')
-            write_line('host=0.0.0.0')
-            write_line('port=80')
-        
-        add_heading('Database Settings', 2)
-        write_line(f'db_name=myapp_{env}')
-
-# Create multiple environment configs
-for env in ['development', 'staging', 'production']:
-    create_config(env)
+    # Create an archive of the project
+    with ArchiveFile('myproject.zip') as archive:
+        archive.add_directory('src')
+        archive.add_directory('docs')
 ```
 
-## Best Practices
-
-### 1. Use Global Functions for Cleaner Code
+### Global Functions Usage
 
 ```python
-# ✅ Good: Clean and readable
-with Directory('myproject', enable_globals=True):
+# Using global functions for cleaner syntax
+with DirectoryCore('myproject', create=True, enable_globals=True):
     create_subdirectory('src')
-    create_subdirectory('tests')
-    list_contents()
-
-# ❌ Verbose: Too many object references
-with Directory('myproject') as d:
-    d.create_subdirectory('src')
-    d.create_subdirectory('tests')
-    d.list_contents()
-```
-
-### 2. Use Dry-Run for Testing
-
-```python
-# Test your script logic without side effects
-def setup_project(name: str, dry_run: bool = False):
-    with Directory(name, create=True, dry_run=dry_run, enable_globals=True):
-        create_subdirectory('src')
-        
-        with File('README.md', dry_run=dry_run, enable_globals=True):
-            add_heading(name)
-
-# Test first
-setup_project('testproject', dry_run=True)
-# Then execute
-setup_project('testproject', dry_run=False)
-```
-
-### 3. Combine with Shell Operations
-
-```python
-from hands_scaphoid import Directory, File, ShellContext
-
-with ShellContext() as shell:
-    allow("git")
-    allow("python")
     
-    with Directory('newproject', enable_globals=True):
-        run("git init")
-        
-        with File('.gitignore', enable_globals=True):
-            write_line('__pycache__/')
-            write_line('*.pyc')
-            write_line('.env')
-        
-        run("git add .")
-        run("git commit -m 'Initial commit'")
-```
-
-### 4. Handle Errors Gracefully
-
-```python
-try:
-    with Directory('sensitive_dir', enable_globals=True):
-        create_subdirectory('new_folder')
-        
-        with File('important.txt', enable_globals=True):
-            write_line('Important data')
-            
-except PermissionError as e:
-    print(f"Permission denied: {e}")
-except FileNotFoundError as e:
-    print(f"Path not found: {e}")
-```
-
-## Integration with Existing Code
-
-### Migrating from Standard Library
-
-```python
-# Old approach with pathlib
-from pathlib import Path
-import os
-
-os.chdir('/tmp')
-project_dir = Path('myproject')
-project_dir.mkdir(exist_ok=True)
-os.chdir(project_dir)
-
-readme = project_dir / 'README.md'
-readme.write_text('# My Project\n')
-
-# New approach with hierarchical contexts
-with Directory('/tmp/myproject', create=True, enable_globals=True):
-    with File('README.md', enable_globals=True):
-        add_heading('My Project')
-```
-
-### Working with Existing Functions
-
-```python
-def process_files_old_way(directory: str):
-    """Old way: manual path management."""
-    old_cwd = os.getcwd()
-    try:
-        os.chdir(directory)
-        # Process files...
-    finally:
-        os.chdir(old_cwd)
-
-def process_files_new_way(directory: str):
-    """New way: automatic context management."""
-    with Directory(directory, enable_globals=True):
-        # Process files...
-        for file in list_files('txt'):
-            with File(file, enable_globals=True):
-                content = read_content()
-                # Process content...
-```
-
-## Troubleshooting
-
-### Common Issues
-
-**Issue**: Global functions not available
-```python
-# ❌ Wrong: forgot enable_globals
-with Directory('mydir'):
-    list_contents()  # NameError: name 'list_contents' is not defined
-
-# ✅ Correct: enable global functions
-with Directory('mydir', enable_globals=True):
-    list_contents()  # Works!
-```
-
-**Issue**: Functions from wrong context
-```python
-with Directory('mydir', enable_globals=True):
-    with File('myfile.txt', enable_globals=True):
-        write_line('text')      # ✅ File method available
-        list_contents()         # ❌ Directory method not available here
-```
-
-**Issue**: Nested path resolution
-```python
-# The path is resolved relative to parent context
-with Directory('/home/user'):
-    with Directory('documents'):  # This is /home/user/documents
-        with File('notes.txt'):   # This is /home/user/documents/notes.txt
-            pass
-```
-
-### Debugging Tips
-
-1. **Use dry-run mode** to see what operations would be performed
-2. **Check resolved paths** using the `resolve_path()` method
-3. **Enable verbose logging** by importing and using the rich console
-4. **Test with simple operations** before building complex hierarchies
-
-## Performance Considerations
-
-- **Context overhead**: Minimal - contexts are lightweight
-- **Global function injection**: Fast - uses Python's built-in namespace
-- **Path resolution**: Cached per context for efficiency
-- **File handle management**: Automatic - no need to worry about leaks
-
-## Thread Safety
-
-All context managers are thread-safe:
-- Each thread maintains its own context stack
-- Global functions are isolated per thread
-- No shared mutable state between threads
-
-```python
-import threading
-from hands_scaphoid import Directory
-
-def worker(thread_id: int):
-    with Directory(f'thread_{thread_id}', enable_globals=True):
-        create_subdirectory('work')
+    with FileCore('src/main.py', enable_globals=True):
+        add_heading('Main Application')
+        write_line('#!/usr/bin/env python3')
+        write_line('print("Hello, World!")')
+    
+    with ArchiveFile('project.zip', enable_globals=True):
+        add_directory('src')
         list_contents()
-
-# Multiple threads can safely use contexts
-threads = []
-for i in range(5):
-    t = threading.Thread(target=worker, args=(i,))
-    threads.append(t)
-    t.start()
-
-for t in threads:
-    t.join()
 ```
 
-This concludes the user guide for hierarchical file system context managers. The combination of automatic resource management, global function access, and seamless integration with shell operations makes these tools powerful for file system automation tasks.
+### Dry-Run Testing
+
+```python
+# Test operations without making changes
+with DirectoryCore('testdir', dry_run=True, enable_globals=True):
+    create_subdirectory('would_create')
+    
+    with FileCore('would_create.txt', dry_run=True, enable_globals=True):
+        write_line('This would be written')
+        add_heading('Test Heading')
+```

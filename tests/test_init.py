@@ -34,7 +34,9 @@ class TestModuleImports:
         assert isinstance(__all__, list)
         assert "Shell" in __all__
         assert "ShellContext" in __all__
-        assert len(__all__) == 2
+        assert "__version__" in __all__
+        assert "__author__" in __all__
+        assert len(__all__) > 10  # Should have many exports
 
 
 class TestModuleIntegration:

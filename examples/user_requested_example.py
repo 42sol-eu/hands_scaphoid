@@ -42,18 +42,18 @@ def main():
             print("Running the user's requested example:")
             print()
             
-            with Directory('home') as home:
+            with DirectoryCore('home') as home:
                 print(f"Entered directory: {home.get_current_path()}")
                 
-                with Directory('project') as project:
+                with DirectoryCore('project') as project:
                     print(f"Entered project directory: {project.get_current_path()}")
                     
-                    with File('README.md') as readme:
+                    with FileCore('README.md') as readme:
                         print(f"Opened file: {readme.resolve_path()}")
                         readme.add_heading('Contributing')
                         print("Added 'Contributing' heading to README.md")
                 
-                with Archive(source='project') as archive:
+                with ArchiveFile(source='project') as archive:
                     print(f"Created archive: {archive.resolve_path()}")
                     archive.add_directory('project')
                     print("Added 'project' directory to archive")

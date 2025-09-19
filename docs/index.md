@@ -826,7 +826,8 @@ Now that you understand the basics, explore these advanced topics:
 
 - [Basic Usage](user-guide/basic-usage.md) - Detailed usage examples
 - [Windows Shells](windows-shells.md) - Windows PowerShell and WSL support
-- [API Reference](api/shell.md) - Complete API documentation
+- [API Reference](api/objects.md) - Complete API documentation
+  - [Shell Object](api/objects/shell-executable.md) - Complete API documentation
 # Hands Scaphoid
 
 [![PyPI version](https://badge.fury.io/py/hands-trapezium.svg)](https://badge.fury.io/py/hands-trapezium)
@@ -918,10 +919,6 @@ For comprehensive documentation, visit: [https://42sol-eu.github.io/hands_scapho
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Author
 

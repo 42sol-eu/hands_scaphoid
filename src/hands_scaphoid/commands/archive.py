@@ -1,4 +1,4 @@
-from Typing import List, Optional, Any
+from typing import List, Optional, Any
 from pathlib import Path
 from rich.console import Console
 import hands_scaphoid.Archive_Old_Context as ArchiveModule

@@ -17,7 +17,7 @@ Authors: ["Andreas Häberle"]
 
 from pathlib import Path
 from typing import Optional, List, TextIO
-from .contexts.Context import Context
+from .Context import Context
 from .FileOperations import File
 from .__base__ import PathLike, console
 

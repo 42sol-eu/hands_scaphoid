@@ -51,7 +51,7 @@ def create_directory(self, name: str) -> 'Directory':
     Returns:
         A new Directory instance for the subdirectory
     """
-    return Directory(name, create=True, dry_run=self.dry_run)
+    return DirectoryCore(name, create=True, dry_run=self.dry_run)
 
 def delete_directory(self, name: str, recursive: bool = False, force: bool = False, allow_empty: bool = False, dry_run: bool = False) -> bool: 
     """

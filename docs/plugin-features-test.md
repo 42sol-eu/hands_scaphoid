@@ -138,7 +138,7 @@ The mkdocstrings plugin automatically generates API documentation from docstring
 
 ### Shell Class Example
 
-::: hands_scaphoid.Shell
+::: hands_scaphoid.ShellExecutable
     options:
       show_root_heading: false
       show_source: false

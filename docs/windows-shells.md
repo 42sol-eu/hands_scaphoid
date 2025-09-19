@@ -107,7 +107,7 @@ ps_shell = create_powershell_shell()
 wsl_shell = create_wsl_shell("Ubuntu")
 
 # Get available WSL distributions
-from hands_scaphoid.WindowsShells import get_available_wsl_distributions
+from hands_scaphoid.objects.WslShell import get_available_wsl_distributions
 distributions = get_available_wsl_distributions()
 ```
 

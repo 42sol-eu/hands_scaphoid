@@ -1,7 +1,7 @@
-from .Item import Item
+from .ItemCore import ItemCore
 from .type_enums import ItemType
 
-class Variable(Item):
+class VariableCore(ItemCore):
     """
     Represents a variable in the shell context.
 
@@ -15,5 +15,5 @@ class Variable(Item):
         self.value = value
 
     def __repr__(self):
-        return f"Variable(name={self.name}, value={self.value})"
+        return f"VariableCore(name={self.name}, value={self.value})"
     

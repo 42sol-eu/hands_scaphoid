@@ -6,7 +6,7 @@ This module provides the Archive class for managing archive operations
 with context manager support and hierarchical path resolution.
 
 File:
-    name: Archive.py
+    name: ArchiveFile.py
     date: 2025-09-16
 
 Description:
@@ -22,14 +22,13 @@ import zipfile
 import tarfile
 import shutil
 
-from .__base__ import PathLike, console
+from ..__base__ import PathLike, console
 
-from .File import File 
+from .FileCore import FileCore 
 from .type_enums import ItemType
 from ..commands.core import get_file_extension
 
 #from .contexts.Context import Context
-
 
 class CompressionType(str, Enum):
     ZIP     = 'zip'
@@ -43,8 +42,7 @@ class CompressionType(str, Enum):
     TAR_BZ2 = 'tar.bz2'
     UNKNOWN = 'unknown'
 
-
-class Archive(File):
+class ArchiveFile(FileCore):
     """
     Pure archive operations class without context management.
     
@@ -55,11 +53,13 @@ class Archive(File):
     Supported formats: ZIP, TAR, TAR.GZ, TAR.BZ2
     
     Example:
+        ```python
         # Direct archive operations
         Archive.create_zip_archive(Path("backup.zip"), Path("source_dir"))
         Archive.add_file_to_zip(Path("backup.zip"), Path("new_file.txt"))
         files = Archive.list_archive_contents(Path("backup.zip"))
-    
+        Archive.extract_archive(Path("backup.zip"), Path("extracted_dir"))
+        ```
     Attributes:
         name (str): The name of the archive file.
         path (str): The path of the archive file in the filesystem.
@@ -96,9 +96,9 @@ class Archive(File):
         return compression_types.get(extension, CompressionType.UNKNOWN)
 
     def __repr__(self):
-        return f"Archive(name={self.name}, path={self.path})"
+        return f"ArchiveFile(name={self.name}, path={self.path})"
 
-@staticmethod
+    @staticmethod
     def detect_archive_type(archive_path: PathLike) -> str:
         """
         Detect the archive type from file extension.

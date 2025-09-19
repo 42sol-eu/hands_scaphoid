@@ -398,7 +398,7 @@ if __name__ == "__main__":
 Now that you understand the basics, explore these advanced topics:
 
 - [Basic Usage](user-guide/basic-usage.md) - More detailed usage examples
-- [API Reference](api/) - Complete API documentation
+- [API Reference](api/api-reference.md) - Complete API documentation
 - [Examples](examples.md) - Real-world usage examples
 
 Happy coding! 🚀
@@ -425,15 +425,3 @@ pip install hands-trapezium
 ## Documentation
 
 For comprehensive documentation, visit: [https://42sol-eu.github.io/hands_scaphoid](https://42sol-eu.github.io/hands_scaphoid)
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Author
-
-Andreas Häberle - [42sol-eu](https://github.com/42sol-eu)

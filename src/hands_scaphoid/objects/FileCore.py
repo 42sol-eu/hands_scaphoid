@@ -6,7 +6,7 @@ This module provides the File class for pure file operations
 without context management.
 
 File:
-    name: FileOperations.py
+    name: FileCore.py
     date: 2025-09-16
 
 Description:
@@ -16,15 +16,15 @@ Authors: ["Andreas Häberle"]
 """
 
 
-from .Object import Object
+from .ObjectCore import ObjectCore
 from .type_enums import ItemType
 from pathlib import Path
 from typing import List, Optional, Union
-from .__base__ import PathLike, console
+from ..__base__ import PathLike, console
 import shutil
 
 
-class File(Object):
+class FileCore(ObjectCore):
     """
     Represents a file in the shell context.
     Pure file operations class without context management.
@@ -48,7 +48,7 @@ class File(Object):
         super().__init__(name, path, item_type=ItemType.FILE)
 
     def __repr__(self):
-        return f"File(name={self.name}, path={self.path})"
+        return f"FileCore(name={self.name}, path={self.path})"
 
 
     

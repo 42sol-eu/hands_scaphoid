@@ -4,7 +4,7 @@
 
 ## API Documentation
 
-::: hands_scaphoid.objects.Variable
+::: hands_scaphoid.objects.VariableCore
     options:
       show_root_heading: true
       show_source: true

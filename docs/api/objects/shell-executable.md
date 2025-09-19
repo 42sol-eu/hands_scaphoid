@@ -1,4 +1,4 @@
-# Shell API Reference
+# Shell Executable API Reference
 
 The `Shell` class is the core component of hands-scaphoid, providing a secure context manager for shell command execution.
 
@@ -31,9 +31,9 @@ The `Shell` class is the core component of hands-scaphoid, providing a secure co
 !!! warning "Platform Compatibility"
     Different shell types have varying levels of support across platforms. See the Windows Shells documentation for platform-specific details.
 
-## API Documentation
+## API documentation
 
-::: hands_scaphoid.Shell
+::: hands_scaphoid.objects.ShellExecutable
     options:
       show_root_heading: true
       show_source: true

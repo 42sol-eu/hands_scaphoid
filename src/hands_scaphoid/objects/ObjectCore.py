@@ -1,7 +1,7 @@
-from .Item import Item
+from .ItemCore import ItemCore
 from .type_enums import ItemType
 
-class Object(Item):
+class ObjectCore(ItemCore):
     """
     Represents an object in the shell context.
 
@@ -14,5 +14,5 @@ class Object(Item):
         super().__init__(name, path, item_type=ItemType.OBJECT)
 
     def __repr__(self):
-        return f"Object(name={self.name}, path={self.value})"
+        return f"ObjectCore(name={self.name}, path={self.value})"
 

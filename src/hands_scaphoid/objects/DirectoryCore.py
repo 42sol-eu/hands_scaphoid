@@ -20,9 +20,9 @@ import shutil
 from pathlib import Path
 from typing import List, Optional, Union
 from ..__base__ import PathLike, console
-from .Object import Object
+from .ObjectCore import ObjectCore
 
-class Directory(Object):
+class DirectoryCore(ObjectCore):
     """
     Pure directory operations class without context management.
     
@@ -36,11 +36,12 @@ class Directory(Object):
         files = Directory.list_contents(Path("myproject"))
         Directory.copy_directory(Path("source"), Path("target"))
     """
+    
     def __init__(self, name: str, path: str):
         super().__init__(name, path)
         
     def __repr__(self):
-        return f"Directory(name={self.name}, path={self.value})"
+        return f"DirectoryCore(name={self.name}, path={self.value})"
     
     @staticmethod
     def create_directory(dir_path: PathLike, parents: bool = True, exist_ok: bool = True) -> None:

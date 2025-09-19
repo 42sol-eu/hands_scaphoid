@@ -17,9 +17,9 @@ Authors: ["Andreas Häberle"]
 
 from pathlib import Path
 from typing import Optional, List, Dict, Any
-from .contexts.Context import Context
-from .ArchiveOperations import Archive
-from .__base__ import PathLike, console
+from .Context import Context
+from ..objects.ArchiveFile import Archive
+from ..__base__ import PathLike, console
 
 
 class ArchiveContext(Context):

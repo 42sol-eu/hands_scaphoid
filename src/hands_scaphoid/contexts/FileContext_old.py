@@ -21,7 +21,7 @@ from .contexts.Context import Context
 from .__base__ import PathLike, console
 
 
-class File(Context):
+class FileCore(Context):
     """
     File context manager for hierarchical file system operations.
     
@@ -30,9 +30,9 @@ class File(Context):
     file content while maintaining awareness of the current directory context.
     
     Example:
-        with Directory('~') as home:
-            with Directory('projects') as projects:
-                with File('README.md') as readme:
+        with DirectoryCore('~') as home:
+            with DirectoryCore('projects') as projects:
+                with FileCore('README.md') as readme:
                     readme.add_heading('My Project')
                     readme.write_content('This is my project.')
     """

@@ -4,7 +4,7 @@ import os
 import yaml
 import json
 
-class Item:
+class ItemCore:
     def __init__(self, name: str, value: str, item_type: ItemType = ItemType.ITEM):
         self._name = name
         self._value = value
@@ -27,7 +27,7 @@ class Item:
         self._value = new_value
         
     def __repr__(self) -> str:
-        return f"Item(name={self._name}, value={self._value}, item_type={self._item_type})"
+        return f"ItemCore(name={self._name}, value={self._value}, item_type={self._item_type})"
     
     def __str__(self) -> str:
         return f'{self._name}="{self._value}"'

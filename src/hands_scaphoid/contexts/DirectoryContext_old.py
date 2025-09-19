@@ -21,7 +21,7 @@ from .contexts.Context import Context
 from .__base__ import PathLike, os, console
 
 
-class Directory(Context):
+class DirectoryCore(Context):
     """
     Directory context manager for hierarchical file system operations.
     
@@ -30,10 +30,10 @@ class Directory(Context):
     and restoring it when exiting.
     
     Example:
-        with Directory('~') as home:
-            with Directory('projects') as projects:
+        with DirectoryCore('~') as home:
+            with DirectoryCore('projects') as projects:
                 # Now working in ~/projects
-                with Directory('myproject') as project:
+                with DirectoryCore('myproject') as project:
                     # Now working in ~/projects/myproject
                     pass
     """
@@ -177,7 +177,7 @@ class Directory(Context):
         Returns:
             A new Directory instance for the subdirectory
         """
-        return Directory(name, create=True, dry_run=self.dry_run)
+        return DirectoryCore(name, create=True, dry_run=self.dry_run)
     
     def create_directory(self) -> 'Directory':
         """

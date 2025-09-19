@@ -6,7 +6,26 @@ command allowlisting, and Docker integration. It also provides hierarchical cont
 managers for file system operations including directories, files, and archives.
 """
 
+__version__ = "2025.0.3"
+__author__ = "Andreas Felix Häberle"
+
 from .__base__ import *
+from .objects import (
+    type_enums,
+    ItemCore,
+    ObjecCore,
+    VariableCore,
+    FileCore,
+    ArchiveFile,
+    DirectoryCore,
+    ShellExecutable,
+    PowerShell,
+    WslShell,
+)
+from .contexts import (
+    Context,
+    ShellContext,
+)
 from .main import (
     console,
     demo,
@@ -15,14 +34,37 @@ from .main import (
 )
 
 __all__ = [
-    "console",  # src\hands_scaphoid\__base__.py
-    "DEBUG_MODE",  # src\hands_scaphoid\__base__.py
-    "demo",  # src\hands_scaphoid\main.py
-    "ENABLE_TRACEBACK",  # src\hands_scaphoid\__base__.py
-    "exec",  # src\hands_scaphoid\main.py
-    "G_debug",  # src\hands_scaphoid\__base__.py
-    "main",  # src\hands_scaphoid\main.py
-    "no",  # src\hands_scaphoid\__base__.py
-    "PathLike",  # src\hands_scaphoid\__base__.py
-    "yes",  # src\hands_scaphoid\__base__.py
+    # Version and author info
+    "__version__",
+    "__author__",
+    
+    # Objects
+    "type_enums",
+    "Item",
+    "Object", 
+    "Variable",
+    "File",
+    "Archive",
+    "Directory",
+    "Shell",
+    "PowerShell",
+    "WslShell",
+    
+    # Contexts
+    "Context",
+    "ShellContext",
+    
+    # Main functions
+    "console",
+    "demo",
+    "exec",
+    "main",
+    
+    # Base utilities
+    "DEBUG_MODE",
+    "ENABLE_TRACEBACK", 
+    "G_debug",
+    "no",
+    "PathLike",
+    "yes",
 ]

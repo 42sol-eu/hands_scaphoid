@@ -11,18 +11,18 @@
 graph TD;
     Item --> Object;
     Object --> Directory;
-    Object --> File;
-    Directory -contains-> File;
+    Object --> FileCore;
+    Directory -contains-> FileCore;
     Directory -contains-> Directory; 
     Object --> Link;
-    File --> Archive;
-    File --> Executable;
-    File --> Script;
+    FileCore --> Archive;
+    FileCore --> Executable;
+    FileCore --> Script;
     Script -uses-> Executable;
     Directory --> MountPoint;
     Item --> Path;
     Item --> System;
-    Item --> Variable;
+    Item --> VariableCore;
 ```
 
 - `Object`s are generic file system items

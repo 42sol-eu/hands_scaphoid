@@ -29,9 +29,9 @@ from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 from ..__base__ import *
-from. Object import Object
+from.ExecutableCore import ExecutableCore
 
-class Shell(Object):
+class ShellExecutable(ExecutableCore):
     """
     A secure shell command executor with environment management.
     

@@ -1,7 +1,7 @@
 
 
 
-class Archive(Context):
+class ArchiveContextOld(Context):
     """
     Archive context manager for hierarchical file system operations.
     
@@ -10,9 +10,9 @@ class Archive(Context):
     while maintaining awareness of the current directory context.
     
     Example:
-        with Directory('~') as home:
-            with Directory('projects') as projects:
-                with Archive(source='myproject', target='backup.zip') as archive:
+        with DirectoryCore('~') as home:
+            with DirectoryCore('projects') as projects:
+                with ArchiveFile(source='myproject', target='backup.zip') as archive:
                     archive.add_directory('myproject')
                     archive.add_file('README.md')
     """

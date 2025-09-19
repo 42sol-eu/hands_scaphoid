@@ -16,7 +16,7 @@ import platform
 import subprocess
 from typing import Dict, List, Optional, Union
 
-from .Shell import Shell
+from .ShellExecutable import Shell
 from ..__base__ import console
 
 

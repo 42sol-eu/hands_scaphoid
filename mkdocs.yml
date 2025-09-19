@@ -15,15 +15,25 @@ nav:
     - Basic Usage: user-guide/basic-usage.md
     - Windows Shells: windows-shells.md
   - API Reference:
+    - API Reference: api/api-reference.md
+    - API Objects: api/objects.md
     - Objects: 
-      - Objects: api/objects.md
-      - Shell: api/objects/shell.md
+      - Item: api/objects/item-core.md
+      - Object: api/objects/object-core.md
+      - Variable: api/objects/variable-core.md
+      - File: api/objects/file-core.md
+      - Archive: api/objects/archive-file.md
+      - Directory: api/objects/directory-core.md
+      - Executables: api/objects/executable-core.md
+      - Scripts: api/objects/file-script.md
+      - Shell: api/objects/shell-executable.md
+      - WindowsShells: api/objects/windows-shells.md
     - Context Managers:
-      - Context Managers: api/context-managers.md
+      - Context Managers: api/contexts/context-managers.md
       - ShellContext: api/contexts/shell-context.md
-      - Hierarchical Contexts: api/contexts/hierarchical-contexts.md
   - Examples: examples.md
   - Plugin Features Test: plugin-features-test.md
+  - Hierarchical Contexts: user-guide/hierarchical-contexts.md
 
 theme:
   name: material
