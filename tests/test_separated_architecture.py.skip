@@ -17,7 +17,7 @@ authors:         felix@42sol.eu
 project:
 project:
     name:        hands_scaphoid
-    uuid:        TODO_uuid_scaphoid
+    uuid:        2945ba3b-2d66-4dff-b898-672c386f03f4
     url:         https://github.com/42sol-eu/hands_scaphoid
 """
 

@@ -13,7 +13,7 @@ Description:
     Shell context runner base module
 
 Project:
-    name: hands/palm/trapezium
+    name: hands/scapohoid
     uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
 
 Authors: ["Andreas Häberle"]
@@ -32,6 +32,8 @@ PathLike = Union[str, Path]
 
 from rich import print
 from rich.console import Console
+from rich.logging import RichHandler
+import logging
 
 # Constants
 DEBUG_MODE = False
@@ -45,10 +47,19 @@ if ENABLE_TRACEBACK:
 # Convenience constants
 no = False
 yes = True
+false = False
+true = True
 G_debug = DEBUG_MODE
 
 # Create console instance for rich output
 console = Console()
+
+logging.basicConfig(
+    level=logging.DEBUG if DEBUG_MODE else logging.INFO,
+    format="%(message)s",
+    datefmt="[%X]",
+    handlers=[RichHandler(console=console, rich_tracebacks=True)],
+)
 
 __all__ = [
     "os",
@@ -63,3 +74,5 @@ __all__ = [
     "DEBUG_MODE",
     "ENABLE_TRACEBACK",
 ]
+
+logger = logging.getLogger("hands_scaphoid")

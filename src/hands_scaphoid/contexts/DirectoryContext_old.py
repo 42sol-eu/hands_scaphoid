@@ -4,15 +4,16 @@ Directory module for hands-scaphoid package.
 
 This module provides the Directory class for managing directory operations
 with context manager support and hierarchical path resolution.
-
+----
 File:
-    name: Directory.py
+    name: DirectoryContext.py
+    uuid: 3908677f-4768-4b9b-9b8c-74cd0842a5b7
     date: 2025-09-16
 
-Description:
+authors: ["Andreas Häberle"]
+description:
     Directory context manager for hierarchical file system operations
 
-Authors: ["Andreas Häberle"]
 """
 
 from pathlib import Path

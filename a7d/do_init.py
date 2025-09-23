@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Simple constants for python projects.
+Create and update your __init__.py files in your Python projects.
 ----
 file:
-    name:        update_init_files.py  
+    name:        do_init.py  
     uuid:        5d9f9244-9783-4db3-a037-690ebbc99b70
 description:     Simple generator helper for python projects
 authors:         felix@42sol.eu
@@ -33,7 +33,7 @@ from click import (      #!md| [docs](https://click.palletsprojects.com/en/8.1.x
     secho,
     echo,
     confirm,
-#    Choice,
+    Choice,
 )
 
 
@@ -214,8 +214,9 @@ def update_init_file(folder: PathLike,
                                 elif hasattr(elem, 's'):  # For backward compatibility
                                     existing_all_names.append(elem.s)
                         elif isinstance(node.value, ast.Constant):
-                            existing_all_names = node.value.value if isinstance(node.value.value, list)
-                                                                else []
+                            active = node.value
+                            is_list = isinstance(active.value, list)
+                            existing_all_names = active.value if is_list else []
     except SyntaxError:
         # Fallback to line-by-line parsing if AST fails
         lines = content.splitlines()
@@ -383,7 +384,14 @@ def check_cog_consistency(folder_path: PathLike, include_private: bool, cleanup:
     help="Check if COG-generated content matches what would be generated (requires existing COG checksums).",
 )
 def cli(folder, all_files, include_private, cleanup, group_by_file, cog_check):
-    """Semi-manual CLI for updating __init__.py files in a folder."""
+    """Semi-manual CLI for updating __init__.py files in a folder.
+    
+    Example usage:
+    
+    - uv run a7d/do_init.py ./my_package --all-files --cleanup --group-by-file
+    
+    - uv run a7d/do_init.py ./my_package --cog-check
+    """
     folder_path = FsPath(folder)
     
     # Handle COG checksum validation

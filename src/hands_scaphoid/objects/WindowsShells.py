@@ -17,8 +17,8 @@ import platform
 import subprocess
 from typing import Dict, List, Optional, Union
 
-from .ShellExecutable import Shell
-from ..__base__ import console
+from .ShellExecutable import ShellExecutable as Shell
+from ..__base__ import console, logger, PathLike, Path 
 
 
 class PowerShell(Shell):

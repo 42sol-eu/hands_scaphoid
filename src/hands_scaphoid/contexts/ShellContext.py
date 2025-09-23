@@ -26,8 +26,8 @@ from contextlib import contextmanager
 from typing import Dict, Generator, Optional, Union
 from pathlib import Path
 
-from ..objects.ShellExecutable import Shell
-
+from ..objects.ShellExecutable import ShellExecutable as Shell
+from ..__base__ import PathLike, console, logger
 
 @contextmanager
 def ShellContext(

@@ -15,34 +15,25 @@ Description:
 Authors: ["Andreas Häberle"]
 """
 
-from enum import Enum
 from pathlib import Path
 from typing import Optional, List, Dict, Any
-import zipfile
-import tarfile
-import shutil
 
-from ..__base__ import PathLike, console
+from ..__base__ import PathLike, console, logger
 
 from .FileCore import FileCore
 from .type_enums import ItemType
-from ..commands.core_commands import get_file_extension
+from ..commands.core_commands import (
+    CompressionType,
+    get_file_extension
+)
+from ..commands.archive_commands import (
+    is_archive_file, 
+    create_7z_archive, 
+    create_tar_archive,
+    create_zip_archive
+)
 
-# from .contexts.Context import Context
-
-
-class CompressionType(str, Enum):
-    ZIP = "zip"
-    TAR = "tar"
-    GZIP = "gzip"
-    BZIP2 = "bzip2"
-    XZ = "xz"
-    SEVEN_Z = "7z"
-    RAR = "rar"
-    TAR_GZ = "tar.gz"
-    TAR_BZ2 = "tar.bz2"
-    UNKNOWN = "unknown"
-
+from ..commands.core_commands import CompressionType
 
 class ArchiveFile(FileCore):
     """
@@ -82,13 +73,14 @@ class ArchiveFile(FileCore):
         Returns:
             str: The compression type (e.g., 'zip', 'tar', 'gz', etc.) or 'unknown' if not recognized.
         """
-        extension = get_file_extension(name.lower())
+        extension = get_file_extension(name)
 
         compression_types = {
             "zip": CompressionType.ZIP,
             "tar": CompressionType.TAR,
             "tar.gz": CompressionType.TAR_GZ,
             "tar.bz2": CompressionType.TAR_BZ2,
+            "tar.xz": CompressionType.TAR_XZ,
             "gz": CompressionType.GZIP,
             "bz2": CompressionType.BZIP2,
             "xz": CompressionType.XZ,
@@ -118,12 +110,24 @@ class ArchiveFile(FileCore):
 
         if path.suffix.lower() == ".zip":
             return "zip"
+        elif path.suffix.lower() == ".gz":
+            return "gz"
+        elif path.suffix.lower() == ".bz2":
+            return "bz2"
+        elif path.suffix.lower() == ".7z":
+            return "7z"
+        elif path.suffix.lower() == ".rar":
+            return "rar"
         elif path.suffixes[-2:] == [".tar", ".gz"]:
             return "tar.gz"
         elif path.suffixes[-2:] == [".tar", ".bz2"]:
             return "tar.bz2"
+        elif path.suffixes[-2:] == [".tar", ".xz"]:
+            return "tar.xz"
         elif path.suffix.lower() == ".tar":
             return "tar"
+        elif path.suffix.lower() == ".xz":
+            return "xz"
         else:
             raise ValueError(f"Unsupported archive type for file: {path}")
 

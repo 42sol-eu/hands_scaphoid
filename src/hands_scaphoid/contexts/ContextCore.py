@@ -4,15 +4,19 @@ Context module for hands-scaphoid package.
 
 This module provides the base Context class for managing hierarchical file system operations
 with context manager support and global function access.
-
-File:
-    name: Context.py
+----
+file:
+    name: ContextCore.py
+    uuid: 1f31a384-f5c2-4b7b-a755-f0caffaff1f4
     date: 2025-09-16
-
-Description:
+description:
     Base context manager for hierarchical file system operations
+authors: ["Andreas Häberle"]
+project:
+    name:        hands_scaphoid
+    uuid:        2945ba3b-2d66-4dff-b898-672c386f03f4
+    url:         https://github.com/42sol-eu/hands_scaphoid
 
-Authors: ["Andreas Häberle"]
 """
 
 from pathlib import Path

@@ -52,3 +52,18 @@ dev = [
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.pylint]
+disable = [
+    "W1203",  # logging-fstring-interpolation
+]
+
+[tool.pylint.messages_control]
+disable = [
+    "W1203",  # logging-fstring-interpolation: Use lazy % formatting in logging functions
+]
+
+# TODO: add cli commands  ... in sections
+[project.scripts]
+extract = "hands_scaphoid.cli:extract"
+compress = "hands_scaphoid.cli:compress"

@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from hands_scaphoid import Shell, ShellContext
+from hands_scaphoid import ShellExecutable, ShellContext
 
 
 @pytest.fixture
@@ -35,13 +35,13 @@ PATH=/usr/bin:/bin
 @pytest.fixture
 def shell_with_temp_dir(temp_dir):
     """Create a Shell instance with a temporary directory."""
-    return Shell(cwd=str(temp_dir))
+    return ShellExecutable(cwd=str(temp_dir))
 
 
 @pytest.fixture
 def shell_with_env(temp_dir, temp_env_file):
     """Create a Shell instance with custom environment."""
-    return Shell(cwd=str(temp_dir), env_file=temp_env_file)
+    return ShellExecutable(cwd=str(temp_dir), env_file=temp_env_file)
 
 
 @pytest.fixture
