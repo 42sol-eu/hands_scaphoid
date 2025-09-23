@@ -63,6 +63,23 @@ disable = [
     "W1203",  # logging-fstring-interpolation: Use lazy % formatting in logging functions
 ]
 
+[tool.ruff]
+# Ruff configuration - disable similar logging checks
+ignore = [
+    "G201",  # Use `.exception()` instead of `.error()` when logging an exception
+    "G202",  # Avoid bare `except:` in logging
+    "G203",  # Use lazy % formatting for logging
+    "G204",  # Use lazy % formatting for logging (fstring)
+]
+
+[tool.ruff.lint]
+ignore = [
+    "G201",  # logging-not-lazy
+    "G202",  # logging-not-lazy  
+    "G203",  # logging-not-lazy
+    "G204",  # logging-fstring-interpolation (equivalent to pylint's W1203)
+]
+
 # TODO: add cli commands  ... in sections
 [project.scripts]
 extract = "hands_scaphoid.cli:extract"

@@ -21,5 +21,8 @@
     "python.linting.pylintArgs": [
         "--disable=W1203"
     ],
-    "python.analysis.diagnosticMode": "workspace"
+    "python.analysis.diagnosticMode": "workspace",
+    "ruff.lint.args": [
+        "--ignore=G201,G202,G203,G204"
+    ]
 }
