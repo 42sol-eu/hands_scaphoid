@@ -34,7 +34,10 @@ from .directory_commands import (
     list_archives,
     list_contents,
 )
-from .archive_commands import create_zip_archive, list_archives
+from .archive_commands import (
+    extract,
+    create,
+)
 
 
 __all__ = [

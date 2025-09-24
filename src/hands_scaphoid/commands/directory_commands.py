@@ -19,7 +19,7 @@ from ..__base__ import (
     PathLike, Path
 )
 from ..objects import ObjectCore
-from .core_commands import CompressionType, exists, filter, is_dir, is_instance, is_variable
+from .core_commands import CompressionType, does_not_exists, ensure_path, exists, filter, is_directory, is_instance, is_variable
 
 from typing import Optional, Any
 from pathlib import Path
@@ -59,25 +59,6 @@ def get_file_directory(script_file: Optional[PathLike] = None) -> Path:
     return Path(script_file).parent.resolve()
 
 
-def ensure_path(path: Any) -> Path:
-    """
-    Ensure the path is a Path object.
-
-    Args:
-        path (Any): The path to ensure.
-    Returns:
-        Path: The ensured Path object.
-    """
-    if is_instance(path, Path):
-        return path
-    elif is_instance(path, str):
-        return Path(path)
-    elif is_instance(path, ObjectCore):
-        path = path.name
-    elif is_variable(path):
-        path = str(os.environ.get(str(path), path))
-    return Path(str(path)) # TODO: does this work with Any?
-
 
 def list_contents(path: PathLike, filter_pattern: str = None) -> list[Path]:
     """
@@ -91,10 +72,10 @@ def list_contents(path: PathLike, filter_pattern: str = None) -> list[Path]:
         List of paths in this directory
     """
     path = ensure_path(path)
-    path = path.resolve_path()
+    path = path.resolve()
     item_list = []
 
-    if exists(path) is False or not is_dir(path):
+    if exists(path) is False or not is_directory(path):
         return item_list
 
     try:
@@ -123,23 +104,24 @@ def list_archives(path: PathLike, filter_pattern: str = None) -> list[Path]:
     """
     path = ensure_path(path)
     archives = []
-    if exists(path) is False or not is_dir(path):
+    if exists(path) is False or not is_directory(path):
         return archives
     
     try:
         archive_types = CompressionType.list_types()
         for item in path.iterdir():
-            if item.is_file() and item.suffix in archive_types:
-                archives.append(item)
-        return archives
+            ext = item.suffix.lower()[1:]
+            if item.is_file() and ext in archive_types:
+                if filter_pattern is None or item.match(filter_pattern, case_sensitive=False):
+                    archives.append(item)
     
     except PermissionError:
         logger.error(f"Permission denied listing directory: {path}")
-        return archives
     
     except Exception as e:
         logger.error(f"Error listing directory {path}: {e}")
-        return archives
+
+    return archives
 
 
 def create_directory(path: PathLike, 
@@ -158,7 +140,7 @@ def create_directory(path: PathLike,
     Returns:
         A new path instance for the subdirectory
     """
-    path = path.resolve_path() / name
+    path = path.resolve() / name
 
     os.mkdir(path, exist_ok=exist_ok, make_parents=make_parents)
     return Path(path)
@@ -184,18 +166,18 @@ def delete_directory(
     Returns:
         True if deleted successfully, False otherwise
     """
-    subdir = path.resolve_path() / name
-    if not subdir.exists() or not subdir.is_dir():
+    subdir = path.resolve() / name
+    if does_not_exists(subdir) or not is_directory(subdir):
         if not allow_empty:
             logger.error(f"Directory does not exist: {subdir}")
             
         return False
 
     try:
-        result = subdir.rmdir() if not recursive else shutil.rmtree(subdir, ignore_errors=ignore_errors)
+        subdir.rmdir() if not recursive else shutil.rmtree(subdir, ignore_errors=ignore_errors)
         logger.info(f"Deleted directory: {subdir}")
-        return result
-    
+        return True
+        
     except Exception as e:
         logger.error(f"Error deleting directory {subdir}: {e}")
     

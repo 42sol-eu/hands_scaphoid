@@ -85,7 +85,7 @@ def create_7z_archive(archive_name: PathLike, source: PathLike) -> bool:
         bool: True if the archive was created, False otherwise
     """
     ext = get_file_extension(archive_name)
-    if ext.lower() != ".7z":
+    if ext.lower() != "7z":
         archive_name += ".7z"
     archive_path = Path(archive_name)
     
@@ -117,7 +117,7 @@ def create_rar_archive(archive_name: PathLike, source: PathLike) -> bool:
         bool: True if the archive was created, False otherwise
     """
     ext = get_file_extension(archive_name)
-    if ext.lower() != ".rar":
+    if ext.lower() != "rar":
         archive_name += ".rar"
     archive_path = Path(archive_name)
     
@@ -156,9 +156,9 @@ def create_tar_archive(archive_name: PathLike, source: PathLike, compression: Op
         bool: True if the archive was created, False otherwise
     """
     ext = get_file_extension(archive_name)
-    if ".tar" not in ext.lower():
+    if "tar" not in ext.lower():
         archive_name += ".tar"
-    if compression not in ext.lower():
+    if compression and compression.lower() not in ext.lower():
         if compression:
             archive_name += f".{compression}"
     archive_path = Path(archive_name)
@@ -170,8 +170,7 @@ def create_tar_archive(archive_name: PathLike, source: PathLike, compression: Op
         logger.error(f"[red]Unsupported compression type:[/red] {compression}")
         return False
 
-    ext = f".tar.{compression}" if compression else ".tar"
-    archive_path = Path(f"{archive_name}{ext}")
+    archive_path = Path(archive_name)
 
     if not source.exists() or not source.is_dir():
         logger.error(
@@ -204,7 +203,7 @@ def create_zip_archive(archive_name: str, source: PathLike) -> bool:
     """
 
     ext = get_file_extension(archive_name)
-    if ext.lower() != ".zip":
+    if ext.lower() != "zip":
         archive_name += ".zip"
     archive_path = Path(archive_name)
     
@@ -361,6 +360,19 @@ def extract_zip_archive(archive_path: PathLike, target_dir: PathLike) -> bool:
     return False
 
 
+def create(archive_name: PathLike, source: PathLike, compression: Optional[str] = None) -> bool:
+    """
+    Create an archive from the specified source directory.
+
+    Args:
+        archive_name: Name of the output archive file (without extension)
+        source: Path to the source directory to archive
+        compression: Compression type for tar archives ('gz', 'bz2', 'xz', or None)
+    Returns:
+        bool: True if the archive was created, False otherwise
+    """
+    pass
+
 def extract(archive_path: PathLike, target_dir: PathLike) -> bool:
     """
     Extract an archive to the specified target directory.
@@ -380,17 +392,17 @@ def extract(archive_path: PathLike, target_dir: PathLike) -> bool:
     try:
         ext = get_file_extension(archive_path).lower()
         match ext:
-            case ".7z":
+            case "7z":
                 return extract_7z_archive(archive_path, target_dir)
     
-            case ".rar":
+            case "rar":
                 return extract_rar_archive(archive_path, target_dir)
             
-            case ".tar" | ".tar.gz" | ".tar.bz2" | ".tar.xz":                
-                compression = ext.replace(".tar", "").lstrip(".") or None
+            case "tar" | "tar.gz" | "tar.bz2" | "tar.xz":                
+                compression = ext.replace("tar", "").lstrip(".") or None
                 return extract_tar_archive(archive_path, target_dir, compression)
             
-            case ".zip":
+            case "zip":
                 return extract_zip_archive(archive_path, target_dir)
             
             case _:
@@ -404,7 +416,7 @@ def extract(archive_path: PathLike, target_dir: PathLike) -> bool:
 
     return False    
         
-def list_content(archive_path: PathLike) -> List[Path]:
+def list_contents(archive_path: PathLike) -> List[Path]:
     """
     List all files in the specified archive.
 
@@ -422,16 +434,16 @@ def list_content(archive_path: PathLike) -> List[Path]:
     try:
         ext = get_file_extension(archive_path).lower()
         match ext:
-            case ".zip":
+            case "zip":
                 with zipfile.ZipFile(archive_path, "r") as zip_file:
                     return [Path(file) for file in zip_file.namelist()]
-            case ".7z":
+            case "7z":
                 with py7zr.SevenZipFile(archive_path, "r") as archive:
                     return [Path(file) for file in archive.getnames()]
-            case ".rar":
+            case "rar":
                 with rarfile.RarFile(archive_path, "r") as archive:
                     return [Path(file.filename) for file in archive.infolist()]
-            case ".tar" | ".tar.gz" | ".tar.bz2" | ".tar.xz":
+            case "tar" | ".tar.gz" | ".tar.bz2" | ".tar.xz":
                 with tarfile.open(archive_path, "r") as archive:
                     return [Path(member.name) for member in archive.getmembers() if member.isfile()]
             case _:

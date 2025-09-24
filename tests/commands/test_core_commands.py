@@ -26,7 +26,10 @@ from unittest import mock
 from unittest.mock import patch
     
 from hands_scaphoid.commands.core_commands import (
+    CompressionType,
+    does_not_exists,
     exists,
+    filter,
     is_instance,
     is_item,
     is_directory,
@@ -35,9 +38,11 @@ from hands_scaphoid.commands.core_commands import (
     is_hands_project,
     is_link,
     is_object,
+    is_project,
     is_variable,
     is_vscode_project,
     get_file_extension,
+    which,
 )
 def test_exists(tmp_path):
     file = tmp_path / "file.txt"
@@ -45,13 +50,23 @@ def test_exists(tmp_path):
     assert exists(file)
     assert not exists(tmp_path / "nofile.txt")
 
+
+# Helper to create symlinks safely on platforms that may not allow them.
+def safe_symlink(target: Path, link: Path):
+    try:
+        link.symlink_to(target)
+        return True
+    except (OSError, NotImplementedError) as e:
+        pytest.skip(f"Symbolic links not supported or insufficient privileges: {e}")
+
 def test_is_object(tmp_path):
     file = tmp_path / "file.txt"
     file.write_text("content")
     dir_path = tmp_path / "dir"
     dir_path.mkdir()
-    symlink = tmp_path / "link"
-    symlink.symlink_to(file)
+    symlink = tmp_path / "link1"
+    
+    safe_symlink(symlink, file)
     assert is_object(file)
     assert is_object(dir_path)
     assert is_object(symlink)
@@ -76,8 +91,8 @@ def test_is_file(tmp_path):
 def test_is_link(tmp_path):
     file = tmp_path / "file.txt"
     file.write_text("content")
-    symlink = tmp_path / "link"
-    symlink.symlink_to(file)
+    symlink = tmp_path / "link2"
+    safe_symlink(symlink,file)
     assert is_link(symlink)
     assert not is_link(file)
 
@@ -95,8 +110,8 @@ def test_is_item(tmp_path, monkeypatch):
     file.write_text("content")
     dir_path = tmp_path / "dir"
     dir_path.mkdir()
-    symlink = tmp_path / "link"
-    symlink.symlink_to(file)
+    symlink = tmp_path / "link4"
+    safe_symlink(symlink, file)
     assert is_item(file)
     assert is_item(dir_path)
     assert is_item(symlink)
@@ -155,7 +170,208 @@ def test_is_project(tmp_path):
     ("complex.name.drawio.png", "drawio.png"),
 ])
 def test_get_file_extension(filename, expected):
-    assert get_file_extension(filename) == expected
-    assert get_file_extension(Path(filename)) == expected
+    assert get_file_extension(filename) == expected, f"Expected {expected} for {filename}, but got {get_file_extension(filename)}"
+    assert get_file_extension(Path(filename)) == expected, f"Expected {expected} for Path({filename}), but got {get_file_extension(Path(filename))}"
 
-# TODO: implement tests all core_commands
+@pytest.mark.parametrize("compression_type,expected", [
+    (CompressionType.ZIP, "zip"),
+    (CompressionType.TAR, "tar"),
+    (CompressionType.GZIP, "gzip"),
+    (CompressionType.GZ, "gz"),
+    (CompressionType.BZIP2, "bzip2"),
+    (CompressionType.XZ, "xz"),
+    (CompressionType.SEVEN_Z, "7z"),
+    (CompressionType.RAR, "rar"),
+    (CompressionType.TAR_GZ, "tar.gz"),
+    (CompressionType.TAR_BZ2, "tar.bz2"),
+    (CompressionType.TAR_XZ, "tar.xz"),
+    (CompressionType.UNKNOWN, "UNKNOWN"),
+])
+def test_compression_type_enum(compression_type, expected):
+    """Test CompressionType enum values."""
+    assert compression_type.value == expected
+
+def test_compression_type_list_types():
+    """Test listing all compression types."""
+    types = CompressionType.list_types()
+    expected_types = [
+        "zip", "tar", "gzip", "gz", "bzip2", "xz", "7z", "rar", 
+        "tar.gz", "tar.bz2", "tar.xz"
+    ]
+    # Note: UNKNOWN should be filtered out
+    for expected_type in expected_types:
+        assert expected_type in types
+    assert "UNKNOWN" not in types
+
+def test_does_not_exists(tmp_path):
+    """Test does_not_exists function."""
+    file = tmp_path / "file.txt"
+    file.write_text("content")
+    assert not does_not_exists(file)
+    assert does_not_exists(tmp_path / "nonexistent.txt")
+
+def test_filter_function(tmp_path):
+    """Test filter function with glob patterns."""
+    # Create test files
+    (tmp_path / "file1.txt").write_text("content")
+    (tmp_path / "file2.txt").write_text("content")
+    (tmp_path / "file3.py").write_text("content")
+    subdir = tmp_path / "subdir"
+    subdir.mkdir()
+    (subdir / "file4.txt").write_text("content")
+    
+    # Test filtering with *.txt pattern
+    txt_files = filter(tmp_path, "*.txt")
+    txt_names = [f.name for f in txt_files]
+    assert "file1.txt" in txt_names
+    assert "file2.txt" in txt_names
+    assert "file3.py" not in txt_names
+    
+    # Test filtering with *.py pattern
+    py_files = filter(tmp_path, "*.py")
+    py_names = [f.name for f in py_files]
+    assert "file3.py" in py_names
+    assert len(py_names) == 1
+    
+    # Test filtering on non-directory (should return empty list)
+    file_path = tmp_path / "file1.txt"
+    result = filter(file_path, "*.txt")
+    assert result == []
+
+def test_which_function():
+    """Test which function for finding executables."""
+    # Test with common system commands
+    python_path = which("python")
+    if python_path:  # Only test if python is available
+        assert isinstance(python_path, Path)
+        assert python_path.exists()
+    
+    # Test with non-existent command
+    result = which("nonexistent_command_12345")
+    assert result is None
+
+def test_which_with_path_object():
+    """Test which function with Path object input."""
+    result = which(Path("python"))
+    # Should handle Path objects the same as strings
+    if result:
+        assert isinstance(result, Path)
+
+class TestCoreCommandsAdditional:
+    """Additional tests for core_commands functions."""
+    
+    def test_is_project_combined(self, tmp_path):
+        """Test is_project function with different project types."""
+        # Test directory with multiple project markers
+        dir_path = tmp_path / "multi_project"
+        dir_path.mkdir()
+        (dir_path / ".git").mkdir()
+        (dir_path / ".vscode").mkdir()
+        (dir_path / ".hands").mkdir()
+        
+        assert is_project(dir_path)
+        assert is_git_project(dir_path)
+        assert is_vscode_project(dir_path)
+        assert is_hands_project(dir_path)
+    
+    def test_get_file_extension_edge_cases(self):
+        """Test get_file_extension with edge cases."""
+        # Test with no extension
+        assert get_file_extension("filename") == ""
+        assert get_file_extension("filename.") == ""
+        
+        # Test with hidden files
+        assert get_file_extension(".hidden") == ""
+        assert get_file_extension(".hidden.txt") == "txt"
+        
+        # Test case sensitivity
+        assert get_file_extension("FILE.TXT") == "txt"
+        assert get_file_extension("File.Zip") == "zip"
+        
+        # Test complex extensions
+        assert get_file_extension("backup.tar.gz.old") == "old"
+        assert get_file_extension("diagram.excalidraw.png") == "excalidraw.png"
+        
+        # Test very long extensions
+        assert get_file_extension("file.verylongextension") == "verylongextension"
+    
+    def test_is_item_edge_cases(self, tmp_path, monkeypatch):
+        """Test is_item function with various edge cases."""
+        # Test with Path objects
+        path_obj = Path("nonexistent")
+        assert not is_item(path_obj)
+        
+        # Test with empty string (should be treated as variable name)
+        assert not is_item("")
+        
+        # Test with existing environment variable
+        monkeypatch.setenv("TEST_ITEM_VAR", "value")
+        assert is_item("TEST_ITEM_VAR")
+        
+        # Test with special characters in variable names
+        monkeypatch.setenv("TEST_VAR_123", "value")
+        assert is_item("TEST_VAR_123")
+    
+    def test_error_conditions(self, tmp_path):
+        """Test error conditions and edge cases."""
+        # Test exists with invalid path types
+        assert not exists(None) if hasattr(Path, '__new__') else True  # Depending on Path implementation
+        
+        # Test directory operations on files
+        file_path = tmp_path / "file.txt"
+        file_path.write_text("content")
+        assert not is_directory(file_path)
+        
+        # Test file operations on directories
+        dir_path = tmp_path / "dir"
+        dir_path.mkdir()
+        assert not is_file(dir_path)
+    
+    def test_symlink_operations(self, tmp_path):
+        """Test operations with symbolic links."""
+        # Create original file
+        original = tmp_path / "original.txt"
+        original.write_text("content")
+        
+        # Create symbolic link
+        link = tmp_path / "link.txt"
+        try:
+            link.symlink_to(original)
+            
+            # Test various functions with symlinks
+            assert exists(link)
+            assert is_object(link)
+            assert is_link(link)
+            assert is_item(link)
+            
+            # Test that symlink is not considered a regular file or directory
+            assert not is_file(link)  # This might depend on implementation
+            assert not is_directory(link)
+            
+        except OSError:
+            # Skip if symlinks are not supported on this system
+            pytest.skip("Symbolic links not supported on this system")
+    
+    def test_performance_with_large_directory(self, tmp_path):
+        """Test performance and correctness with larger directory structures."""
+        # Create a directory with many files
+        test_dir = tmp_path / "large_dir"
+        test_dir.mkdir()
+        
+        # Create 100 files with different extensions
+        for i in range(100):
+            ext = "txt" if i % 2 == 0 else "py"
+            (test_dir / f"file_{i:03d}.{ext}").write_text(f"content {i}")
+        
+        # Test filtering
+        txt_files = filter(test_dir, "*.txt")
+        py_files = filter(test_dir, "*.py")
+        
+        assert len(txt_files) == 50
+        assert len(py_files) == 50
+        
+        # Verify all are Path objects
+        for file_path in txt_files + py_files:
+            assert is_instance(file_path, Path), f"{file_path} is not a Path instance"
+            assert is_file(file_path), f"{file_path} is not a file"
+            assert exists(file_path), f"{file_path} does not exist"

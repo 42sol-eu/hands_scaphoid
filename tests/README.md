@@ -1,0 +1,1 @@
+uv run pytest .\tests\commands\ --cov=./src/hands_scaphoid/commands/ --cov-report=term-missing --cov-report=html

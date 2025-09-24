@@ -7,11 +7,13 @@ license = {file = "LICENSE"}
 authors = [
     {name = "Andreas Felix Häberle", email = "felix@42sol.eu"},
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 dependencies = [
     "click>=8.0.0",
     "cog>=0.16.7",
+    "pytest-cov>=7.0.0",
     "rich>=13.0.0",
+    "rich-click>=1.9.1",
     "ruff>=0.13.0",
 ]
 
@@ -32,8 +34,6 @@ docs = [
     "mkdocstrings[python]>=0.20",
     "mkdocs-include-markdown-plugin>=0.9",
 ]
-[project.scripts]
-hands-scaphoid = "hands_scaphoid.main:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -82,5 +82,6 @@ ignore = [
 
 # TODO: add cli commands  ... in sections
 [project.scripts]
-extract = "hands_scaphoid.cli:extract"
-compress = "hands_scaphoid.cli:compress"
+hands-scaphoid = "hands_scaphoid.main:main"
+#extract = "hands_scaphoid.cli:extract"
+#compress = "hands_scaphoid.cli:compress"

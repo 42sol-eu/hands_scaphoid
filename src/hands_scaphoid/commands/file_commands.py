@@ -16,11 +16,12 @@ project:
 
 from ..__base__ import (
     console, 
-    yes, no, true, false, 
-    DEBUG_MODE,
+    # yes, no, true, false, 
+    # DEBUG_MODE,
     logger,
     PathLike, Path
 )
+from .core_commands import is_file, ensure_path
 from typing import Optional, Any
 
 logger.debug("Importing file_commands module")

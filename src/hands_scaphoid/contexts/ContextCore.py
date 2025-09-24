@@ -27,7 +27,7 @@ import builtins
 from ..__base__ import PathLike, os, console
 
 
-class Context(ABC):
+class ContextCore(ABC):
     """
     Base context manager class for hierarchical file system operations.
 

@@ -86,6 +86,58 @@ Types of operations:
 | unmount( mount_point )             | D      | `umount {path}`         | Unmount a remote file system from the given mount point |
 | execute( file_path, args )        | E      | `{file_path} {args}`    | Execute a file at the given path with optional arguments |
 
+=== Archive Operations
+
+| Operation                          | Type   | Implementation Status | Test Coverage | Description                                            |
+|------------------------------------|--------|--------------------- |---------------|--------------------------------------------------------|
+| is_archive_file( path )            | M      | ✅ Implemented       | ✅ Complete   | Check if file is an archive based on extension         |
+| create_zip_archive( name, source ) | C      | ✅ Implemented       | ✅ Complete   | Create ZIP archive from directory                       |
+| create_tar_archive( name, source ) | C      | ✅ Implemented       | ✅ Complete   | Create TAR archive (with optional compression)         |
+| create_7z_archive( name, source )  | C      | ✅ Implemented       | ✅ Complete   | Create 7Z archive from directory                        |
+| create_rar_archive( name, source ) | C      | ✅ Implemented       | ✅ Complete   | Create RAR archive (requires external rar command)     |
+| extract( archive_path, target )    | C      | ✅ Implemented       | ✅ Complete   | Extract archive contents to target directory           |
+| list_contents( archive_path )      | S      | ✅ Implemented       | ✅ Complete   | List files and directories in archive                  |
+
+=== File Operations
+
+| Operation                          | Type   | Implementation Status | Test Coverage | Description                                            |
+|------------------------------------|--------|--------------------- |---------------|--------------------------------------------------------|
+| read( path, head, tail )           | R      | ✅ Implemented       | ✅ Complete   | Read file content with optional head/tail limits       |
+| filter( path, pattern )            | S      | 🔄 TODO              | 🔄 Placeholder| Filter files by pattern (planned)                      |
+| write( path, data )                | W      | 🔄 TODO              | 🔄 Placeholder| Write data to file (planned)                           |
+| append( path, data )               | W      | 🔄 TODO              | 🔄 Placeholder| Append data to file (planned)                          |
+| create( path, data )               | C      | 🔄 TODO              | 🔄 Placeholder| Create new file with data (planned)                    |
+
+=== Core Utilities
+
+| Operation                          | Type   | Implementation Status | Test Coverage | Description                                            |
+|------------------------------------|--------|--------------------- |---------------|--------------------------------------------------------|
+| exists( path )                     | M      | ✅ Implemented       | ✅ Complete   | Check if path exists                                    |
+| does_not_exists( path )            | M      | ✅ Implemented       | ✅ Complete   | Check if path does not exist                            |
+| is_file( path )                    | M      | ✅ Implemented       | ✅ Complete   | Check if path is a file                                 |
+| is_directory( path )               | M      | ✅ Implemented       | ✅ Complete   | Check if path is a directory                            |
+| is_link( path )                    | M      | ✅ Implemented       | ✅ Complete   | Check if path is a symbolic link                        |
+| is_object( path )                  | M      | ✅ Implemented       | ✅ Complete   | Check if path is any file system object                |
+| is_project( path )                 | M      | ✅ Implemented       | ✅ Complete   | Check if directory is a project (git/vscode/hands)     |
+| get_file_extension( filename )     | M      | ✅ Implemented       | ✅ Complete   | Get file extension (supports complex extensions)       |
+| which( executable )                | M      | ✅ Implemented       | ✅ Complete   | Find executable in system PATH                          |
+| filter( path, pattern )            | S      | ✅ Implemented       | ✅ Complete   | Filter directory contents by glob pattern              |
+
+=== Test Coverage Summary
+
+| Module              | Functions Tested | Coverage Level | Status        |
+|--------------------|------------------|----------------|---------------|
+| file_commands      | 1/5 functions    | 🟡 Partial     | Ready for expansion |
+| archive_commands   | 11/11 functions  | 🟢 Complete    | Fully tested |
+| core_commands      | 15/15 functions  | 🟢 Complete    | Comprehensive |
+
+**Legend:**
+- ✅ Implemented & Tested
+- 🔄 TODO/Planned
+- 🟢 Complete Coverage
+- 🟡 Partial Coverage  
+- 🔴 Needs Attention
+
 === Generic commands
 
 | Operation                          | Bash                  | Description                                          |

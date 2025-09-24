@@ -312,3 +312,6 @@ If you find this project helpful, please consider giving it a star on GitHub! ‚≠
 ## üìù Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for a list of changes and version history.
+
+# Rersouces (more)
+- https://pypi.org/project/rich-click/
