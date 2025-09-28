@@ -20,22 +20,38 @@ Authors: ["Andreas Häberle"]
 Projects: ["hands/palm/trapezium"]
 """
 
-import os
-from pathlib import Path
-import zipfile
-import subprocess
-import sys
-import time
-from typing import Any, Union, Optional, IO
+#%% [ Typing imports]
+from typing import (
+    Any, 
+    Callable,
+    Dict,
+    Generator,
+    IO,
+    List,
+    Optional, 
+    Union,
+)
 
 PathLike = Union[str, Path]
 
+from contextlib import contextmanager as context_manager
+
+#%% [Standard library imports]
+from abc import ABC as AbstractBaseClass
+from abc import abstractmethod as abstract_method
+import logging
+import os
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+#%% [Third party imports]
 from rich import print
 from rich.console import Console
 from rich.logging import RichHandler
-import logging
 
-# Constants
+#%% [Constants]
 DEBUG_MODE = False
 ENABLE_TRACEBACK = DEBUG_MODE
 
@@ -51,6 +67,7 @@ false = False
 true = True
 G_debug = DEBUG_MODE
 
+#%% [Local setup] 
 # Create console instance for rich output
 console = Console()
 
@@ -61,6 +78,7 @@ logging.basicConfig(
     handlers=[RichHandler(console=console, rich_tracebacks=True)],
 )
 
+#%% [Exports]
 __all__ = [
     "os",
     "subprocess",

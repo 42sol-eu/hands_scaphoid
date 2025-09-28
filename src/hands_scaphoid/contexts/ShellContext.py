@@ -19,17 +19,25 @@ Authors: ["Andreas Häberle"]
 Projects: ["hands/palm/scaphoid"]
 """
 
+#%% [Standard library imports]
 from __future__ import annotations
-
 import builtins
-from contextlib import contextmanager
-from typing import Dict, Generator, Optional, Union
-from pathlib import Path
 
+#%% [Local imports]
+from ..__base__ import (
+    context_manager,
+    Dict,
+    Optional,
+    logger,
+    Path,
+    PathLike,
+    Union
+)
 from ..objects.ShellExecutable import ShellExecutable as Shell
-from ..__base__ import PathLike, console, logger
 
-@contextmanager
+
+#%% [Context Manager Definition]
+@context_manager
 def ShellContext(
     cwd: Optional[Union[str, Path]] = None,
     env: Optional[Dict[str, str]] = None,

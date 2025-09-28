@@ -7,9 +7,9 @@ A context manager in Python is a construct that allows for the setup and teardow
 To use a context manager, you define a class with `__enter__` and `__exit__` methods, or you can use the `contextlib` module to create one easily. Here's an example:
 
 ```python
-from contextlib import contextmanager
+from contextlib import contextmanager as context_manager
 
-@contextmanager
+@context_manager
 def managed_resource():
     # Setup code
     resource = acquire_resource()

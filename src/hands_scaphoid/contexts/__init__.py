@@ -12,9 +12,11 @@ project:
     url:         https://github.com/42sol-eu/hands_scaphoid
 """
 
+#%% [Local imports]
 from .ContextCore import ContextCore
 from .ShellContext import ShellContext
 
+#%% [Exports]
 __all__ = [
     "ContextCore",
     "ShellContext",

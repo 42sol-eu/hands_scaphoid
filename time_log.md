@@ -6,3 +6,4 @@
   - 2h: structure and initial content
   - 4h: documentation 
   - 2h: refactor class names (ClassName for all classes *Core or FileScript)
+  - 5h: add custom archives (2025-09-28) 

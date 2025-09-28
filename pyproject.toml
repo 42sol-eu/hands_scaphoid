@@ -7,6 +7,28 @@ license = {file = "LICENSE"}
 authors = [
     {name = "Andreas Felix Häberle", email = "felix@42sol.eu"},
 ]
+
+# ---yaml
+# File:
+#    name: pyproject.toml
+#    uuid: {{generated-uuid}}
+#    date: {{modification date, YYYY-MM-DD}}
+#
+# Description:
+#    Python library configuration
+#
+# Project:
+#    name: hands_scaphoid
+#    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+#    url: https://github.com/42sol-eu/hands_scaphoid
+#
+# Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
+#
+# Abbreviations:
+# - {{abbreviation}}[{{context}}]:: {{description}}
+# - TOML[file]: Tom's Obvious, Minimal Language (file format)
+#
+
 requires-python = ">=3.13"
 dependencies = [
     "click>=8.0.0",
@@ -64,21 +86,51 @@ disable = [
 ]
 
 [tool.ruff]
-# Ruff configuration - disable similar logging checks
-ignore = [
-    "G201",  # Use `.exception()` instead of `.error()` when logging an exception
-    "G202",  # Avoid bare `except:` in logging
-    "G203",  # Use lazy % formatting for logging
-    "G204",  # Use lazy % formatting for logging (fstring)
+# Line length to match pylint and your codebase style
+line-length = 88
+target-version = "py311"
+
+# Enable additional rule sets
+lint.select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings  
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "PIE", # flake8-pie
+    "SIM", # flake8-simplify
 ]
 
-[tool.ruff.lint]
-ignore = [
-    "G201",  # logging-not-lazy
-    "G202",  # logging-not-lazy  
-    "G203",  # logging-not-lazy
-    "G204",  # logging-fstring-interpolation (equivalent to pylint's W1203)
+# Disable logging-related checks to match your W1203 disable preference
+lint.ignore = [
+    "G201",  # Use `.exception()` instead of `.error()` when logging an exception
+    "G202",  # Avoid bare `except:` in logging
+    # "G203",  # Use lazy % formatting for logging
+    # "G204",  # Use lazy % formatting for logging (fstring)
+    "E501",  # Line too long (handled by formatter)
+    "B008",  # Do not perform function calls in argument defaults (common in Click)
 ]
+
+
+# Allow certain patterns observed in your codebase
+[tool.ruff.lint.pep8-naming]
+# Allow class names with specific suffixes
+classmethod-decorators = ["classmethod"]
+
+[tool.ruff.lint.isort]
+# Import organization to match your pattern
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+known-first-party = ["hands_scaphoid"]
+lines-after-imports = 2
+
+[tool.ruff.format]
+# Formatting preferences
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
 
 # TODO: add cli commands  ... in sections
 [project.scripts]

@@ -4,10 +4,11 @@ Archive module for hands-scaphoid package.
 
 This module provides the Archive class for managing archive operations
 with context manager support and hierarchical path resolution.
-
+---yaml
 File:
-    name: ArchiveFile.py
-    date: 2025-09-16
+    name:   ArchiveFile.py
+    uuid:   14a7856f-b8d0-43b7-a647-5ccbfc45c0e8
+    date:   2025-09-16
 
 Description:
     Archive context manager for hierarchical file system operations
@@ -20,6 +21,7 @@ from typing import Optional, List, Dict, Any
 
 from ..__base__ import PathLike, console, logger
 
+from .ItemCore import ItemType
 from .FileCore import FileCore
 from .type_enums import ItemType
 from ..commands.core_commands import (
@@ -48,10 +50,10 @@ class ArchiveFile(FileCore):
     Example:
         ```python
         # Direct archive operations
-        Archive.create_zip_archive(Path("backup.zip"), Path("source_dir"))
-        Archive.add_file_to_zip(Path("backup.zip"), Path("new_file.txt"))
-        files = Archive.list_archive_contents(Path("backup.zip"))
-        Archive.extract_archive(Path("backup.zip"), Path("extracted_dir"))
+        ArchiveFile.create_zip_archive(Path("backup.zip"), Path("source_dir"))
+        ArchiveFile.add_file_to_zip(Path("backup.zip"), Path("new_file.txt"))
+        files = ArchiveFile.list_archive_contents(Path("backup.zip"))
+        ArchiveFile.extract_archive(Path("backup.zip"), Path("extracted_dir"))
         ```
     Attributes:
         name (str): The name of the archive file.
@@ -63,7 +65,7 @@ class ArchiveFile(FileCore):
         self.item_type = ItemType.ARCHIVE
 
     @classmethod
-    def compression_type(name: str) -> str:
+    def compression_type(cls, name: str) -> str:
         """
         Determines the compression type based on the file extension.
 
@@ -91,6 +93,15 @@ class ArchiveFile(FileCore):
 
     def __repr__(self):
         return f"ArchiveFile(name={self.name}, path={self.path})"
+
+
+    @staticmethod
+    def add_archive_type(name: str, extract_function, compress_function) -> boolean:
+        """
+        Add a user defined archive type (also used for types like *.whl, *.app)
+        """
+        done = CompressionType.add_archvive_type(name, extract_function, compress_funcion)
+        return done
 
     @staticmethod
     def detect_archive_type(archive_path: PathLike) -> str:
@@ -129,6 +140,9 @@ class ArchiveFile(FileCore):
         elif path.suffix.lower() == ".xz":
             return "xz"
         else:
+            # check for project specific archive types
+            # TODO: !!! implement whl, app and more 
+            
             raise ValueError(f"Unsupported archive type for file: {path}")
 
     @staticmethod
@@ -143,7 +157,7 @@ class ArchiveFile(FileCore):
             True if file appears to be an archive, False otherwise
         """
         try:
-            Archive.detect_archive_type(file_path)
+            ArchiveFile.detect_archive_type(file_path)
             return True
         except ValueError:
             return False
@@ -153,7 +167,7 @@ class ArchiveFile(FileCore):
         archive_path: PathLike, source_path: Optional[PathLike] = None
     ) -> None:
         """
-        Create a new ZIP archive.
+        Create a new ZIP ArchiveFile.
 
         Args:
             archive_path: Path for the new archive
@@ -193,7 +207,7 @@ class ArchiveFile(FileCore):
         compression: Optional[str] = None,
     ) -> None:
         """
-        Create a new TAR archive.
+        Create a new TAR ArchiveFile.
 
         Args:
             archive_path: Path for the new archive
@@ -233,7 +247,7 @@ class ArchiveFile(FileCore):
         archive_path: PathLike, file_path: PathLike, archive_name: Optional[str] = None
     ) -> None:
         """
-        Add a file to an existing ZIP archive.
+        Add a file to an existing ZIP ArchiveFile.
 
         Args:
             archive_path: Path to the ZIP archive
@@ -246,7 +260,7 @@ class ArchiveFile(FileCore):
         archive = Path(archive_path)
         file_to_add = Path(file_path)
 
-        if not archive.exists():
+        if not ArchiveFile.exists():
             raise FileNotFoundError(f"Archive not found: {archive}")
         if not file_to_add.exists():
             raise FileNotFoundError(f"File not found: {file_to_add}")
@@ -267,7 +281,7 @@ class ArchiveFile(FileCore):
         archive_path: PathLike, dir_path: PathLike, archive_name: Optional[str] = None
     ) -> None:
         """
-        Add a directory to an existing ZIP archive.
+        Add a directory to an existing ZIP ArchiveFile.
 
         Args:
             archive_path: Path to the ZIP archive
@@ -277,7 +291,7 @@ class ArchiveFile(FileCore):
         archive = Path(archive_path)
         directory = Path(dir_path)
 
-        if not archive.exists():
+        if not ArchiveFile.exists():
             raise FileNotFoundError(f"Archive not found: {archive}")
         if not directory.exists():
             raise FileNotFoundError(f"Directory not found: {directory}")
@@ -304,7 +318,7 @@ class ArchiveFile(FileCore):
         archive_path: PathLike, file_path: PathLike, archive_name: Optional[str] = None
     ) -> None:
         """
-        Add a file to an existing TAR archive.
+        Add a file to an existing TAR ArchiveFile.
 
         Args:
             archive_path: Path to the TAR archive
@@ -314,14 +328,14 @@ class ArchiveFile(FileCore):
         archive = Path(archive_path)
         file_to_add = Path(file_path)
 
-        if not archive.exists():
+        if not ArchiveFile.exists():
             raise FileNotFoundError(f"Archive not found: {archive}")
         if not file_to_add.exists():
             raise FileNotFoundError(f"File not found: {file_to_add}")
 
         try:
             # Determine TAR mode based on archive type
-            archive_type = Archive.detect_archive_type(archive)
+            archive_type = ArchiveFile.detect_archive_type(archive)
             if archive_type == "tar.gz":
                 mode = "a:gz"
             elif archive_type == "tar.bz2":
@@ -342,7 +356,7 @@ class ArchiveFile(FileCore):
     @staticmethod
     def list_archive_contents(archive_path: PathLike) -> List[str]:
         """
-        List contents of an archive.
+        List contents of an ArchiveFile.
 
         Args:
             archive_path: Path to the archive
@@ -359,7 +373,7 @@ class ArchiveFile(FileCore):
             raise FileNotFoundError(f"Archive not found: {path}")
 
         try:
-            archive_type = Archive.detect_archive_type(path)
+            archive_type = ArchiveFile.detect_archive_type(path)
 
             if archive_type == "zip":
                 with zipfile.ZipFile(path, "r") as zf:
@@ -383,7 +397,7 @@ class ArchiveFile(FileCore):
         archive_path: PathLike, target_path: Optional[PathLike] = None
     ) -> None:
         """
-        Extract all contents from an archive.
+        Extract all contents from an ArchiveFile.
 
         Args:
             archive_path: Path to the archive to extract
@@ -395,14 +409,14 @@ class ArchiveFile(FileCore):
         archive = Path(archive_path)
         target = Path(target_path) if target_path else Path.cwd()
 
-        if not archive.exists():
+        if not ArchiveFile.exists():
             raise FileNotFoundError(f"Archive not found: {archive}")
 
         try:
             # Create target directory if it doesn't exist
             target.mkdir(parents=True, exist_ok=True)
 
-            archive_type = Archive.detect_archive_type(archive)
+            archive_type = ArchiveFile.detect_archive_type(archive)
 
             if archive_type == "zip":
                 with zipfile.ZipFile(archive, "r") as zf:
@@ -423,7 +437,7 @@ class ArchiveFile(FileCore):
         archive_path: PathLike, file_name: str, target_path: Optional[PathLike] = None
     ) -> None:
         """
-        Extract a specific file from an archive.
+        Extract a specific file from an ArchiveFile.
 
         Args:
             archive_path: Path to the archive
@@ -436,14 +450,14 @@ class ArchiveFile(FileCore):
         archive = Path(archive_path)
         target = Path(target_path) if target_path else Path.cwd()
 
-        if not archive.exists():
+        if not ArchiveFile.exists():
             raise FileNotFoundError(f"Archive not found: {archive}")
 
         try:
             # Create target directory if it doesn't exist
             target.mkdir(parents=True, exist_ok=True)
 
-            archive_type = Archive.detect_archive_type(archive)
+            archive_type = ArchiveFile.detect_archive_type(archive)
 
             if archive_type == "zip":
                 with zipfile.ZipFile(archive, "r") as zf:
@@ -470,7 +484,7 @@ class ArchiveFile(FileCore):
     @staticmethod
     def archive_info(archive_path: PathLike) -> Dict[str, Any]:
         """
-        Get information about an archive.
+        Get information about an ArchiveFile.
 
         Args:
             archive_path: Path to the archive
@@ -487,7 +501,7 @@ class ArchiveFile(FileCore):
             raise FileNotFoundError(f"Archive not found: {path}")
 
         try:
-            archive_type = Archive.detect_archive_type(path)
+            archive_type = ArchiveFile.detect_archive_type(path)
             file_size = path.stat().st_size
 
             if archive_type == "zip":

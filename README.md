@@ -313,5 +313,20 @@ If you find this project helpful, please consider giving it a star on GitHub! тн
 
 See [CHANGELOG.md](CHANGELOG.md) for a list of changes and version history.
 
-# Rersouces (more)
+# Resources (more)
 - https://pypi.org/project/rich-click/
+- https://docs.github.com/en/copilot/get-started/best-practices
+- https://code.visualstudio.com/docs/copilot/customization/custom-instructions
+  - enable `github.copilot.chat.codeGeneration.useInstructionFiles`
+  - define `chat.instructionsFilesLocations` to include the paths to `.gitlab/instructions/` instruction files
+  - enable `chat.useAgentsMdFile` --> `AGENTS.md` file for agent instructions
+
+```settings.json
+    "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [
+        { "text": "Always include a list of key changes." }
+    ],
+    "github.copilot.chat.reviewSelection.instructions": [
+        { "file": "guidance/backend-review-guidelines.md" },
+        { "file": "guidance/frontend-review-guidelines.md" }
+  ]
+```

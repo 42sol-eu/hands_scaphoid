@@ -1,12 +1,32 @@
+#!/usr/bin/env python3
 """
 Unit tests for the main module and CLI interface.
+---yaml
+File:
+    name: test_main.py
+    uuid: 9a8b7c6d-5e4f-3210-9876-543210fedcba
+    date: 2025-09-28
+
+Description:
+    Comprehensive tests for main CLI interface functionality including
+    command execution, version display, and help system.
+
+Project:
+    name: hands_scaphoid
+    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+    url: https://github.com/42sol-eu/hands_scaphoid
+
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
+# Standard library imports
 from unittest.mock import patch, MagicMock
+
+# Third-party imports
+import pytest
 from click.testing import CliRunner
 
-import pytest
-
+# Project imports
 from hands_scaphoid.main import main, exec, demo
 from hands_scaphoid import __version__
 

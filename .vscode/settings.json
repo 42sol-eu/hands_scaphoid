@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "abstract_method",
         "addopts",
         "arcname",
         "capsys",
@@ -24,5 +25,9 @@
     "python.analysis.diagnosticMode": "workspace",
     "ruff.lint.args": [
         "--ignore=G201,G202,G203,G204"
+    ],
+
+    "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [
+        { "text": "Always include a list of key changes." }
     ]
 }

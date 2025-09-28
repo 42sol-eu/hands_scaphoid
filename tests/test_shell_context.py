@@ -1,12 +1,32 @@
+#!/usr/bin/env python3
 """
 Unit tests for the ShellContext context manager.
+---yaml
+File:
+    name: test_shell_context.py
+    uuid: abcd1234-ef56-7890-abcd-1234567890ef
+    date: 2025-09-28
+
+Description:
+    Comprehensive tests for ShellContext context manager functionality including
+    global function injection, cleanup, and integration with Shell class.
+
+Project:
+    name: hands_scaphoid
+    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+    url: https://github.com/42sol-eu/hands_scaphoid
+
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
+# Standard library imports
 import builtins
 from unittest.mock import patch, MagicMock
 
+# Third-party imports
 import pytest
 
+# Project imports
 from hands_scaphoid import ShellContext, Shell
 
 

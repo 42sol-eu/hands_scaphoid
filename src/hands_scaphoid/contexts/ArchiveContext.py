@@ -4,15 +4,21 @@ Archive context manager for hands-scaphoid package.
 
 This module provides the ArchiveContext class for managing archive operations
 with context manager support and hierarchical path resolution.
-
+---yaml
 File:
-    name: ArchiveContext.py
-    date: 2025-09-16
+    name:   ArchiveContext.py
+    uuid:   e57327ae-44be-429a-9bb6-9b9eeb5c8dd1
+    date:   2025-09-16
 
 Description:
     Archive context manager for hierarchical file system operations
 
-Authors: ["Andreas Häberle"]
+Project:
+    name:        a7d
+    uuid:        2cc2a024-ae2a-4d2c-91c2-f41348980f7f
+    url:         https://github.com/42sol-eu/a7d
+
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
 from pathlib import Path

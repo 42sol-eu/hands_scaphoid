@@ -1,14 +1,35 @@
+#!/usr/bin/env python3
 """
-Test configuration and fixtures for hands-trapezium package.
+Test configuration and fixtures for hands_scaphoid package.
+---yaml
+File:
+    name: conftest.py
+    uuid: 638e5d46-ac46-410b-8991-e8a23b7c57f3
+    date: 2025-09-28
+
+Description:
+    Global pytest configuration and fixtures for testing hands_scaphoid
+    functionality including temporary directories, mock environments,
+    and shell instances.
+
+Project:
+    name: hands_scaphoid
+    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+    url: https://github.com/42sol-eu/hands_scaphoid
+
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
+#%% [Standard library imports]
 import os
 import tempfile
 from pathlib import Path
 
+#%% [ Third-party imports]
 import pytest
 
-from hands_scaphoid import ShellExecutable, ShellContext
+#%% [Project imports]
+from hands_scaphoid import ShellExecutable
 
 
 @pytest.fixture
@@ -34,13 +55,13 @@ PATH=/usr/bin:/bin
 
 @pytest.fixture
 def shell_with_temp_dir(temp_dir):
-    """Create a Shell instance with a temporary directory."""
+    """Create a shell instance with a temporary directory."""
     return ShellExecutable(cwd=str(temp_dir))
 
 
 @pytest.fixture
 def shell_with_env(temp_dir, temp_env_file):
-    """Create a Shell instance with custom environment."""
+    """Create a shell instance with custom environment."""
     return ShellExecutable(cwd=str(temp_dir), env_file=temp_env_file)
 
 

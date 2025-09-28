@@ -1,41 +1,82 @@
 """
 Generic archive commands.
-----
-file:
-    name:        archive_commands.py  
-    uuid:        5bcba9a5-9afb-44a1-b711-3f971fb419fc
-description:     archive commands
-authors:         felix@42sol.eu
-project:
+- tar files
+- typical compression formats
+- special archives:
+  - *.whl: Python installers TODO: implement whl archives
+  - *.app: MacOS applications TODO: implement app archives
+  - *.3mf: Printing projects TODO: implement 3mf archives
+  - *.docx/*.xlsx/*.pptx: Office documents TODO: implement office archives
+  NOTE: Dual view of an archive directory (extracted) and File (compressed).
+---yaml
+File:
+    name:       archive_commands.py
+    uuid:       5bcba9a5-9afb-44a1-b711-3f971fb419fc
+    date:       2025-09-28
+
+Description:     archive commands
+
+Project:
     name:        hands_scaphoid
     uuid:        2945ba3b-2d66-4dff-b898-672c386f03f4
     url:         https://github.com/42sol-eu/hands_scaphoid
+
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-from ..__base__ import logger, PathLike, Path
-from typing import List, Optional, Any
-from .core_commands import (
-    CompressionType, 
-    exists,
-    ensure_path,
-    does_not_exists,
-    get_file_extension, 
-    is_directory,
-    is_file,
-    is_instance,
-    which,
-)
-from .directory_commands import CompressionType, list_contents
-
-import rarfile  # Requires 'rarfile' package
-import tarfile
-import py7zr    # Requires 'py7zr' package
-import zipfile
+# %% [Standard library imports]
 import os
 import subprocess
+import tarfile
+import zipfile
+
+# %% [Third party imports]
+import py7zr
+import rarfile
+
+# %% [Local imports]
+from ..base import (
+    List,
+    Optional,
+    Path,
+    PathLike,
+    logger,
+)
+from .core_commands import (
+    CompressionType,
+    does_not_exists,
+    ensure_path,
+    exists,
+    get_file_extension,
+    is_directory,
+    is_file,
+    which,
+)
+
+
+# %% [Standard library imports]
+
+# %% [3rd party imports]
+# Optional imports for extended archive support
+try:
+    import rarfile  # Requires 'rarfile' package
+
+    RARFILE_AVAILABLE = True
+except ImportError:
+    RARFILE_AVAILABLE = False
+    logger.debug("rarfile package not available - RAR support disabled")
+
+try:
+    import py7zr  # Requires 'py7zr' package
+
+    PY7ZR_AVAILABLE = True
+except ImportError:
+    PY7ZR_AVAILABLE = False
+    logger.debug("py7zr package not available - 7Z support disabled")
 
 logger.debug("Importing archive_commands module")
 # used in hands_scaphoid.objects.ArchiveFile
+
 
 def is_archive_file(file_path: PathLike) -> bool:
     """
@@ -50,6 +91,7 @@ def is_archive_file(file_path: PathLike) -> bool:
     archive_types = CompressionType.list_types()
     file_extension = get_file_extension(file_path).lower()
     return file_extension in archive_types
+
 
 def core_preconditions(target: PathLike, source: PathLike) -> bool:
     """
@@ -74,6 +116,7 @@ def core_preconditions(target: PathLike, source: PathLike) -> bool:
 
     return True
 
+
 def create_7z_archive(archive_name: PathLike, source: PathLike) -> bool:
     """
     Create a 7z archive from the specified source directory.
@@ -88,12 +131,12 @@ def create_7z_archive(archive_name: PathLike, source: PathLike) -> bool:
     if ext.lower() != "7z":
         archive_name += ".7z"
     archive_path = Path(archive_name)
-    
+
     if not core_preconditions(archive_path, source):
         return False
 
     try:
-        with py7zr.SevenZipFile(archive_path, 'w') as archive:
+        with py7zr.SevenZipFile(archive_path, "w") as archive:
             # Add all files and subdirectories from source
             for root, _, files in os.walk(source):
                 for file in files:
@@ -103,8 +146,9 @@ def create_7z_archive(archive_name: PathLike, source: PathLike) -> bool:
         return True
     except Exception as e:
         logger.error(f"[red]Error creating archive {archive_path}:[/red] {e}")
-    
+
     return False
+
 
 def create_rar_archive(archive_name: PathLike, source: PathLike) -> bool:
     """
@@ -120,31 +164,38 @@ def create_rar_archive(archive_name: PathLike, source: PathLike) -> bool:
     if ext.lower() != "rar":
         archive_name += ".rar"
     archive_path = Path(archive_name)
-    
+
     if core_preconditions(archive_path, source) is False:
         return False
-    
+
     try:
         # rarfile does not support writing archives directly.
         # Use external 'rar' command if available.
         if not which("rar"):
-            logger.error("[red]'rar' executable not found. Please install WinRAR or ensure 'rar' is in your PATH.[/red]")
+            logger.error(
+                "[red]'rar' executable not found. Please install WinRAR or ensure 'rar' is in your PATH.[/red]"
+            )
             return False
-        
+
         cmd = ["rar", "a", str(archive_path), str(source)]
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode == 0:
             logger.info(f"[green]Created archive:[/green] {archive_path}")
             return True
         else:
-            logger.error(f"[red]Error creating archive {archive_path}:[/red] {result.stderr}")
+            logger.error(
+                f"[red]Error creating archive {archive_path}:[/red] {result.stderr}"
+            )
             return False
     except Exception as e:
         logger.error(f"[red]Error creating archive {archive_path}:[/red] {e}")
-        
+
     return False
 
-def create_tar_archive(archive_name: PathLike, source: PathLike, compression: Optional[str] = None) -> bool:
+
+def create_tar_archive(
+    archive_name: PathLike, source: PathLike, compression: Optional[str] = None
+) -> bool:
     """
     Create a tar archive from the specified source directory.
 
@@ -159,14 +210,13 @@ def create_tar_archive(archive_name: PathLike, source: PathLike, compression: Op
     if "tar" not in ext.lower():
         archive_name += ".tar"
     if compression and compression.lower() not in ext.lower():
-        if compression:
-            archive_name += f".{compression}"
+        archive_name += f".{compression}"
     archive_path = Path(archive_name)
-    
+
     if core_preconditions(archive_path, source) is False:
         return False
-    
-    if compression not in (None, 'gz', 'bz2', 'xz'):
+
+    if compression not in (None, "gz", "bz2", "xz"):
         logger.error(f"[red]Unsupported compression type:[/red] {compression}")
         return False
 
@@ -187,7 +237,6 @@ def create_tar_archive(archive_name: PathLike, source: PathLike, compression: Op
     except Exception as e:
         logger.error(f"[red]Error creating archive {archive_path}:[/red] {e}")
         return False
-    
 
 
 def create_zip_archive(archive_name: str, source: PathLike) -> bool:
@@ -206,7 +255,7 @@ def create_zip_archive(archive_name: str, source: PathLike) -> bool:
     if ext.lower() != "zip":
         archive_name += ".zip"
     archive_path = Path(archive_name)
-    
+
     if core_preconditions(archive_path, source) is False:
         return False
 
@@ -223,7 +272,7 @@ def create_zip_archive(archive_name: str, source: PathLike) -> bool:
                     file_path = Path(root) / file
                     zip_file.write(file_path, file_path.relative_to(source))
         logger.info(f"[green]Created archive:[/green] {archive_path}")
-        return True 
+        return True
 
     except Exception as e:
         logger.error(f"[red]Error creating archive {archive_path}:[/red] {e}")
@@ -243,7 +292,9 @@ def core_extract_conditions(archive_path: PathLike, target_dir: PathLike) -> boo
         True if all checks pass, False otherwise
     """
     if does_not_exists(archive_path) or not is_file(archive_path):
-        logger.error(f"[red]Archive does not exist or is not a file:[/red] {archive_path}")
+        logger.error(
+            f"[red]Archive does not exist or is not a file:[/red] {archive_path}"
+        )
         return False
 
     if exists(target_dir):
@@ -251,6 +302,7 @@ def core_extract_conditions(archive_path: PathLike, target_dir: PathLike) -> boo
         return False
 
     return True
+
 
 def extract_7z_archive(archive_path: PathLike, target_dir: PathLike) -> bool:
     """
@@ -276,6 +328,7 @@ def extract_7z_archive(archive_path: PathLike, target_dir: PathLike) -> bool:
         logger.error(f"[red]Error extracting 7z archive {archive_path}:[/red] {e}")
 
     return False
+
 
 def extract_rar_archive(archive_path: PathLike, target_dir: PathLike) -> bool:
     """
@@ -303,7 +356,9 @@ def extract_rar_archive(archive_path: PathLike, target_dir: PathLike) -> bool:
     return False
 
 
-def extract_tar_archive(archive_path: PathLike, target_dir: PathLike, compression: Optional[str] = None) -> bool:
+def extract_tar_archive(
+    archive_path: PathLike, target_dir: PathLike, compression: Optional[str] = None
+) -> bool:
     """
     Extract a tar archive to the specified target directory.
 
@@ -318,7 +373,7 @@ def extract_tar_archive(archive_path: PathLike, target_dir: PathLike, compressio
     if not core_extract_conditions(archive_path, target_dir):
         return False
 
-    if compression not in (None, 'gz', 'bz2', 'xz'):
+    if compression not in (None, "gz", "bz2", "xz"):
         logger.error(f"[red]Unsupported compression type:[/red] {compression}")
         return False
 
@@ -333,6 +388,7 @@ def extract_tar_archive(archive_path: PathLike, target_dir: PathLike, compressio
         logger.error(f"[red]Error extracting tar archive {archive_path}:[/red] {e}")
 
     return False
+
 
 def extract_zip_archive(archive_path: PathLike, target_dir: PathLike) -> bool:
     """
@@ -360,7 +416,9 @@ def extract_zip_archive(archive_path: PathLike, target_dir: PathLike) -> bool:
     return False
 
 
-def create(archive_name: PathLike, source: PathLike, compression: Optional[str] = None) -> bool:
+def create(
+    archive_name: PathLike, source: PathLike, compression: Optional[str] = None
+) -> bool:
     """
     Create an archive from the specified source directory.
 
@@ -371,7 +429,7 @@ def create(archive_name: PathLike, source: PathLike, compression: Optional[str] 
     Returns:
         bool: True if the archive was created, False otherwise
     """
-    pass
+
 
 def extract(archive_path: PathLike, target_dir: PathLike) -> bool:
     """
@@ -388,34 +446,35 @@ def extract(archive_path: PathLike, target_dir: PathLike) -> bool:
     target_dir = ensure_path(target_dir)
     if not core_extract_conditions(archive_path, target_dir):
         return False
-    
+
     try:
         ext = get_file_extension(archive_path).lower()
         match ext:
             case "7z":
                 return extract_7z_archive(archive_path, target_dir)
-    
+
             case "rar":
                 return extract_rar_archive(archive_path, target_dir)
-            
-            case "tar" | "tar.gz" | "tar.bz2" | "tar.xz":                
+
+            case "tar" | "tar.gz" | "tar.bz2" | "tar.xz":
                 compression = ext.replace("tar", "").lstrip(".") or None
                 return extract_tar_archive(archive_path, target_dir, compression)
-            
+
             case "zip":
                 return extract_zip_archive(archive_path, target_dir)
-            
+
             case _:
                 logger.error(f"[red]Unsupported archive type:[/red] {ext}")
                 return False
-        
+
         return True
 
     except Exception as e:
         logger.error(f"[red]Error extracting archive {archive_path}:[/red] {e}")
 
-    return False    
-        
+    return False
+
+
 def list_contents(archive_path: PathLike) -> List[Path]:
     """
     List all files in the specified archive.
@@ -428,7 +487,9 @@ def list_contents(archive_path: PathLike) -> List[Path]:
     """
     archive_path = ensure_path(archive_path)
     if does_not_exists(archive_path) or not is_file(archive_path):
-        logger.error(f"[red]Archive does not exist or is not a file:[/red] {archive_path}")
+        logger.error(
+            f"[red]Archive does not exist or is not a file:[/red] {archive_path}"
+        )
         return []
 
     try:
@@ -445,14 +506,21 @@ def list_contents(archive_path: PathLike) -> List[Path]:
                     return [Path(file.filename) for file in archive.infolist()]
             case "tar" | ".tar.gz" | ".tar.bz2" | ".tar.xz":
                 with tarfile.open(archive_path, "r") as archive:
-                    return [Path(member.name) for member in archive.getmembers() if member.isfile()]
+                    return [
+                        Path(member.name)
+                        for member in archive.getmembers()
+                        if member.isfile()
+                    ]
             case _:
                 logger.error(f"[red]Unsupported archive type:[/red] {ext}")
                 return []
 
     except Exception as e:
-        logger.error(f"[red]Error listing contents of archive {archive_path}:[/red] {e}")
-        
+        logger.error(
+            f"[red]Error listing contents of archive {archive_path}:[/red] {e}"
+        )
+
     return []
+
 
 # - TODO: cli for extract, list, compress, and defaults like tar, zip, unzip, gzip, gunzip, rar, 7z(sevenz)

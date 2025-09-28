@@ -4,30 +4,38 @@ Context module for hands-scaphoid package.
 
 This module provides the base Context class for managing hierarchical file system operations
 with context manager support and global function access.
-----
-file:
+---yaml
+File:
     name: ContextCore.py
     uuid: 1f31a384-f5c2-4b7b-a755-f0caffaff1f4
     date: 2025-09-16
-description:
+
+Description:
     Base context manager for hierarchical file system operations
-authors: ["Andreas Häberle"]
-project:
+
+Project:
     name:        hands_scaphoid
     uuid:        2945ba3b-2d66-4dff-b898-672c386f03f4
     url:         https://github.com/42sol-eu/hands_scaphoid
 
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
+#%% [ Standard library imports ]
 from pathlib import Path
 from typing import Optional, Union, List, Any, Dict
-from abc import ABC, abstractmethod
+from abc import ABC as AbstractBaseClass
+from abc import abstractmethod as abstract_method
+
 import threading
 import builtins
+
+#%% [ Project imports ]
 from ..__base__ import PathLike, os, console
 
 
-class ContextCore(ABC):
+#%% [ Class definition ]
+class ContextCore(AbstractBaseClass):
     """
     Base context manager class for hierarchical file system operations.
 
@@ -163,7 +171,7 @@ class ContextCore(ABC):
         if not stack and self.original_cwd:
             os.chdir(self.original_cwd)
 
-    @abstractmethod
+    @abstract_method
     def _create_path(self, resolved_path: Path) -> None:
         """
         Create the path for this context.
@@ -173,7 +181,7 @@ class ContextCore(ABC):
         """
         pass
 
-    @abstractmethod
+    @abstract_method
     def _enter_context(self, resolved_path: Path) -> None:
         """
         Perform context-specific operations when entering.
@@ -183,7 +191,7 @@ class ContextCore(ABC):
         """
         pass
 
-    @abstractmethod
+    @abstract_method
     def _exit_context(self, resolved_path: Path) -> None:
         """
         Perform context-specific operations when exiting.

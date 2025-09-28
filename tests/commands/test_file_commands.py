@@ -1,28 +1,36 @@
+#!/usr/bin/env python3
 """
-----
-file:
-    name:        test_file_commands.py  
-    uuid:        ee446672-7c17-49f9-a5f3-492ad41a3bbb
-description:     Test: file commands
-authors:         felix@42sol.eu
-project:
-    name:        hands_scaphoid
-    uuid:        2945ba3b-2d66-4dff-b898-672c386f03f4
-    url:         https://github.com/42sol-eu/hands_scaphoid
+Unit tests for file commands module.
+---yaml
+File:
+    name: test_file_commands.py
+    uuid: ee446672-7c17-49f9-a5f3-492ad41a3bbb
+    date: 2025-09-28
 
-----glossary
-DUT::
-    Device Under Test (or directly used to refer to the class or module being tested)
+Description:
+    Comprehensive tests for file command functionality including file reading,
+    writing, manipulation, and validation operations.
+
+Project:
+    name: hands_scaphoid
+    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+    url: https://github.com/42sol-eu/hands_scaphoid
+
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
+# Standard library imports
 import os
 import tempfile
 from pathlib import Path
-import pytest
+from io import StringIO
 from unittest import mock
 from unittest.mock import patch, mock_open
-from io import StringIO
-    
+
+# Third-party imports
+import pytest
+
+# Project imports
 from hands_scaphoid.commands.file_commands import read
 from hands_scaphoid.commands.core_commands import is_file
 from hands_scaphoid.commands.directory_commands import ensure_path

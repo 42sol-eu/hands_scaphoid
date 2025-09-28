@@ -1,30 +1,38 @@
+#!/usr/bin/env python3
 """
-----
-file:
-    name:        test_archive_commands.py  
-    uuid:        a8b9c7d6-1e2f-3456-7890-abcdef123456
-description:     Test: archive commands
-authors:         felix@42sol.eu
-project:
-    name:        hands_scaphoid
-    uuid:        2945ba3b-2d66-4dff-b898-672c386f03f4
-    url:         https://github.com/42sol-eu/hands_scaphoid
+Unit tests for archive commands module.
+---yaml
+File:
+    name: test_archive_commands.py
+    uuid: a8b9c7d6-1e2f-3456-7890-abcdef123456
+    date: 2025-09-28
 
-----glossary
-DUT::
-    Device Under Test (or directly used to refer to the class or module being tested)
+Description:
+    Comprehensive tests for archive command functionality including ZIP, TAR,
+    7Z, and RAR archive operations with creation, extraction, and validation.
+
+Project:
+    name: hands_scaphoid
+    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+    url: https://github.com/42sol-eu/hands_scaphoid
+
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
+# Standard library imports
 import os
 import tempfile
-from pathlib import Path
-import pytest
-from unittest import mock
-from unittest.mock import patch, MagicMock
 import zipfile
 import tarfile
 import subprocess
+from pathlib import Path
+from unittest import mock
+from unittest.mock import patch, MagicMock
 
+# Third-party imports
+import pytest
+
+# Project imports
 from hands_scaphoid.commands.archive_commands import (
     is_archive_file,
     core_preconditions,

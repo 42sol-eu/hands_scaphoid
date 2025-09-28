@@ -2,17 +2,21 @@
 # -*- coding: utf-8 -*-
 """
 Create and update your __init__.py files in your Python projects.
-----
-file:
+---yaml
+File:
     name:        do_init.py  
     uuid:        5d9f9244-9783-4db3-a037-690ebbc99b70
-description:     Simple generator helper for python projects
-authors:         felix@42sol.eu
-project:
-project:
+    date:        2025-09-28
+    
+Description:     Simple generator helper for python projects
+
+Project:
     name:        a7d
     uuid:        2cc2a024-ae2a-4d2c-91c2-f41348980f7f
     url:         https://github.com/42sol-eu/a7d
+
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
+
 """
 # %% [External imports]
 import ast               #!md| [docs](https://docs.python.org/3/library/ast.html)

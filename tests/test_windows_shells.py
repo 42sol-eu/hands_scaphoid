@@ -1,12 +1,31 @@
 #!/usr/bin/env python3
 """
 Unit tests for Windows-specific shell implementations.
+---yaml
+File:
+    name: test_windows_shells.py
+    date: 2025-09-28
+
+Project:
+    name: hands_scaphoid
+    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+    url: https://github.com/42sol-eu/hands_scaphoid
+
+Description:
+    Comprehensive tests for Windows shell implementations including PowerShell
+    and WSL integration, command translation, and platform-specific functionality.
+
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
+# Standard library imports
 import platform
-import pytest
 from unittest.mock import patch, MagicMock
 
+# Third-party imports
+import pytest
+
+# Project imports
 from hands_scaphoid.objects.WindowsShells import (
     Shell,
     PowerShell,

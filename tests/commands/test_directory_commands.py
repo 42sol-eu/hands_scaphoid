@@ -1,27 +1,35 @@
+#!/usr/bin/env python3
 """
-----
-file:
-    name:        test_directory_commands.py  
-    uuid:        24b6a98a-97f9-49cd-8040-b36d5773f5e7
-description:     Test: directory commands
-authors:         felix@42sol.eu
-project:
-    name:        hands_scaphoid
-    uuid:        2945ba3b-2d66-4dff-b898-672c386f03f4
-    url:         https://github.com/42sol-eu/hands_scaphoid
+Unit tests for directory commands module.
+---yaml
+File:
+    name: test_directory_commands.py
+    uuid: 24b6a98a-97f9-49cd-8040-b36d5773f5e7
+    date: 2025-09-28
 
-----glossary
-DUT::
-    Device Under Test (or directly used to refer to the class or module being tested)
+Description:
+    Comprehensive tests for directory command functionality including directory
+    creation, deletion, listing, and navigation operations.
+
+Project:
+    name: hands_scaphoid
+    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+    url: https://github.com/42sol-eu/hands_scaphoid
+
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
+# Standard library imports
 import os
 import tempfile
 from pathlib import Path
-import pytest
 from unittest import mock
 from unittest.mock import patch
-    
+
+# Third-party imports
+import pytest
+
+# Project imports
 from hands_scaphoid.commands.directory_commands import (
     get_current_directory,
     get_file_directory,

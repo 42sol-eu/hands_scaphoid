@@ -1,6 +1,24 @@
+#!/usr/bin/env python3
 """
 Unit tests for the __init__ module.
+---yaml
+File:
+    name: test_init.py
+    uuid: f1e2d3c4-b5a6-7890-1234-567890abcdef
+    date: 2025-09-28
+
+Description:
+    Comprehensive tests for module imports and exports
+
+Project:
+    name: hands_scaphoid
+    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+    url: https://github.com/42sol-eu/hands_scaphoid
+
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
+
+import pytest
 
 from hands_scaphoid import Shell, ShellContext, __version__, __author__, __all__
 

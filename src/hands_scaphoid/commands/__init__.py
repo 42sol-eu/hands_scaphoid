@@ -16,17 +16,22 @@ project:
 
 from hands_scaphoid.commands.core_commands import (
     exists,
-    is_instance,
-    is_item,
+    get_file_extension,
     is_directory,
     is_file,
     is_git_project,
     is_hands_project,
+    is_instance,
+    is_item,
     is_link,
     is_object,
     is_variable,
     is_vscode_project,
-    get_file_extension,
+)
+
+from .archive_commands import (
+    create,
+    extract,
 )
 from .directory_commands import (
     create_directory,
@@ -34,13 +39,24 @@ from .directory_commands import (
     list_archives,
     list_contents,
 )
-from .archive_commands import (
-    extract,
-    create,
-)
 
 
+# %% [Exports]
 __all__ = [
+    "exists",
+    "get_file_extension",
+    "is_directory",
+    "is_file",
+    "is_git_project",
+    "is_hands_project",
+    "is_instance",
+    "is_item",
+    "is_link",
+    "is_object",
+    "is_variable",
+    "is_vscode_project",
+    "create",  # src\hands_scaphoid\commands\archive_commands.py
+    "extract",  # src\hands_scaphoid\commands\archive_commands.py
     "create_directory",  # src\hands_scaphoid\commands\directory_commands.py
     "delete_directory",  # src\hands_scaphoid\commands\directory_commands.py
     "list_archives",  # src\hands_scaphoid\commands\archive_commands.py

@@ -2,25 +2,40 @@
 """
 Comprehensive unit tests for the separated architecture.
 
-This module provides complete test coverage for:
-- Operations classes (File, Directory, Archive)
-- Context classes (FileContext, DirectoryContext, ArchiveContext)
-- Context managers, global functions, and error handling
+---yaml
+File:
+    name: test_separated_architecture.py
+    uuid: 5a6b7c8d-9e0f-1234-5678-90abcdef1234
+    date: 2025-09-28
+
+Description:
+    Complete test coverage for separated architecture including operations classes
+    (File, Directory, Archive) and context classes (FileContext, DirectoryContext, 
+    ArchiveContext) with context managers and global functions.
+
+Project:
+    name: hands_scaphoid
+    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+    url: https://github.com/42sol-eu/hands_scaphoid
+
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-import pytest
-import tempfile
-import shutil
+# Standard library imports
+import sys
 import os
 import builtins
+import tempfile
+import shutil
 import zipfile
 import tarfile
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
-# Import the classes to test
-import sys
+# Third-party imports
+import pytest
 
+# Project imports - adjust path for testing
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from hands_scaphoid.contexts.ContextCore import Context

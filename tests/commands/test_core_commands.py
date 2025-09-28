@@ -1,37 +1,44 @@
+#!/usr/bin/env python3
+"""
+Unit tests for core commands module.
+---yaml
+File:
+    name: test_core_commands.py
+    uuid: d397dc43-5ad4-4def-adaf-9a7a5d9bd4ea
+    date: 2025-09-28
+
+Description:
+    Comprehensive tests for core command functionality including path operations,
+    file type detection, project validation, and compression type handling.
+
+Project:
+    name: hands_scaphoid
+    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+    url: https://github.com/42sol-eu/hands_scaphoid
+
+Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-----
-file:
-    name:        test_core_commands.py  
-    uuid:        d397dc43-5ad4-4def-adaf-9a7a5d9bd4ea
-description:     Test: core commands
-authors:         felix@42sol.eu
-project:
-    name:        hands_scaphoid
-    uuid:        2945ba3b-2d66-4dff-b898-672c386f03f4
-    url:         https://github.com/42sol-eu/hands_scaphoid
-
-----glossary
-DUT::
-    Device Under Test (or directly used to refer to the class or module being tested)
-"""
-
-
-
+# Standard library imports
 import os
 import tempfile
 from pathlib import Path
+
+# Third-party imports
 import pytest
 from unittest import mock
 from unittest.mock import patch
-    
+
+# Project imports
 from hands_scaphoid.commands.core_commands import (
     CompressionType,
     does_not_exists,
+    ensure_path,
     exists,
     filter,
     is_instance,
     is_item,
+    is_invalid,
     is_directory,
     is_file,
     is_git_project,
@@ -256,6 +263,43 @@ def test_which_with_path_object():
     # Should handle Path objects the same as strings
     if result:
         assert isinstance(result, Path)
+
+
+@pytest.mark.parametrize("type,expected", [
+    (None,False),
+    (1,False),
+    (1.4,False),
+    (False,False),
+    ('', False),
+    (' ', False),
+    #(Path(''), False),
+    #(Path(' '), False),
+])
+def test_invalid_calls(type, expected):
+    """Test some function with invalid input parameters."""
+    ensure_path_result = ensure_path(type)
+    assert ensure_path_result is expected
+
+    result = is_directory(type)
+    assert result is expected
+
+    result = is_invalid(type)
+    assert result is expected
+
+    # TODO: more functions to test with invalid inputs
+
+def test_invalid_which_calls():
+    """Test which function with invalid input parameters."""
+    result = which(None)
+    assert result is None
+
+    result = which("")
+    assert result is None
+
+    result = which("nonexistent_command_12345")
+    assert result is None
+
+
 
 class TestCoreCommandsAdditional:
     """Additional tests for core_commands functions."""
