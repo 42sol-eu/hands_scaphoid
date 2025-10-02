@@ -60,6 +60,7 @@ docs = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]
 # addopts = [
 #     "--cov=hands_scaphoid",
 #     "--cov-report=term-missing",

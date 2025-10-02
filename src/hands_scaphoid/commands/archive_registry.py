@@ -68,7 +68,6 @@ class ArchiveRegistry:
         
         # Placeholder initialization to avoid errors
         self._initialized = True
-        logger.info("Archive registry initialized (handlers temporarily disabled)")
     
     def register_archive_type(
         self, 

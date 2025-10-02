@@ -12,8 +12,12 @@
         "mkdocstrings",
         "pytest",
         "secho",
-        "testpaths"
+        "testpaths",
+        "scaphoid",
+        "trapezium"
     ],
+    "editor.formatOnType": false,
+    "editor.formatOnEnter": false,
     "python.testing.pytestArgs": [
         "tests"
     ],

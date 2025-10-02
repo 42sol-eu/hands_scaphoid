@@ -19,7 +19,7 @@ Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 
 #%% [Standard library imports]
 from enum import Enum
-
+import yaml 
 
 class ItemType(str, Enum):
     """Enum representing different types of items."""
@@ -34,4 +34,20 @@ class ItemType(str, Enum):
     LINK = "link"
     MOUNT = "mount"
     SYSTEM = "system"
+
+    def __str__(self):
+        return self.value
+    
+    def __repr__(self):
+        return f"ItemType.{self.name}"
+
     # Additional item types can be added here as needed.
+
+# Custom representer for Enum
+def enum_representer(dumper, data):
+    """convert the enum to a YAML scalar"""
+    return dumper.represent_scalar('tag:yaml.org,2002:str', data.value)
+
+# Register the custom representer
+yaml.add_representer(Enum, enum_representer)
+yaml.add_representer(ItemType, enum_representer, yaml.SafeDumper)

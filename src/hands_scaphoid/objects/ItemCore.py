@@ -6,9 +6,9 @@ import json
 #%% [Code]
 
 class ItemCore:
-    def __init__(self, name: str, value: str, item_type: ItemType = ItemType.ITEM):
+    def __init__(self, name: str, value: str | int, item_type: str | ItemType = ItemType.ITEM):
         self._name = name
-        self._value = value
+        self._value = value if isinstance(value, int) else value
         self._item_type = item_type
 
     @property
@@ -16,7 +16,7 @@ class ItemCore:
         return self._name
 
     @property
-    def value(self) -> str:
+    def value(self) -> str | int:
         return self._value
 
     @property
@@ -28,7 +28,7 @@ class ItemCore:
         self._value = new_value
 
     def __repr__(self) -> str:
-        return f"ItemCore(name={self._name}, value={self._value}, item_type={self._item_type})"
+        return f"ItemCore(name={self._name}, value={self._value}, item_type={self._item_type.name})"
 
     def __str__(self) -> str:
         return f'{self._name}="{self._value}"'
@@ -41,10 +41,11 @@ class ItemCore:
         }
 
     def to_json(self) -> str:
+        """return as JSON"""
         return json.dumps(self.to_dict())
 
     def to_yaml(self) -> str:
-        return yaml.dump(self.to_dict())
+        return yaml.safe_dump(self.to_dict())
 
     def to_env_var(self) -> str:
         return f"{self._name}={self._value}"

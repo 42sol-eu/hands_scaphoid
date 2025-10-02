@@ -20,6 +20,8 @@ Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 #%% [Local imports]
 from ..objects.shells.PowerShell import PowerShell
 from ..objects.shells.WslShell import WslShell
+from ..objects.shells.SshShell import SshShell
+
 
 
 def create_powershell_shell(**kwargs) -> PowerShell:
@@ -43,3 +45,18 @@ def create_wsl_shell(distribution: str = "wsl", **kwargs) -> WslShell:
         WslShell instance
     """
     return WslShell(distribution=distribution, **kwargs)
+
+def create_ssh_shell(host: str, **kwargs) -> SshShell:
+    """
+    Create an SSH shell instance.
+
+    Args:
+        distribution: WSL distribution to use (default: "wsl")
+
+    Returns:
+        WslShell instance
+    """
+    return SshShell(host=host, **kwargs)
+
+#TODO: type from call def create_shell(prompt):
+

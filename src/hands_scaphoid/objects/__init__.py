@@ -7,19 +7,17 @@ from ..types.CommandType import CommandType
 from .ItemCore import ItemCore
 from .ObjectItem import ObjectItem
 from .VariableItem import VariableItem
+from .DirectoryObject import DirectoryObject
 from .FileObject import FileObject
 from .ArchiveFile import ArchiveFile
-
-# from .LinkObject import LinkObject
-from .DirectoryObject import DirectoryObject
 from .files.ExecutableFile import ExecutableFile
 from .files.ScriptFile import ScriptFile
 from .ShellExecutable import ShellExecutable
+# from .LinkObject import LinkObject
 
 # Individual shell imports
 from .shells.PowerShell import PowerShell
 from .shells.WslShell import WslShell
-from ..commands.shell_factory import create_powershell_shell, create_wsl_shell
 
 
 # %% [Exports]

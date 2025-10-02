@@ -30,6 +30,7 @@ from typing import Dict, List, Optional, Union
 #%% [Local imports]
 from ..__base__ import *
 from .files.ExecutableFile import ExecutableFile
+# from ..commands.shell_factory import create_powershell_shell, create_wsl_shell
 
 #%% [Class code]
 class ShellExecutable(ExecutableFile):
@@ -45,7 +46,7 @@ class ShellExecutable(ExecutableFile):
 
     def __init__(
         self,
-        cwd: Optional[Union[str, Path]] = None,
+        cwd: Optional[Union[str, PathLike]] = None,
         env: Optional[Dict[str, str]] = None,
         env_file: str = "~/.env",
     ) -> None:
