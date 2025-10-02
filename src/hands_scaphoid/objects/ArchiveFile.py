@@ -13,17 +13,33 @@ File:
 Description:
     Archive context manager for hierarchical file system operations
 
+Project:
+    name:   hands_scaphoid
+    uuid:   2945ba3b-2d66-4dff-b898-672c386f03f4
+    url:    https://github.com/42sol-eu/hands_scaphoid
+    
 Authors: ["Andreas Häberle"]
 """
 
-from pathlib import Path
-from typing import Optional, List, Dict, Any
+from ..__base__ import (
+    logger,
+    console,
+    Path,
+    PathLike,
+    List,
+    Dict,
+    Optional,
+    Any,
+    AbstractBaseClass
+)
 
-from ..__base__ import PathLike, console, logger
+#%% [Standard library imports]
+import os
+import zipfile
+import tarfile
 
-from .ItemCore import ItemType
-from .FileCore import FileCore
-from .type_enums import ItemType
+from ..types.ItemType import ItemType
+from .FileObject import FileObject
 from ..commands.core_commands import (
     CompressionType,
     get_file_extension
@@ -37,7 +53,7 @@ from ..commands.archive_commands import (
 
 from ..commands.core_commands import CompressionType
 
-class ArchiveFile(FileCore):
+class ArchiveFile(FileObject):
     """
     Pure archive operations class without context management.
 
@@ -96,11 +112,11 @@ class ArchiveFile(FileCore):
 
 
     @staticmethod
-    def add_archive_type(name: str, extract_function, compress_function) -> boolean:
+    def add_archive_type(name: str, extract_function, compress_function) -> bool:
         """
         Add a user defined archive type (also used for types like *.whl, *.app)
         """
-        done = CompressionType.add_archvive_type(name, extract_function, compress_funcion)
+        done = CompressionType.add_archvive_type(name, extract_function, compress_function)
         return done
 
     @staticmethod

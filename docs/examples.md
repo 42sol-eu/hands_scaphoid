@@ -4,6 +4,11 @@ This page provides practical examples of using Hands Scaphoid in real-world scen
 
 ## Deployment Scripts
 
+!!! note
+
+    Deployment scripts 
+
+
 ### Simple Web App Deployment
 
 ```python
@@ -815,7 +820,9 @@ with ShellContext() as shell:
 Now that you understand the basics, explore these advanced topics:
 
 - [Basic Usage](user-guide/basic-usage.md) - Detailed usage examples
-- [Windows Shells](api/objects/windows-shells.md) - Windows PowerShell and WSL support
+- [PowerShell](api/objects/power-shell.md) - Windows PowerShell and WSL support
+- [SshShell](api/objects/ssh-shell.md) - Windows PowerShell and WSL support
+- [WslShell](api/objects/wsl-shell.md) - Windows PowerShell and WSL support
 - [API Reference](api/objects/shell-executable.md) - Complete API documentation
 # Hands Scaphoid
 

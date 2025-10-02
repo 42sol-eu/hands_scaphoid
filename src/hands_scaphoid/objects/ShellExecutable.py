@@ -18,21 +18,21 @@ Authors: ["Andreas Häberle"]
 Projects: ["hands/palm/trapezium"]
 """
 
+#%% [Standard library imports]
 from __future__ import annotations
-
 import os
 import platform
 import subprocess
 import sys
 import time
-from pathlib import Path
 from typing import Dict, List, Optional, Union
 
+#%% [Local imports]
 from ..__base__ import *
-from .ExecutableCore import ExecutableCore
+from .files.ExecutableFile import ExecutableFile
 
-
-class ShellExecutable(ExecutableCore):
+#%% [Class code]
+class ShellExecutable(ExecutableFile):
     """
     A secure shell command executor with environment management.
 

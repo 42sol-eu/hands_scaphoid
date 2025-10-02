@@ -42,13 +42,13 @@ def main():
             print("Running the user's requested example:")
             print()
             
-            with DirectoryCore('home') as home:
+            with DirectoryObject('home') as home:
                 print(f"Entered directory: {home.get_current_path()}")
                 
-                with DirectoryCore('project') as project:
+                with DirectoryObject('project') as project:
                     print(f"Entered project directory: {project.get_current_path()}")
                     
-                    with FileCore('README.md') as readme:
+                    with FileObject('README.md') as readme:
                         print(f"Opened file: {readme.resolve_path()}")
                         readme.add_heading('Contributing')
                         print("Added 'Contributing' heading to README.md")

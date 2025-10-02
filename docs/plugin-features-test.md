@@ -155,11 +155,7 @@ The mkdocstrings plugin automatically generates API documentation from docstring
 
 ### File Operations
 
-::: hands_scaphoid.FileCore
-    options:
-      show_root_heading: true
-      show_source: false
-      members_order: alphabetical
+TODO: add file operations example
 
 ## Combined Example
 

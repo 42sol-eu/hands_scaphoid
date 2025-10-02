@@ -3,7 +3,7 @@
 Core object integration examples with Handler patterns.
 
 This module demonstrates how to integrate the new Handler patterns
-with existing FileCore, DirectoryCore, and ExecutableCore objects.
+with existing FileObject, DirectoryObject, and ExecutableCore objects.
 ---yaml
 File:
     name: core_integration_examples.py
@@ -28,15 +28,15 @@ from .handler_patterns import (
 
 
 # =============================================================================
-# Enhanced FileCore with Handler Support
+# Enhanced FileObject with Handler Support
 # =============================================================================
 
-class EnhancedFileCore:
+class EnhancedFileObject:
     """
-    Enhanced FileCore that uses Handler patterns for extensible file operations.
+    Enhanced FileObject that uses Handler patterns for extensible file operations.
     
     This class demonstrates how to integrate FileHandler patterns with the
-    existing FileCore functionality while maintaining backward compatibility.
+    existing FileObject functionality while maintaining backward compatibility.
     """
     
     def __init__(self, path: PathLike):
@@ -171,12 +171,12 @@ class EnhancedFileCore:
 
 
 # =============================================================================
-# Enhanced DirectoryCore with Handler Support
+# Enhanced DirectoryObject with Handler Support
 # =============================================================================
 
-class EnhancedDirectoryCore:
+class EnhancedDirectoryObject:
     """
-    Enhanced DirectoryCore that uses Handler patterns for project-aware operations.
+    Enhanced DirectoryObject that uses Handler patterns for project-aware operations.
     
     This class can detect and work with different project types (Git, Python, Node, etc.)
     using specialized handlers.
@@ -492,14 +492,14 @@ class EnhancedExecutableCore:
 # Usage Examples and Factory Functions
 # =============================================================================
 
-def create_enhanced_file(path: PathLike) -> EnhancedFileCore:
+def create_enhanced_file(path: PathLike) -> EnhancedFileObject:
     """Factory function to create enhanced file objects."""
-    return EnhancedFileCore(path)
+    return EnhancedFileObject(path)
 
 
-def create_enhanced_directory(path: PathLike) -> EnhancedDirectoryCore:
+def create_enhanced_directory(path: PathLike) -> EnhancedDirectoryObject:
     """Factory function to create enhanced directory objects."""
-    return EnhancedDirectoryCore(path)
+    return EnhancedDirectoryObject(path)
 
 
 def create_enhanced_executable(path: PathLike) -> EnhancedExecutableCore:

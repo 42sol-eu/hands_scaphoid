@@ -15,9 +15,9 @@ pip install hands-scaphoid
 Hands Scaphoid provides two ways to work with files, directories, and archives:
 
 1. **Operations Classes**: Direct static methods for simple operations
-   - `File.read_content(path)`
-   - `Directory.create_directory(path)`
-   - `Archive.create_zip_archive(target, source)`
+   - `FileObject.read_content(path)`
+   - `DirectoryObject.create_directory(path)`
+   - `ArchiveFile.create_zip_archive(target, source)`
 
 2. **Context Classes**: Context managers for hierarchical operations
    - `FileContext(path)` - for file operations with context
@@ -29,7 +29,7 @@ Hands Scaphoid provides two ways to work with files, directories, and archives:
 Context managers maintain a stack of current directories. All paths are resolved relative to the current context:
 
 ```python
-from hands_scaphoid import DirectoryContext, FileContext
+from hands_scaphoid.contexts import DirectoryContext, FileContext
 
 with DirectoryContext('~/projects') as projects:
     # Current context: ~/projects
@@ -47,7 +47,8 @@ with DirectoryContext('~/projects') as projects:
 ### Reading Files
 
 ```python
-from hands_scaphoid import FileContext, File
+from hands_scaphoid.contexts import FileContext
+from hands_scaphoid.objects import FileObject
 
 # Using context manager
 with FileContext('data.txt') as f:
@@ -55,8 +56,9 @@ with FileContext('data.txt') as f:
     lines = f.read_lines()
 
 # Using operations class directly
-content = File.read_content('data.txt')
-lines = File.read_lines('data.txt')
+from hands_scaphoid.objects import FileObject
+content = FileObject.read_content('data.txt')
+lines = FileObject.read_lines('data.txt')
 ```
 
 ### Writing Files
@@ -69,8 +71,8 @@ with FileContext('output.txt') as f:
     f.add_heading('Section 1')
 
 # Direct operations
-File.write_content('output.txt', 'Hello, World!')
-File.append_line('output.txt', 'New line')
+FileObject.write_content('output.txt', 'Hello, World!')
+FileObject.append_line('output.txt', 'New line')
 ```
 
 ### Method Chaining
@@ -90,7 +92,8 @@ with FileContext('report.txt') as report:
 ### Creating Directory Structures
 
 ```python
-from hands_scaphoid import DirectoryContext, Directory
+from hands_scaphoid.contexts import DirectoryContext
+from hands_scaphoid.objects import DirectoryObject
 
 # Using context manager for hierarchical operations
 with DirectoryContext('~/projects') as projects:
@@ -105,8 +108,8 @@ with DirectoryContext('~/projects') as projects:
             src.create_file('main.py', '#!/usr/bin/env python3\nprint("Hello!")')
 
 # Direct operations
-Directory.create_directory('path/to/new/directory')
-Directory.create_file('path/to/file.txt', 'content')
+DirectoryObject.create_directory('path/to/new/directory')
+DirectoryObject.create_file('path/to/file.txt', 'content')
 ```
 
 ### Directory Navigation
@@ -138,7 +141,7 @@ with DirectoryContext('~/projects') as projects:
         project.create_file('config.json', '{"name": "My Project"}')
 
 # Direct operations
-Directory.copy_directory('source_dir', 'destination_dir')
+DirectoryObject.copy_directory('source_dir', 'destination_dir')
 ```
 
 ## Archive Operations
@@ -146,7 +149,8 @@ Directory.copy_directory('source_dir', 'destination_dir')
 ### Creating Archives
 
 ```python
-from hands_scaphoid import ArchiveContext, Archive
+from hands_scaphoid.contexts import ArchiveContext
+from hands_scaphoid.objects import ArchiveFile
 
 # Create ZIP archive with context
 with DirectoryContext('~/projects') as projects:
@@ -161,8 +165,8 @@ with ArchiveContext(source='myproject', target='backup.tar.gz', archive_type='ta
     print(f"Compression ratio: {info['compression_ratio']:.2f}")
 
 # Direct operations
-Archive.create_zip_archive('backup.zip', 'source_directory')
-Archive.create_tar_archive('backup.tar.gz', 'source_directory', 'gz')
+ArchiveFile.create_zip_archive('backup.zip', 'source_directory')
+ArchiveFile.create_tar_archive('backup.tar.gz', 'source_directory', 'gz')
 ```
 
 ### Extracting Archives
@@ -178,7 +182,7 @@ with DirectoryContext('~/backups') as backups:
         archive.extract_file('README.md', 'extracted_readme')
 
 # Direct operations
-Archive.extract_archive('backup.zip', 'output_directory')
+ArchiveFile.extract_archive('backup.zip', 'output_directory')
 ```
 
 ### Selective Archiving
@@ -200,7 +204,7 @@ with ArchiveContext(target='selective_backup.zip') as archive:
 For script-like usage, enable global functions within contexts:
 
 ```python
-from hands_scaphoid import DirectoryContext
+from hands_scaphoid.contexts import DirectoryContext
 
 # Enable global functions
 with DirectoryContext('~/projects', enable_globals=True):

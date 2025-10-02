@@ -3,7 +3,7 @@
 # This file contains the key style rules in a format suitable for tooling and quick reference
 
 ## File Naming Patterns
-- Core classes: *Core.py (FileCore.py, ObjectCore.py)
+- Core classes: *Core.py (FileObject.py, ObjectItem.py)
 - Context managers: *Context.py (FileContext.py, ShellContext.py)  
 - Commands: *_commands.py (file_commands.py, core_commands.py)
 - Scripts: *Script.py (FileScript.py)
@@ -12,7 +12,7 @@
 ## Class Naming
 - PascalCase for all classes
 - Descriptive suffixes: Core, Context, Script, Type
-- Examples: FileCore, DirectoryContext, DynamicArchiveType
+- Examples: FileObject, DirectoryContext, DynamicArchiveType
 
 ## Function/Method Naming
 - snake_case for all functions and methods
@@ -61,7 +61,7 @@ Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 - Separation: commands/ (functions), objects/ (classes), contexts/ (context managers)
 - Method chaining support: return self for fluent interface
 - Context managers for hierarchical operations
-- Static methods for pure operations (FileCore.read_content)
+- Static methods for pure operations (FileObject.read_content)
 
 ## Error Handling
 - Specific exceptions with descriptive messages

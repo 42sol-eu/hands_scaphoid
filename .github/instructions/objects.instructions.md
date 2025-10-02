@@ -9,7 +9,7 @@ applyTo: "**/objects/*.py"
 Core object module description.
 ---yaml
 File:
-    name: ObjectCore.py
+    name: ObjectItem.py
     uuid: generated-uuid
     date: YYYY-MM-DD
 
@@ -29,7 +29,7 @@ from ..commands.core_commands import get_file_extension
 
 ## Core Object Implementation
 ```python
-class ObjectCore(ItemCore):
+class ObjectItem(ItemCore):
     """Core object with handler pattern integration."""
     
     def __init__(self, path: PathLike):

@@ -45,14 +45,14 @@ from hands_scaphoid.Directory import Directory
 ### Constructor
 
 ```python
-DirectoryCore(path: PathLike, create: bool = True, dry_run: bool = False, enable_globals: bool = False)
+DirectoryContext(path: PathLike, create: bool = True, dry_run: bool = False, enable_globals: bool = False)
 ```
 
 ### Context Manager Usage
 
 ```python
-with DirectoryCore('~/projects') as home_projects:
-    with DirectoryCore('myproject') as project:
+with DirectoryContext('~/projects') as home_projects:
+    with DirectoryContext('myproject') as project:
         # Now working in ~/projects/myproject
         project.list_contents()
         project.create_subdirectory('src')
@@ -63,7 +63,7 @@ with DirectoryCore('~/projects') as home_projects:
 When `enable_globals=True`, methods can be called without object prefix:
 
 ```python
-with DirectoryCore('~/projects', enable_globals=True):
+with DirectoryContext('~/projects', enable_globals=True):
     list_contents()  # Instead of directory.list_contents()
     create_subdirectory('src')
     list_contents()
@@ -78,7 +78,7 @@ List all items in the directory.
 
 **Example:**
 ```python
-with DirectoryCore('/home/user') as home:
+with DirectoryContext('/home/user') as home:
     contents = home.list_contents()
     print(contents)  # ['Documents', 'Downloads', 'Pictures', ...]
 ```
@@ -93,7 +93,7 @@ Create a subdirectory within the current context.
 
 **Example:**
 ```python
-with DirectoryCore('/tmp') as temp:
+with DirectoryContext('/tmp') as temp:
     temp.create_subdirectory('project').create_subdirectory('src')
 ```
 
@@ -107,7 +107,7 @@ List files in the directory, optionally filtered by extension.
 
 **Example:**
 ```python
-with DirectoryCore('/home/user/documents') as docs:
+with DirectoryContext('/home/user/documents') as docs:
     python_files = docs.list_files('py')
     all_files = docs.list_files()
 ```
@@ -132,13 +132,13 @@ Directory.create_directory('/tmp/standalone_dir')
 The `File` class provides file context management with automatic file handle management.
 
 ```python
-from hands_scaphoid.FileCore import FileCore
+from hands_scaphoid.objects import FileObject
 ```
 
 ### Constructor
 
 ```python
-FileCore(path: PathLike, create: bool = True, mode: str = 'r+', 
+FileContext(path: PathLike, create: bool = True, mode: str = 'r+', 
      encoding: str = 'utf-8', dry_run: bool = False, enable_globals: bool = False)
 ```
 
@@ -153,7 +153,7 @@ FileCore(path: PathLike, create: bool = True, mode: str = 'r+',
 ### Context Manager Usage
 
 ```python
-with FileCore('config.txt') as config:
+with FileContext('config.txt') as config:
     config.write_line('# Configuration file')
     config.add_heading('Database Settings')
     config.write_line('host=localhost')
@@ -163,7 +163,7 @@ with FileCore('config.txt') as config:
 ### Global Functions Usage
 
 ```python
-with FileCore('config.txt', enable_globals=True):
+with FileContext('config.txt', enable_globals=True):
     write_line('# Configuration file')
     add_heading('Database Settings')
     write_content('host=localhost\nport=5432')
@@ -329,12 +329,12 @@ When `enable_globals=True` is set on any context manager, the context's methods 
 
 ```python
 # Traditional usage
-with DirectoryCore('mydir') as d:
+with DirectoryContext('mydir') as d:
     d.list_contents()
     d.create_subdirectory('subdir')
 
 # Global functions usage
-with DirectoryCore('mydir', enable_globals=True):
+with DirectoryContext('mydir', enable_globals=True):
     list_contents()        # No object prefix needed
     create_subdirectory('subdir')
 ```
@@ -344,10 +344,10 @@ with DirectoryCore('mydir', enable_globals=True):
 When contexts are nested, the inner context's global functions take precedence:
 
 ```python
-with DirectoryCore('mydir', enable_globals=True):
+with DirectoryContext('mydir', enable_globals=True):
     list_contents()  # Directory.list_contents()
     
-    with FileCore('myfile.txt', enable_globals=True):
+    with FileContext('myfile.txt', enable_globals=True):
         write_line('text')    # File.write_line()
         # list_contents() would fail here (not a File method)
     
@@ -365,11 +365,11 @@ Global functions are automatically cleaned up when exiting contexts, preventing 
 All classes support dry-run mode for testing operations without making actual changes.
 
 ```python
-with DirectoryCore('test', dry_run=True, enable_globals=True):
+with DirectoryContext('test', dry_run=True, enable_globals=True):
     create_subdirectory('would_create')  # Shows what would be created
     list_contents()                      # Shows what would be listed
 
-with FileCore('test.txt', dry_run=True, enable_globals=True):
+with FileContext('test.txt', dry_run=True, enable_globals=True):
     write_line('would write this')       # Shows what would be written
 ```
 
@@ -380,7 +380,7 @@ with FileCore('test.txt', dry_run=True, enable_globals=True):
 All mutation methods return `self` to enable method chaining:
 
 ```python
-with FileCore('config.txt') as config:
+with FileContext('config.txt') as config:
     config.add_heading('Settings') \
           .write_line('key=value') \
           .write_line('debug=true')
@@ -413,15 +413,15 @@ Common exceptions:
 from hands_scaphoid import Directory, File, Archive
 
 # Create a project structure
-with DirectoryCore('myproject', create=True) as project:
-    with DirectoryCore('src') as src:
-        with FileCore('main.py') as main:
+with DirectoryContext('myproject', create=True) as project:
+    with DirectoryContext('src') as src:
+        with FileContext('main.py') as main:
             main.add_heading('Main Application', 1)
             main.write_line('#!/usr/bin/env python3')
             main.write_line('print("Hello, World!")')
     
-    with DirectoryCore('docs') as docs:
-        with FileCore('README.md') as readme:
+    with DirectoryContext('docs') as docs:
+        with FileContext('README.md') as readme:
             readme.add_heading('My Project')
             readme.write_line('This is my project description.')
     
@@ -435,10 +435,10 @@ with DirectoryCore('myproject', create=True) as project:
 
 ```python
 # Using global functions for cleaner syntax
-with DirectoryCore('myproject', create=True, enable_globals=True):
+with DirectoryContext('myproject', create=True, enable_globals=True):
     create_subdirectory('src')
     
-    with FileCore('src/main.py', enable_globals=True):
+    with FileContext('src/main.py', enable_globals=True):
         add_heading('Main Application')
         write_line('#!/usr/bin/env python3')
         write_line('print("Hello, World!")')
@@ -452,10 +452,10 @@ with DirectoryCore('myproject', create=True, enable_globals=True):
 
 ```python
 # Test operations without making changes
-with DirectoryCore('testdir', dry_run=True, enable_globals=True):
+with DirectoryContext('testdir', dry_run=True, enable_globals=True):
     create_subdirectory('would_create')
     
-    with FileCore('would_create.txt', dry_run=True, enable_globals=True):
+    with FileContext('would_create.txt', dry_run=True, enable_globals=True):
         write_line('This would be written')
         add_heading('Test Heading')
 ```

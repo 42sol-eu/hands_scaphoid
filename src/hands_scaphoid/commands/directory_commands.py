@@ -18,7 +18,7 @@ from ..__base__ import (
     # yes, no, 
     PathLike, Path
 )
-from ..objects import ObjectCore
+from ..objects import ObjectItem
 from .core_commands import CompressionType, does_not_exists, ensure_path, exists, filter, is_directory, is_instance, is_variable
 
 from typing import Optional, Any

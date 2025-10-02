@@ -40,7 +40,7 @@ from typing import Any, Dict, List, Optional
 from ..__base__ import PathLike, logger, console
 
 # 3. Project internal imports
-from ..objects.FileCore import FileCore
+from ..objects.FileObject import FileObject
 from ..commands.core_commands import DynamicArchiveType
 ```
 

@@ -1,8 +1,9 @@
-from .type_enums import ItemType
+from ..types.ItemType import ItemType
 import os
 import yaml
 import json
 
+#%% [Code]
 
 class ItemCore:
     def __init__(self, name: str, value: str, item_type: ItemType = ItemType.ITEM):
@@ -70,3 +71,5 @@ class ItemCore:
     def from_env_var(cls, env_var: str):
         value = os.getenv(env_var, "")
         return cls(name=env_var, value=value, item_type=ItemType.VARIABLE)
+
+#%% [End of file]

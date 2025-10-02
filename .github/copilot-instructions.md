@@ -57,7 +57,7 @@ from ..__base__ import (
 )
 
 #%% [Project modules]  
-from ..objects.FileCore import FileCore
+from ..objects.FileObject import FileObject
 from ..commands.core_commands import DynamicArchiveType
 ```
 

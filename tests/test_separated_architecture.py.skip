@@ -37,7 +37,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from hands_scaphoid.contexts.Context import Context
 from hands_scaphoid.objects.File import File
-from hands_scaphoid.objects.DirectoryCore import DirectoryCore
+from hands_scaphoid.objects.DirectoryObject import DirectoryObject
 from hands_scaphoid.objects.Archive import Archive
 # from hands_scaphoid.contexts.FileContext import FileContext
 # from hands_scaphoid.contexts.DirectoryContext import DirectoryContext

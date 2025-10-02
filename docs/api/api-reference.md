@@ -5,8 +5,8 @@ This is the complete API reference for Hands Scaphoid, covering all modules, cla
 ## Core Components
 
 ### Context Managers
-- [ShellContext](../objects/shell-context.md) - Primary context manager for shell operations
-- [Shell Executable](../objects/shell-executable.md) - Core shell execution class
+- [ShellContext](contexts/shell-context.md) - Primary context manager for shell operations
+- [Shell Executable](objects/shell-executable.md) - Core shell execution class
 
 ### Command Modules
 
@@ -76,42 +76,95 @@ Supported compression types:
 - `TAR_BZ2` - TAR with BZIP2 compression
 - `TAR_XZ` - TAR with XZ compression
 
+
+## Item classes [ordered logically]
+
+### [ItemCore](objects/item-core.md)
+Base class for all file system items.
+
+#### [VariableItem](objects/variable-item.md)
+Variable class for all file system items.
+
+#### [PathItem](objects/path-item.md)
+Path class for all file system items.
+
+
 #### PathLike Type
 **Module**: `hands_scaphoid.__base__`
 
 Type alias for path-like objects: `Union[str, Path]`
 
-## Object Classes
-
-### [Archive File](objects/archive-file.md)
-Object representation of archive files with built-in operations.
-
-### [Directory Core](objects/directory-core.md) 
-Object representation of directories with file system operations.
-
-### [Executable Core](objects/executable-core.md)
-Object representation of executable files.
-
-### [File Core](objects/file-core.md)
-Object representation of regular files with read/write operations.
-
-### [File Script](objects/file-script.md)
-Object representation of script files.
-
-### [Item Core](objects/item-core.md)
+#### [ObjectItem](objects/object-item.md)
 Base class for all file system items.
 
-### [Object Core](objects/object-core.md)
-Base class for file system objects.
 
-### [Shell Executable](objects/shell-executable.md)
-Main shell execution class with command allowlisting.
+## Object classes 
 
-### [Variable Core](objects/variable-core.md)
-Object representation of environment variables.
+=== "[ordered logically]"
 
-### [Windows Shells](objects/windows-shells.md)
-Windows-specific shell implementations (PowerShell, WSL).
+
+    ### [DirectoryObject](objects/directory-object.md) 
+    Object representation of directories with file system operations.
+
+
+
+    ### [FileObject](objects/file-object.md)
+    Object representation of regular files with read/write operations.
+
+    #### [Archive File](objects/archive-file.md)
+    Object representation of archive files with built-in operations.
+
+    #### [ExecutableFile](objects/executable-file.md)
+    Object representation of executable files.
+
+
+    #### [Script File](objects/script-file.md)
+    Object representation of script files.
+
+    ### [Shell Executable](objects/shell-executable.md)
+    Main shell execution class with command allowlisting.
+
+    #### [SSH Shell](objects/ssh-shell.md)
+    System access shell via SSH
+    TODO: add sSshShell
+
+    #### [Windows Shells](objects/power-shell.md)
+    Windows-specific shell implementations (PowerShell).
+
+    #### [WSL Shell](objects/wsl-shell.md)
+    Windows Subsystem for Linux shell implementation.
+
+==== "[ordered by alphabet]"
+
+    ### [Archive File](objects/archive-file.md)
+    Object representation of archive files with built-in operations.
+
+    ### [ExecutableFile](objects/executable-file.md)
+    Object representation of executable files.
+
+    ### [DirectoryObject](objects/directory-object.md) 
+    Object representation of directories with file system operations.
+
+    ### [FileObject](objects/file-object.md)
+    Object representation of regular files with read/write operations.
+
+
+    ### [Script File](objects/script-file.md)
+    Object representation of script files.
+
+    ### [Shell Executable](objects/shell-executable.md)
+    Main shell execution class with command allowlisting.
+
+    ### [SSH Shell](objects/ssh-shell.md)
+    System access shell via SSH
+    TODO: add sSshShell
+
+    ### [Windows Shells](objects/power-shell.md)
+    Windows-specific shell implementations (PowerShell).
+
+    ### [WSL Shell](objects/wsl-shell.md)
+    Windows Subsystem for Linux shell implementation.
+
 
 ## Context Managers
 

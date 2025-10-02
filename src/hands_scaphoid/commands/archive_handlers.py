@@ -37,25 +37,7 @@ from ..__base__ import (
     Optional,
     PathLike,
 )
-from .core_commands import ArchiveHandler
-
-    Any,
-    Dict,
-    List,
-    Optional,
-    logger,
-    PathLike,
-)
-from .core_commands import ArchiveHandler
-
-
-#%% [Local imports]
-from __base__ import (
-    console,
-    logger,
-    PathLike,
-)
-from core_commands import ArchiveHandler
+from .handlers.ArchiveHandler import ArchiveHandler
 
 class ZipArchiveHandler(ArchiveHandler):
     """Handler for ZIP-based archives (.zip, .whl, .docx, .xlsx, etc.)."""

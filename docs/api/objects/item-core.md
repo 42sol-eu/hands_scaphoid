@@ -1,4 +1,4 @@
-## Item Core API Reference
+# ItemCore API Reference
 
 ## API documentation
 

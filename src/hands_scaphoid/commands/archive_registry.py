@@ -26,7 +26,8 @@ from typing import Dict, List, Optional
 from pathlib import Path
 
 from ..__base__ import logger, PathLike
-from .core_commands import DynamicArchiveType, ArchiveHandler
+from .handlers.ArchiveHandler import ArchiveHandler
+from ..types.DynamicArchiveType import DynamicArchiveType
 # Temporarily disable handler imports to allow tests to run
 # TODO: Fix handler architecture - handlers should either be dataclass instances
 # or follow a different pattern

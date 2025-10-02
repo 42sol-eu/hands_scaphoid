@@ -515,8 +515,8 @@ class ImportAnalyzer:
             # Check if current file is in objects directory
             if 'objects' in current_path.parts:
                 objects_patterns = {
-                    'FileCore': '.FileCore',
-                    'DirectoryCore': '.DirectoryCore',
+                    'FileObject': '.FileObject',
+                    'DirectoryObject': '.DirectoryObject',
                     'ArchiveCore': '.ArchiveCore',
                 }
                 if module_name in objects_patterns:

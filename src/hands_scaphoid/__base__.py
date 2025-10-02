@@ -21,6 +21,7 @@ Projects: ["hands/palm/trapezium"]
 """
 
 #%% [ Typing imports]
+from pathlib import Path
 from typing import (
     Any, 
     Callable,

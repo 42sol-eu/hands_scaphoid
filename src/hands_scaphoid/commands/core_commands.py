@@ -4,15 +4,17 @@ Core commands for package.
 This module contains core command functions used throughout the package.
 ---yaml
 File:
-    name:        core_commands.py  
-    uuid:        d71b08ee-39a3-409a-b8d2-412899dac67c
+    name:   core_commands.py  
+    uuid:   d71b08ee-39a3-409a-b8d2-412899dac67c
+    date:   2025-09-30
 
-Description:     core_commands init
+Description:
+    core_commands init
 
 Project:
-    name:        hands_scaphoid
-    uuid:        2945ba3b-2d66-4dff-b898-672c386f03f4
-    url:         https://github.com/42sol-eu/hands_scaphoid
+    name:   hands_scaphoid
+    uuid:   2945ba3b-2d66-4dff-b898-672c386f03f4
+    url:    https://github.com/42sol-eu/hands_scaphoid
 
 
 Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
@@ -26,125 +28,19 @@ from ..__base__ import (
     logger,
     PathLike, Path
 )
-from ..objects import ObjectCore
-from enum import Enum
-from dataclasses import dataclass
+from ..objects import ObjectItem
 from shutil import which as shutil_which
 from typing import Any, Dict, List, Optional
 
 logger.debug("Importing core_commands module")
 
 
-@dataclass
-class ArchiveHandler:
-    extract: callable
-    pack: callable
-    test: callable
-    list_files: callable
-
-class DynamicArchiveType:
-    """A registry like enum replacement that can be extended at runtime.
-    Also getting an archive handler for the core functions.
-    """
-    _next_id: int = 1
-    _members:           Dict[str, int] = {}
-    _extensions:        Dict[str, str] = {}
-    _handler:           Dict[str, ArchiveHandler] = {}
-
-    @classmethod
-    def get_next_identifier(cls):
-        the_id = cls._next_id 
-        cls._next_id += 1
-        return the_id 
-    
-    def __init__(self, name: str):
-        if name in self.__class__._members:
-            raise ValueError(f'{name} already defined in {self.__class__}')
-        self.name  = name
-        self.value = DynamicArchiveType.get_next_identifier()
-        self.__class__._members[self.name] = self.value
-        
-    
-    @classmethod 
-    def get(cls, name: str) -> "DynamicArchiveType":
-        """get a member (suffix) by name."""
-        if name not in cls._members:
-            raise ValueError(f'{name} [red]not[/red] defined in {cls.__class__}')
-        return cls._members[name]
-
-    @classmethod 
-    def get_suffix(cls, name: str) -> "DynamicArchiveType":
-        """get a member (suffix) by name."""
-        if name not in cls._extensions:
-            raise ValueError(f'Extension for {name} [red]not[/red] defined in {cls.__class__}')
-        return cls._extensions[name]
-
-    @classmethod 
-    def get_handler(cls, name: str) -> "ArchiveHandler":
-        """get an archive handler for the archive type."""
-        if name not in cls._handler:
-            raise ValueError(f'ArchiveHandler for {name} [red]not[/red] defined in {cls.__class__}')
-        return cls._handler[name]
-    
-    @classmethod
-    def add(cls, name: str, extension: str, handler: ArchiveHandler=None) -> bool:
-        if name in cls._members:
-            raise ValueError(f'{name} is already defined in {cls.__class__}')
-
-        cls._members[name] = cls.get_next_identifier()
-        cls._extensions[name] = extension
-        cls._handler[name] = handler
-        
-        return True
-
-    @classmethod
-    def add_similar(cls, name: str, extension: str, similar_name: str) -> bool:
-        """Add an archive type that reuses an already defined archive handler."""
-        if similar_name not in cls._members:
-            raise ValueError(f'The {similar_name} is not defined in {cls.__class__}')
-
-        cls._members[name] = cls.get_next_identifier()
-        cls._extensions[name] = extension
-        cls._handler[name] = cls._handler[similar_name]
-
-        return True
-        
-    @classmethod
-    def items(cls) -> Dict[str, "DynamicArchiveType"]:
-        return dict(cls._members)    
-    
-    @classmethod
-    def list_types(cls) -> List[str]:
-        """
-        List all supported compression types.
-        Returns:
-            List of supported compression type strings.
-        """        
-        return list(cls.items().keys())
-
-    @classmethod
-    def list_extensions(cls) -> List[str]:
-        """
-        List all supported compression type extensions.
-        Returns:
-            List of supported compression type extension strings.
-        """        
-        return list(cls._extensions.values())
-
-    @classmethod
-    def list_types(cls) -> List[str]:
-        """
-        List all supported compression types.
-        
-        Returns:
-            List of supported compression type strings.
-        """        
-        return list(cls._members.keys())
-
+# Import the separated classes
+from .handlers.ArchiveHandler import ArchiveHandler
+from ..types.DynamicArchiveType import DynamicArchiveType
 
 # Import the centralized archive registry
 from .archive_registry import ArchiveType
-
 
 # DynamicArchiveType and ArchiveType replaces `class CompressionType(str, Enum)`. It is user extensible at runtime.
 
@@ -194,7 +90,7 @@ def ensure_path(path: Any) -> Path:
         return path
     elif is_instance(path, str):
         return Path(path)
-    elif is_instance(path, ObjectCore):
+    elif is_instance(path, Object):
         path = path.name
     elif is_variable(path):
         path = str(os.environ.get(str(path), path))

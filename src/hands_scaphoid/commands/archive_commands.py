@@ -35,7 +35,7 @@ import py7zr
 import rarfile
 
 # %% [Local imports]
-from ..base import (
+from ..__base__ import (
     List,
     Optional,
     Path,

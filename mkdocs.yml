@@ -18,20 +18,30 @@ nav:
     - API Reference: api/api-reference.md
     - API Objects: api/objects.md
     - Objects: 
-      - Item: api/objects/item-core.md
-      - Object: api/objects/object-core.md
-      - Variable: api/objects/variable-core.md
-      - File: api/objects/file-core.md
-      - Archive: api/objects/archive-file.md
-      - Directory: api/objects/directory-core.md
-      - Executables: api/objects/executable-core.md
-      - Scripts: api/objects/file-script.md
-      - Shell: api/objects/shell-executable.md
-      - WindowsShells: api/objects/windows-shells.md
+      - Items:
+        - ItemCore: api/objects/item-core.md
+        - VariableItem: api/objects/variable-item.md
+        - PathItem: api/objects/path-item.md
+        - ObjectItem: api/objects/object-item.md
+      - Core Objects:
+        - DirectoryObject: api/objects/directory-object.md
+        - FileObject: api/objects/file-object.md
+        - LinkObject: api/objects/link-object.md
+      - File Objects:
+        - ArchiveFile: api/objects/archive-file.md
+        - ExecutableFile: api/objects/executable-file.md
+        - ScriptFile: api/objects/script-file.md
+      - Shell:
+        - ShellExecutable: api/objects/shell-executable.md
+        - WslShell: api/objects/wsl-shell.md
+        - PowerShell: api/objects/power-shell.md
+        - SshShell: api/objects/ssh-shell.md
     - Context Managers:
       - Context Managers: api/contexts/context-managers.md
       - ShellContext: api/contexts/shell-context.md
   - Examples: examples.md
+  - User Guide:
+    - Testing: user-guide/testing.md
   - Plugin Features Test: plugin-features-test.md
   - Hierarchical Contexts: user-guide/hierarchical-contexts.md
 
@@ -74,8 +84,15 @@ plugins:
 
 markdown_extensions:
   - admonition
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite

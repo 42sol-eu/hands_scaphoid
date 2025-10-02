@@ -27,6 +27,9 @@ from .__base__ import DEBUG_MODE, ENABLE_TRACEBACK, G_debug, Path, PathLike, no,
 from .contexts.ShellContext import ShellContext
 from .objects.ShellExecutable import ShellExecutable
 
+# Backward compatibility alias
+Shell = ShellExecutable
+
 
 # %% [Exports]
 __all__ = [
@@ -38,5 +41,7 @@ __all__ = [
     "no",  # src\hands_scaphoid\__base__.py
     "PathLike",  # src\hands_scaphoid\__base__.py
     "yes",  # src\hands_scaphoid\__base__.py
-    "ShellContext", "ShellExecutable"
+    "Shell",  # Backward compatibility alias
+    "ShellContext",
+    "ShellExecutable"
 ]
