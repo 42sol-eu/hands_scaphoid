@@ -173,7 +173,7 @@ Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 Organize imports in distinct sections with clear separation:
 
 ```python
-#%% [Standard library imports] - or just separate with comments
+# [Standard library imports] - or just separate with comments
 import os
 import sys
 import subprocess
@@ -181,13 +181,13 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 from enum import Enum
 
-#%% [ Third-party imports]
+# [ Third-party imports]
 import click
 from rich.console import Console
 from rich import print
 import pytest
 
-#%% [Local imports] - relative imports preferred for package modules
+# [Local imports] - relative imports preferred for package modules
 from ..__base__ import (
     console, 
     logger,
@@ -330,20 +330,20 @@ def process_files(input_dir, output_dir, pattern="*.py", recursive=True):
 
 ### Common Type Patterns
 ```python
-#%% [Standard library imports]
+# [Standard library imports]
 from typing import Any, Dict, List, Optional, Union
 from pathlib import Path
 
-#%% [Standard type aliases]
+# [Standard type aliases]
 PathLike = Union[str, Path]
 ConfigDict = Dict[str, Any]
 FileList = List[Path]
 
-#%% [Optional types]
+# [Optional types]
 def get_config(name: str) -> Optional[ConfigDict]:
     pass
 
-#%% [Union types for multiple possibilities]
+# [Union types for multiple possibilities]
 def handle_input(data: Union[str, bytes, Path]) -> str:
     pass
 ```

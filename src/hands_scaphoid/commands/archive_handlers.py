@@ -20,14 +20,14 @@ Project:
 Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 import shutil
 import subprocess
 import tarfile
 import zipfile
 from pathlib import Path
 
-#%% [Local imports]
+# [Local imports]
 from ..__base__ import (
     Any,
     console,

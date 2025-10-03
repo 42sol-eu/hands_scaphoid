@@ -43,10 +43,10 @@ Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 
 ### 2. Import Structure (strict order)
 ```python
-#%% [Standard library]
+# [Standard library]
 import os 
 
-#%% [Project base] (always first)
+# [Project base] (always first)
 from ..__base__ import (
     AbstractBaseType,
     Dict,
@@ -56,7 +56,7 @@ from ..__base__ import (
     Path,
 )
 
-#%% [Project modules]  
+# [Project modules]  
 from ..objects.FileObject import FileObject
 from ..commands.core_commands import DynamicArchiveType
 ```

@@ -58,7 +58,7 @@ def example_usage():
         print(f"   {example['command']}")
     
     print("\nThe script will:")
-    print("• Organize imports into #%% [section] format")
+    print("• Organize imports into # [section] format")
     print("• Sort imports alphabetically")
     print("• Group 'from X import' statements with proper formatting")
     print("• Detect unused imports (reported but not removed by default)")

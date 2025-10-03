@@ -18,7 +18,7 @@ Authors: ["Andreas Häberle"]
 Projects: ["hands/palm/trapezium"]
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 from __future__ import annotations
 import os
 import platform
@@ -27,12 +27,12 @@ import sys
 import time
 from typing import Dict, List, Optional, Union
 
-#%% [Local imports]
+# [Local imports]
 from ..__base__ import *
 from .files.ExecutableFile import ExecutableFile
 # from ..commands.shell_factory import create_powershell_shell, create_wsl_shell
 
-#%% [Class code]
+# [Class code]
 class ShellExecutable(ExecutableFile):
     """
     A secure shell command executor with environment management.

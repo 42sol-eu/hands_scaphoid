@@ -3,7 +3,7 @@
 Final test file for import organizer improvements.
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 import json
 import os
 import subprocess
@@ -17,10 +17,10 @@ from typing import (
     Union,
 )
 
-#%% [Third party imports]
+# [Third party imports]
 from rich.console import Console
 
-#%% [Local imports]
+# [Local imports]
 from base import (
     logger,
     PathLike,

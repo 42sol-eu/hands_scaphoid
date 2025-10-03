@@ -33,7 +33,7 @@ from ..__base__ import (
     AbstractBaseClass
 )
 
-#%% [Standard library imports]
+# [Standard library imports]
 import os
 import zipfile
 import tarfile

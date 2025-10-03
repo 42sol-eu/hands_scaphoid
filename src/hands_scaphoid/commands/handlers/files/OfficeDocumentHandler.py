@@ -17,13 +17,13 @@ Project:
 Authors:    ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 from typing import List
 
-#%% [Project base imports]
+# [Project base imports]
 from ....__base__ import logger, PathLike
 
-#%% [Local imports]
+# [Local imports]
 from ..archives.ZipArchiveHandler import ZipArchiveHandler
 
 

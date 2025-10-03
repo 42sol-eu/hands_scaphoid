@@ -13,7 +13,7 @@ project:
     url:         https://github.com/42sol-eu/hands_scaphoid
 """
 
-#%% [Project base]
+# [Project base]
 from ...__base__ import PathLike
 from ..FileObject import FileObject
 

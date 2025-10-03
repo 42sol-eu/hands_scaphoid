@@ -21,7 +21,7 @@ Project:
 Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [ Standard library imports ]
+# [ Standard library imports ]
 from pathlib import Path
 from typing import Optional, Union, List, Any, Dict
 from abc import ABC as AbstractBaseClass
@@ -30,11 +30,11 @@ from abc import abstractmethod as abstract_method
 import threading
 import builtins
 
-#%% [ Project imports ]
+# [ Project imports ]
 from ..__base__ import PathLike, os, console
 
 
-#%% [ Class definition ]
+# [ Class definition ]
 class ContextCore(AbstractBaseClass):
     """
     Base context manager class for hierarchical file system operations.

@@ -21,7 +21,7 @@ Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
 
-#%% [Standard library imports]
+# [Standard library imports]
 from typing import Any, Dict, List, Optional, Protocol
 
 #%%[ Local imports]

@@ -6,7 +6,7 @@ A more robust tool specifically designed to fix import issues in Python projects
 with special handling for the hands_scaphoid project structure.
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 import ast
 import os
 import sys
@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Dict, List, Set, Tuple, Union, Optional
 import re
 
-#%% [Third party imports]
+# [Third party imports]
 import rich_click as click
 
 PathLike = Union[str, Path]

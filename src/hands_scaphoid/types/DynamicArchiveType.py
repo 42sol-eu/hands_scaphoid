@@ -17,10 +17,10 @@ Project:
 Authors:    ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 from typing import Dict, List
 
-#%% [Local imports]
+# [Local imports]
 from ..commands.handlers.ArchiveHandler import ArchiveHandler
 
 

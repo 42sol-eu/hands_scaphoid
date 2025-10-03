@@ -17,15 +17,15 @@ Project:
 Authors:    ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 import ast
 import subprocess
 from typing import Any, Dict, List
 
-#%% [Project base imports]
+# [Project base imports]
 from ....__base__ import Path, PathLike
 
-#%% [Local imports]
+# [Local imports]
 from .ExecutableHandler import ExecutableHandler
 
 

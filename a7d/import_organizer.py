@@ -3,7 +3,7 @@
 Python Import Organizer Script
 
 This script analyzes Python files and organizes their imports according to the project's
-standards with #%% [section] format. It categorizes imports, sorts them alphabetically,
+standards with # [section] format. It categorizes imports, sorts them alphabetically,
 detects unused imports, and suggests missing imports.
 ---yaml
 File:
@@ -22,7 +22,7 @@ Project:
 Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 import ast
 import os
 import sys
@@ -32,14 +32,14 @@ import re
 import importlib.util
 import pkgutil
 
-#%% [Third party imports]
+# [Third party imports]
 import rich_click as click
 
 # Configure rich_click for better appearance
 click.rich_click.SHOW_ARGUMENTS = True
 click.rich_click.GROUP_ARGUMENTS_OPTIONS = True
 
-#%% [Local imports]
+# [Local imports]
 # None - this is a standalone script
 
 PathLike = Union[str, Path]
@@ -253,7 +253,7 @@ class ImportAnalyzer:
     def format_import_section(self, imports: List[ImportInfo], section_name: str) -> str:
         """Format imports for a specific section with proper sorting and grouping."""
         if not imports:
-            return f"#%% [{section_name}]\n# - none\n"
+            return f"# [{section_name}]\n# - none\n"
         
         # Group by module for 'from' imports, separate regular imports
         regular_imports = []
@@ -270,7 +270,7 @@ class ImportAnalyzer:
         # Sort everything properly
         regular_imports.sort(key=lambda x: (x.module.lower(), x.alias.lower() if x.alias else ''))
         
-        lines = [f"#%% [{section_name}]"]
+        lines = [f"# [{section_name}]"]
         
         # Add regular imports first, sorted alphabetically
         for imp in regular_imports:
@@ -396,7 +396,7 @@ class ImportAnalyzer:
             
             # Check if this line is an import-related line
             is_import_line = (
-                line.startswith('#%% [') or 
+                line.startswith('# [') or 
                 line.startswith('import ') or 
                 line.startswith('from ') or
                 line.startswith('# - none') or
@@ -730,14 +730,14 @@ class ImportAnalyzer:
               help='Show detailed information during processing')
 def main(files, dry_run, backup, remove_unused, fix_relative, verbose):
     """
-    Organize Python imports with #%% [section] format.
+    Organize Python imports with # [section] format.
     
     This script analyzes Python files and organizes their imports according to the project's
     standards. It categorizes imports, sorts them alphabetically, detects unused imports,
     and resolves duplicate imports by prioritizing local ones.
     
     Features:
-    • Organizes imports into standard sections with #%% headers
+    • Organizes imports into standard sections with # headers
     • Sorts imports alphabetically within each section  
     • Formats multi-line imports with proper parentheses
     • Detects and reports unused imports

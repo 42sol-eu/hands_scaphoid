@@ -16,11 +16,11 @@ Project:
 Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [Shell implementations]
+# [Shell implementations]
 from .PowerShell import PowerShell
 from .WslShell import WslShell
 
-#%% [Exports]
+# [Exports]
 __all__ = [
     "PowerShell",
     "WslShell",

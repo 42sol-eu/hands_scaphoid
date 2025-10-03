@@ -19,11 +19,11 @@ Authors: ["Andreas Häberle"]
 Projects: ["hands/palm/scaphoid"]
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 from __future__ import annotations
 import builtins
 
-#%% [Local imports]
+# [Local imports]
 from ..__base__ import (
     context_manager,
     Dict,
@@ -36,7 +36,7 @@ from ..__base__ import (
 from ..objects.ShellExecutable import ShellExecutable as Shell
 
 
-#%% [Context Manager Definition]
+# [Context Manager Definition]
 @context_manager
 def ShellContext(
     cwd: Optional[Union[str, Path]] = None,

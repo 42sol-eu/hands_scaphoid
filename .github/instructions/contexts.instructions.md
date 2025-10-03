@@ -33,10 +33,10 @@ Abbreviations:
 - DUT[testing]: Device Under Test (the main object/function being tested)
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 # - none
 
-#%% [Local imports]
+# [Local imports]
 from ..__base__ import (
     Any,
     context_manager

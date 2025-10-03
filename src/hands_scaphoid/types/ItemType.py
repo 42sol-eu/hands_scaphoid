@@ -17,17 +17,22 @@ Project:
 Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 from enum import Enum
 import yaml 
 
-class ItemType(str, Enum):
+# [Local imports]
+from .EnumMixin import EnumMixin
+
+class ItemType(EnumMixin, str, Enum):
     """Enum representing different types of items."""
 
     ITEM = "item"
-    OBJECT = "object"
     VARIABLE = "variable"
     PATH = "path"
+    OBJECT = "object"
+    PROJECT = "project"
+    ENVIRONMENT = "environment"
     FILE = "file"
     DIRECTORY = "directory"
     ARCHIVE = "archive"

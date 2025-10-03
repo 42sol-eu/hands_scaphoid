@@ -17,12 +17,12 @@ Project:
 Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 import platform
 import subprocess
 from typing import Dict, List
 
-#%% [Local imports]
+# [Local imports]
 from ..ShellExecutable import ShellExecutable as Shell
 from ...__base__ import PathLike
 

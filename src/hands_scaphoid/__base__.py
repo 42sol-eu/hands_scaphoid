@@ -20,7 +20,7 @@ Authors: ["Andreas Häberle"]
 Projects: ["hands/palm/trapezium"]
 """
 
-#%% [ Typing imports]
+# [ Typing imports]
 from pathlib import Path
 from typing import (
     Any, 
@@ -37,7 +37,7 @@ PathLike = Union[str, Path]
 
 from contextlib import contextmanager as context_manager
 
-#%% [Standard library imports]
+# [Standard library imports]
 from abc import ABC as AbstractBaseClass
 from abc import abstractmethod as abstract_method
 import logging
@@ -47,12 +47,12 @@ import subprocess
 import sys
 import time
 
-#%% [Third party imports]
+# [Third party imports]
 from rich import print
 from rich.console import Console
 from rich.logging import RichHandler
 
-#%% [Constants]
+# [Constants]
 DEBUG_MODE = False
 ENABLE_TRACEBACK = DEBUG_MODE
 
@@ -67,8 +67,9 @@ yes = True
 false = False
 true = True
 G_debug = DEBUG_MODE
+is_instance = isinstance 
 
-#%% [Code] 
+# [Code] 
 # Create console instance for rich output
 console = Console()
 
@@ -81,7 +82,7 @@ logging.basicConfig(
 
 logger = logging.getLogger("hands_scaphoid")
 
-#%% [Exports]
+# [Exports]
 __all__ = [
     # Typing and path
     "Path",
@@ -95,6 +96,7 @@ __all__ = [
     "Optional",
     "Union",
     "context_manager",
+    "is_instance",
 
     # Standard library
     "AbstractBaseClass",

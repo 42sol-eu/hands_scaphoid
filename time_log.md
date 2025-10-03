@@ -9,3 +9,4 @@
   - 4h: refactor class names (ClassName for all classes *Core or FileScript)
   - 4h: add custom archives (2025-09-28) 
   - 1h: mkdocs-material: mermaid, admonitions,  
+  - 2h: Test: ItemCore (2025-10-02)

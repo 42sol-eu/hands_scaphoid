@@ -16,15 +16,17 @@ Project:
 Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [Type definitions]
+# [Type definitions]
+from .EnumMixin import EnumMixin
 from .ItemType import ItemType
 from .SimpleCommandType import SimpleCommandType
 from .AccessCommandType import AccessCommandType
 from .CommandType import CommandType
 # Note: DynamicArchiveType removed to avoid circular import
 
-#%% [Exports]
+# [Exports]
 __all__ = [
+    "EnumMixin",
     "ItemType",
     "SimpleCommandType", 
     "AccessCommandType",

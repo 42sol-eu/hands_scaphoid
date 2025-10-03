@@ -9,14 +9,14 @@ Project:
 Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [Base handlers]
+# [Base handlers]
 from .Handler import Handler
 from .FileHandler import FileHandler
 from .DirectoryHandler import DirectoryHandler
 from .ArchiveHandler import ArchiveHandler
 from .HandlerRegistry import HandlerRegistry
 
-#%% [Exports]
+# [Exports]
 __all__ = [
     "Handler",
     "FileHandler",

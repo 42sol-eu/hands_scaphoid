@@ -20,15 +20,15 @@ Project:
 Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 import os
 import tempfile
 from pathlib import Path
 
-#%% [ Third-party imports]
+# [ Third-party imports]
 import pytest
 
-#%% [Project imports]
+# [Project imports]
 from hands_scaphoid import ShellExecutable
 
 

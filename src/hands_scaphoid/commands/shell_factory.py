@@ -17,7 +17,7 @@ Project:
 Authors: ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [Local imports]
+# [Local imports]
 from ..objects.shells.PowerShell import PowerShell
 from ..objects.shells.WslShell import WslShell
 from ..objects.shells.SshShell import SshShell

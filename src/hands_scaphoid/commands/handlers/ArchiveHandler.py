@@ -17,7 +17,7 @@ Project:
 Authors:    ["Andreas Felix Häberle <felix@42sol.eu>"]
 """
 
-#%% [Standard library imports]
+# [Standard library imports]
 from dataclasses import dataclass
 from typing import Callable
 
