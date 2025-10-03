@@ -1,0 +1,199 @@
+#!/usr/bin/env python3
+"""
+{{ tool_name }} - {{ description }}
+
+---yaml
+File:
+    name: {{ tool_name }}.py
+    uuid: generated-uuid-placeholder
+    date: {{ current_date }}
+
+Description:
+    {{ description }}
+
+Project:
+    name: {{ project_name }}
+
+Authors: ["{{ author }}"]
+"""
+
+import sys
+from pathlib import Path
+{% if use_config_file %}
+import json
+{% endif %}
+
+import rich_click as click
+{% if use_rich %}
+from rich.console import Console
+from rich.table import Table
+from rich import print as rprint
+{% endif %}
+
+
+{% if use_rich %}
+console = Console()
+{% endif %}
+
+{% if use_config_file %}
+# Configuration handling
+def load_config(config_path: Path = None) -> dict:
+    """Load configuration from file."""
+    if config_path is None:
+        config_path = Path.home() / f".{tool_name}.json"
+    
+    if config_path.exists():
+        try:
+            with open(config_path, 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            {% if use_rich %}
+            console.print(f"❌ [red]Error loading config: {e}[/red]")
+            {% else %}
+            print(f"Error loading config: {e}")
+            {% endif %}
+    return {}
+
+def save_config(config: dict, config_path: Path = None):
+    """Save configuration to file."""
+    if config_path is None:
+        config_path = Path.home() / f".{tool_name}.json"
+    
+    try:
+        with open(config_path, 'w') as f:
+            json.dump(config, f, indent=2)
+        {% if use_rich %}
+        console.print(f"✅ [green]Config saved to {config_path}[/green]")
+        {% else %}
+        print(f"Config saved to {config_path}")
+        {% endif %}
+    except Exception as e:
+        {% if use_rich %}
+        console.print(f"❌ [red]Error saving config: {e}[/red]")
+        {% else %}
+        print(f"Error saving config: {e}")
+        {% endif %}
+{% endif %}
+
+# Main CLI group
+@click.group()
+@click.version_option(version="1.0.0")
+@click.option('--verbose', '-v', is_flag=True, help='Enable verbose output')
+{% if use_config_file %}
+@click.option('--config', type=click.Path(), help='Path to configuration file')
+{% endif %}
+@click.pass_context
+def cli(ctx, verbose{% if use_config_file %}, config{% endif %}):
+    """
+    🚀 **{{ tool_name }}** - {{ description }}
+    
+    {% if use_rich %}
+    This tool provides:
+    
+    {% for command in commands.split(',') -%}
+    • {{ command.strip() | title }} functionality
+    {% endfor %}
+    {% endif %}
+    """
+    # Initialize context
+    ctx.ensure_object(dict)
+    ctx.obj['verbose'] = verbose
+    
+    {% if use_config_file %}
+    # Load configuration
+    if config:
+        config_path = Path(config)
+    else:
+        config_path = None
+    ctx.obj['config'] = load_config(config_path)
+    {% endif %}
+    
+    if verbose:
+        {% if use_rich %}
+        console.print("🔧 [yellow]Verbose mode enabled[/yellow]")
+        {% else %}
+        print("Verbose mode enabled")
+        {% endif %}
+
+{% for command in commands.split(',') -%}
+{% set cmd_name = command.strip() %}
+@cli.command()
+@click.option('--dry-run', is_flag=True, help='Show what would be done without executing')
+@click.pass_context
+def {{ cmd_name }}(ctx, dry_run):
+    """
+    {{ cmd_name | title }} command - implement your {{ cmd_name }} logic here.
+    """
+    verbose = ctx.obj.get('verbose', False)
+    {% if use_config_file %}
+    config = ctx.obj.get('config', {})
+    {% endif %}
+    
+    if dry_run:
+        {% if use_rich %}
+        console.print(f"🔍 [yellow]DRY RUN: Would execute {{ cmd_name }} command[/yellow]")
+        {% else %}
+        print(f"DRY RUN: Would execute {{ cmd_name }} command")
+        {% endif %}
+        return
+    
+    {% if use_rich %}
+    with console.status(f"[bold green]Running {{ cmd_name }}..."):
+        # TODO: Implement {{ cmd_name }} logic here
+        pass
+    
+    console.print(f"✅ [green]{{ cmd_name | title }} completed successfully![/green]")
+    {% else %}
+    print(f"Running {{ cmd_name }}...")
+    # TODO: Implement {{ cmd_name }} logic here
+    print(f"{{ cmd_name | title }} completed successfully!")
+    {% endif %}
+
+{% endfor %}
+
+{% if use_config_file %}
+@cli.command()
+@click.option('--show', is_flag=True, help='Show current configuration')
+@click.option('--reset', is_flag=True, help='Reset configuration to defaults')
+@click.pass_context
+def config(ctx, show, reset):
+    """
+    Manage {{ tool_name }} configuration.
+    """
+    config = ctx.obj.get('config', {})
+    
+    if show:
+        {% if use_rich %}
+        if config:
+            table = Table(title="Current Configuration")
+            table.add_column("Key", style="cyan")
+            table.add_column("Value", style="green")
+            
+            for key, value in config.items():
+                table.add_row(str(key), str(value))
+            
+            console.print(table)
+        else:
+            console.print("📄 [yellow]No configuration found[/yellow]")
+        {% else %}
+        if config:
+            print("Current Configuration:")
+            for key, value in config.items():
+                print(f"  {key}: {value}")
+        else:
+            print("No configuration found")
+        {% endif %}
+    elif reset:
+        save_config({})
+    else:
+        {% if use_rich %}
+        console.print("💡 [blue]Use --show to view config or --reset to clear it[/blue]")
+        {% else %}
+        print("Use --show to view config or --reset to clear it")
+        {% endif %}
+{% endif %}
+
+if __name__ == '__main__':
+    cli()
+
+# [End of file]

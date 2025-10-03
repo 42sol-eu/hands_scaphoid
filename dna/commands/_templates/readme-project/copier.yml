@@ -1,0 +1,113 @@
+# Copier template configuration for project README.md files
+# This configuration defines prompts for generating comprehensive project documentation
+
+_templates_suffix: .jinja
+_envops:
+  block_start_string: "{%"
+  block_end_string: "%}"
+  variable_start_string: "{{"
+  variable_end_string: "}}"
+
+# Template metadata
+_metadata:
+  version: "1.0.0"
+  description: "Comprehensive project README.md with badges, installation, usage, and documentation"
+
+# Project information
+project_name:
+  type: str
+  help: "Name of the project"
+  default: "My Project"
+
+project_description:
+  type: str
+  help: "Brief description of what the project does"
+  default: "A Python project"
+
+# Repository information
+repo_owner:
+  type: str
+  help: "GitHub username or organization"
+  default: "username"
+
+repo_name:
+  type: str
+  help: "Repository name"
+  default: "{{ project_name | lower | replace(' ', '-') }}"
+
+# Author information
+author_name:
+  type: str
+  help: "Author name"
+  default: "Andreas Felix Häberle"
+
+author_email:
+  type: str
+  help: "Author email"
+  default: "felix@42sol.eu"
+
+# Project details
+python_version:
+  type: str
+  help: "Minimum Python version required"
+  default: "3.8"
+
+license_type:
+  type: str
+  help: "License type"
+  default: "MIT"
+
+# Features
+has_cli:
+  type: bool
+  help: "Does the project have a CLI interface?"
+  default: false
+
+has_web_interface:
+  type: bool
+  help: "Does the project have a web interface?"
+  default: false
+
+has_api:
+  type: bool
+  help: "Does the project provide an API?"
+  default: false
+
+# Installation method
+install_method:
+  type: str
+  help: "Primary installation method (pip, uv, conda, poetry)"
+  default: "pip"
+
+# Documentation
+has_docs:
+  type: bool
+  help: "Does the project have documentation?"
+  default: true
+
+docs_url:
+  type: str
+  help: "Documentation URL (if has_docs is true)"
+  default: "https://{{ repo_owner }}.github.io/{{ repo_name }}"
+
+# Testing
+has_tests:
+  type: bool
+  help: "Does the project have tests?"
+  default: true
+
+test_framework:
+  type: str
+  help: "Testing framework used (pytest, unittest)"
+  default: "pytest"
+
+# CI/CD
+has_ci:
+  type: bool
+  help: "Does the project use CI/CD?"
+  default: true
+
+ci_platform:
+  type: str
+  help: "CI/CD platform (github, gitlab, travis)"
+  default: "github"

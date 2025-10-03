@@ -1,0 +1,40 @@
+# Installation
+
+## Requirements
+
+- Python {{ python_version | default('3.8+') }}
+- pip or uv package manager
+
+## Install from PyPI
+
+```bash
+pip install {{ project_slug }}
+```
+
+## Install from Source
+
+```bash
+git clone {{ repo_url }}
+cd {{ project_slug }}
+pip install -e .
+```
+
+## Development Installation
+
+```bash
+git clone {{ repo_url }}
+cd {{ project_slug }}
+pip install -e ".[dev]"
+```
+
+## Verify Installation
+
+```python
+import {{ project_slug }}
+print({{ project_slug }}.__version__)
+```
+
+## Next Steps
+
+- [Quick Start Guide](quick-start.md)
+- [Configuration](configuration.md)

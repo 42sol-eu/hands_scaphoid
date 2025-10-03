@@ -1,0 +1,60 @@
+# Copier template configuration for CLI tools
+# This configuration defines prompts for generating CLI applications
+
+_templates_suffix: .jinja
+_envops:
+  block_start_string: "{%"
+  block_end_string: "%}"
+  variable_start_string: "{{"
+  variable_end_string: "}}"
+
+# Template metadata
+_metadata:
+  version: "1.0.0"
+  description: "CLI tool with rich-click and comprehensive command structure"
+
+# Questions/prompts for the user
+tool_name:
+  type: str
+  help: "Name of the CLI tool (e.g., mytool, data-processor)"
+  default: "mytool"
+
+description:
+  type: str  
+  help: "Description of what this CLI tool does"
+  default: "A command-line tool"
+
+# Commands configuration
+commands:
+  type: str
+  help: "Comma-separated list of command names (e.g., 'process,analyze,export')"
+  default: "process,status"
+
+# Author information
+author:
+  type: str
+  help: "Author name and email"
+  default: "Andreas Felix Häberle <felix@42sol.eu>"
+
+# Project information
+project_name:
+  type: str
+  help: "Project name"
+  default: "hands_scaphoid"
+
+# Features
+use_rich:
+  type: bool
+  help: "Use rich for formatted output"
+  default: true
+
+use_config_file:
+  type: bool
+  help: "Support configuration files"
+  default: true
+
+# Current date
+current_date:
+  type: str
+  help: "Current date (YYYY-MM-DD format)"
+  default: "2025-10-03"

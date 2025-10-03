@@ -135,6 +135,11 @@ quote-style = "double"
 indent-style = "space"
 line-ending = "auto"
 
+[tool.uv.workspace]
+members = [
+    "cells/cells_contexts",
+]
+
 # TODO: add cli commands  ... in sections
 [project.scripts]
 hands-scaphoid = "hands_scaphoid.main:main"

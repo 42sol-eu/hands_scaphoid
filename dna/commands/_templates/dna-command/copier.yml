@@ -1,0 +1,86 @@
+# Copier template configuration for DNA command files
+# This configuration defines prompts for generating command files for the DNA CLI tool
+
+_templates_suffix: .jinja
+_envops:
+  block_start_string: "{%"
+  block_end_string: "%}"
+  variable_start_string: "{{"
+  variable_end_string: "}}"
+
+# Template metadata
+_metadata:
+  version: "1.0.0"
+  description: "DNA command file generator with rich-click integration"
+
+# Command information
+command_name:
+  type: str
+  help: "Name of the command (e.g., analyze, process, generate)"
+  default: "my_command"
+
+command_description:
+  type: str
+  help: "Brief description of what the command does"
+  default: "A new command for the DNA CLI tool"
+
+# Function details
+function_name:
+  type: str
+  help: "Name of the main function to implement"
+  default: "{{ command_name | replace('-', '_') }}"
+
+# Command options
+has_file_input:
+  type: bool
+  help: "Does the command take file input?"
+  default: true
+
+has_directory_input:
+  type: bool
+  help: "Does the command work with directories?"
+  default: false
+
+has_output_option:
+  type: bool
+  help: "Does the command have output options?"
+  default: true
+
+has_verbose_option:
+  type: bool
+  help: "Does the command support verbose output?"
+  default: true
+
+# Advanced features
+uses_rich_output:
+  type: bool
+  help: "Use rich for formatted output?"
+  default: true
+
+needs_progress_bar:
+  type: bool
+  help: "Does the command need progress indication?"
+  default: false
+
+handles_errors:
+  type: bool
+  help: "Include comprehensive error handling?"
+  default: true
+
+# Implementation details
+implementation_module:
+  type: str
+  help: "Module name for the actual implementation"
+  default: "{{ command_name | replace('-', '_') }}_impl"
+
+# Author information
+author:
+  type: str
+  help: "Author name and email"
+  default: "Andreas Felix Häberle <felix@42sol.eu>"
+
+# Current date
+current_date:
+  type: str
+  help: "Current date (YYYY-MM-DD format)"
+  default: "2025-10-03"

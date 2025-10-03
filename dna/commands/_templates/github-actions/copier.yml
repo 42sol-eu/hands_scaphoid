@@ -1,0 +1,112 @@
+# Copier template configuration for GitHub Actions workflows
+# This configuration defines prompts for generating CI/CD workflows
+
+_templates_suffix: .jinja
+_envops:
+  block_start_string: "{%"
+  block_end_string: "%}"
+  variable_start_string: "{{"
+  variable_end_string: "}}"
+
+# Template metadata
+_metadata:
+  version: "1.0.0"
+  description: "GitHub Actions workflows for CI/CD, testing, and deployment"
+
+# Project information
+project_name:
+  type: str
+  help: "Name of the project"
+  default: "My Project"
+
+python_version:
+  type: str
+  help: "Python version to use"
+  default: "3.11"
+
+# Workflow types
+include_ci_workflow:
+  type: bool
+  help: "Include CI workflow (test, lint, type check)?"
+  default: true
+
+include_release_workflow:
+  type: bool
+  help: "Include release workflow (PyPI publishing)?"
+  default: true
+
+include_docs_workflow:
+  type: bool
+  help: "Include documentation deployment workflow?"
+  default: true
+
+# Testing configuration
+test_command:
+  type: str
+  help: "Test command to run"
+  default: "pytest"
+
+# Package management
+package_manager:
+  type: str
+  help: "Package manager (pip, uv, poetry)"
+  choices:
+    - "pip"
+    - "uv"
+    - "poetry"
+  default: "uv"
+
+# Code quality tools
+use_black:
+  type: bool
+  help: "Include Black code formatting?"
+  default: true
+
+use_flake8:
+  type: bool
+  help: "Include Flake8 linting?"
+  default: true
+
+use_mypy:
+  type: bool
+  help: "Include MyPy type checking?"
+  default: true
+
+# Documentation
+docs_framework:
+  type: str
+  help: "Documentation framework"
+  choices:
+    - "mkdocs"
+    - "sphinx"
+    - "none"
+  default: "mkdocs"
+
+# Deployment
+deploy_to_pypi:
+  type: bool
+  help: "Deploy to PyPI on release?"
+  default: true
+
+deploy_docs:
+  type: bool
+  help: "Deploy documentation on release?"
+  default: true
+
+# Security
+enable_security_scanning:
+  type: bool
+  help: "Enable security scanning with CodeQL?"
+  default: true
+
+# Performance
+enable_cache:
+  type: bool
+  help: "Enable dependency caching?"
+  default: true
+
+# Author information
+author:
+  type: str
+  help: "Author name and email"
+  default: "Andreas Felix Häberle <felix@42sol.eu>"

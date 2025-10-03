@@ -1,0 +1,249 @@
+"""
+Implementation module for {{ command_name | replace('-', '_') }} command.
+
+{{ command_description }}
+---yaml
+File:
+    name: {{ implementation_module }}.py
+    uuid: generated-uuid-placeholder
+    date: {{ current_date }}
+
+Description:
+    Core implementation for {{ command_description }}
+
+Project:
+    name: hands_scaphoid
+    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+    url: https://github.com/42sol-eu/hands_scaphoid
+
+Authors: ["{{ author }}"]
+"""
+
+{% if has_file_input or has_directory_input -%}
+from pathlib import Path
+{% endif -%}
+from typing import Optional, Union, Any
+{% if handles_errors -%}
+import logging
+{% endif %}
+
+{% if handles_errors -%}
+# Set up logging
+logger = logging.getLogger(__name__)
+{% endif %}
+
+
+def {{ function_name }}(
+    {% if has_file_input -%}
+    input_path: Optional[Path] = None,
+    {% elif has_directory_input -%}
+    directory_path: Optional[Path] = None,
+    {% endif -%}
+    {% if has_output_option -%}
+    output: Optional[Path] = None,
+    {% endif -%}
+    {% if has_verbose_option -%}
+    verbose: bool = False,
+    {% endif -%}
+    **kwargs
+) -> bool:
+    """
+    {{ command_description }}
+    
+    Args:
+        {% if has_file_input -%}
+        input_path: Path to the input file to process
+        {% elif has_directory_input -%}
+        directory_path: Path to the directory to process
+        {% endif -%}
+        {% if has_output_option -%}
+        output: Path where output should be saved
+        {% endif -%}
+        {% if has_verbose_option -%}
+        verbose: Enable verbose output
+        {% endif -%}
+        **kwargs: Additional keyword arguments
+        
+    Returns:
+        True if operation completed successfully, False otherwise
+        
+    Raises:
+        FileNotFoundError: If input file/directory doesn't exist
+        PermissionError: If insufficient permissions for file operations
+        ValueError: If invalid arguments provided
+    """
+    {% if handles_errors -%}
+    try:
+        {% if has_verbose_option -%}
+        if verbose:
+            logger.info(f"Starting {{ command_name | replace('-', ' ') }} operation")
+            {% if has_file_input -%}
+            if input_path:
+                logger.info(f"Input file: {input_path}")
+            {% elif has_directory_input -%}
+            if directory_path:
+                logger.info(f"Input directory: {directory_path}")
+            {% endif -%}
+            {% if has_output_option -%}
+            if output:
+                logger.info(f"Output path: {output}")
+            {% endif %}
+        {% endif %}
+        
+    {% endif -%}
+        # Validate inputs
+        {% if has_file_input -%}
+        if input_path and not input_path.exists():
+            raise FileNotFoundError(f"Input file not found: {input_path}")
+        {% elif has_directory_input -%}
+        if directory_path and not directory_path.exists():
+            raise FileNotFoundError(f"Directory not found: {directory_path}")
+        {% endif %}
+        
+        {% if has_output_option -%}
+        # Ensure output directory exists
+        if output:
+            output.parent.mkdir(parents=True, exist_ok=True)
+        {% endif %}
+        
+        # TODO: Implement the actual {{ command_name | replace('-', ' ') }} logic here
+        # This is a placeholder implementation
+        
+        {% if has_file_input -%}
+        if input_path:
+            # Process the input file
+            {% if has_verbose_option -%}
+            if verbose:
+                logger.info(f"Processing file: {input_path}")
+            {% endif -%}
+            
+            # TODO: Add your file processing logic here
+            # Example:
+            # with open(input_path, 'r') as f:
+            #     content = f.read()
+            #     processed_content = process_content(content)
+            #     
+            #     if output:
+            #         with open(output, 'w') as out_f:
+            #             out_f.write(processed_content)
+            
+            pass  # Remove this when implementing
+        {% endif %}
+        
+        {% if has_directory_input -%}
+        if directory_path:
+            # Process the directory
+            {% if has_verbose_option -%}
+            if verbose:
+                logger.info(f"Processing directory: {directory_path}")
+            {% endif -%}
+            
+            # TODO: Add your directory processing logic here
+            # Example:
+            # for file_path in directory_path.rglob("*.py"):
+            #     process_file(file_path)
+            
+            pass  # Remove this when implementing
+        {% endif %}
+        
+        {% if not has_file_input and not has_directory_input -%}
+        # General processing without specific input
+        {% if has_verbose_option -%}
+        if verbose:
+            logger.info("Performing {{ command_name | replace('-', ' ') }} operation")
+        {% endif -%}
+        
+        # TODO: Add your general processing logic here
+        pass  # Remove this when implementing
+        {% endif %}
+        
+        {% if has_verbose_option -%}
+        if verbose:
+            logger.info("{{ command_name | replace('-', ' ') | title }} operation completed successfully")
+        {% endif %}
+        
+        return True
+    
+    {% if handles_errors -%}
+    except Exception as e:
+        logger.error(f"Error during {{ command_name | replace('-', ' ') }} operation: {e}")
+        {% if has_verbose_option -%}
+        if verbose:
+            logger.exception("Full traceback:")
+        {% endif -%}
+        return False
+    {% endif %}
+
+
+{% if has_file_input or has_directory_input -%}
+def _process_single_item(item_path: Path, **kwargs) -> bool:
+    """
+    Process a single file or directory item.
+    
+    Args:
+        item_path: Path to the item to process
+        **kwargs: Additional processing options
+        
+    Returns:
+        True if processing successful, False otherwise
+    """
+    {% if handles_errors -%}
+    try:
+        # TODO: Implement single item processing logic
+        {% if has_verbose_option -%}
+        verbose = kwargs.get('verbose', False)
+        if verbose:
+            logger.info(f"Processing item: {item_path}")
+        {% endif -%}
+        
+        # Add your processing logic here
+        
+        return True
+    
+    except Exception as e:
+        logger.error(f"Error processing {item_path}: {e}")
+        return False
+    {% else -%}
+    # TODO: Implement single item processing logic
+    return True
+    {% endif %}
+
+
+{% endif -%}
+def _validate_arguments(**kwargs) -> bool:
+    """
+    Validate the arguments passed to the function.
+    
+    Args:
+        **kwargs: Arguments to validate
+        
+    Returns:
+        True if arguments are valid, False otherwise
+        
+    Raises:
+        ValueError: If arguments are invalid
+    """
+    # TODO: Add argument validation logic
+    # Example validations:
+    # - Check file extensions
+    # - Validate parameter ranges
+    # - Ensure required combinations of parameters
+    
+    return True
+
+
+# Helper functions (add as needed)
+def _{{ command_name | replace('-', '_') }}_helper(data: Any) -> Any:
+    """
+    Helper function for {{ command_name | replace('-', ' ') }} operations.
+    
+    Args:
+        data: Data to process
+        
+    Returns:
+        Processed data
+    """
+    # TODO: Implement helper logic
+    return data
+
+# [End of file]

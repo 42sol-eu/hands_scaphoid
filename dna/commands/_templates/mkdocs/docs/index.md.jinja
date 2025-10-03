@@ -1,0 +1,52 @@
+# {{ project_name }}
+
+{{ description }}
+
+Welcome to the {{ project_name }} documentation!
+
+## Features
+
+- **Easy to use**: Simple and intuitive interface
+- **Well documented**: Comprehensive documentation with examples
+- **Modern**: Built with the latest technologies and best practices
+- **Extensible**: Designed to be extended and customized
+
+## Quick Start
+
+### Installation
+
+```bash
+pip install {{ project_slug }}
+```
+
+### Basic Usage
+
+```python
+import {{ project_slug }}
+
+# Your code here
+```
+
+## Documentation Structure
+
+{% if include_user_guide %}
+- **[User Guide](user-guide/installation.md)**: Step-by-step instructions for getting started
+{% endif %}
+{% if include_examples %}
+- **[Examples](examples/basic-usage.md)**: Practical examples and use cases
+{% endif %}
+{% if include_api_docs %}
+- **[API Reference](api/overview.md)**: Complete API documentation
+{% endif %}
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](contributing.md) for details.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Author
+
+Created by {{ author }}

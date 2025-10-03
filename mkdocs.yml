@@ -8,6 +8,7 @@ repo_url: https://github.com/42sol-eu/hands_scaphoid
 
 nav:
   - Home: index.md
+  - Motivation: motivation.md
   - Summary: operations/summary.md
   - Getting Started: getting-started.md
   - User Guide:

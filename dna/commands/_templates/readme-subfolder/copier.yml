@@ -1,0 +1,65 @@
+# Copier template configuration for subfolder README.md files
+# This configuration defines prompts for generating subfolder documentation
+
+_templates_suffix: .jinja
+_envops:
+  block_start_string: "{%"
+  block_end_string: "%}"
+  variable_start_string: "{{"
+  variable_end_string: "}}"
+
+# Template metadata
+_metadata:
+  version: "1.0.0"
+  description: "Subfolder README.md for documenting specific components or modules"
+
+# Folder information
+folder_name:
+  type: str
+  help: "Name of the folder/module"
+  default: "Module"
+
+folder_description:
+  type: str
+  help: "Brief description of what this folder contains"
+  default: "A collection of related functionality"
+
+# Module type
+module_type:
+  type: str
+  help: "Type of module (commands, models, utils, tests, docs, etc.)"
+  default: "commands"
+
+# Project context
+project_name:
+  type: str
+  help: "Name of the parent project"
+  default: "Project"
+
+# Contents
+has_submodules:
+  type: bool
+  help: "Does this folder contain submodules?"
+  default: true
+
+has_tests:
+  type: bool
+  help: "Are there tests for this module?"
+  default: false
+
+has_examples:
+  type: bool
+  help: "Are there usage examples?"
+  default: false
+
+# Author information
+author_name:
+  type: str
+  help: "Author name"
+  default: "Andreas Felix Häberle"
+
+# Current date
+current_date:
+  type: str
+  help: "Current date (YYYY-MM-DD format)"
+  default: "2025-10-03"

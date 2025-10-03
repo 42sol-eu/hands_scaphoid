@@ -1,0 +1,116 @@
+# Copier template configuration for MkDocs documentation sites
+# This configuration defines prompts for generating MkDocs documentation structure
+
+_templates_suffix: .jinja
+_envops:
+  block_start_string: "{%"
+  block_end_string: "%}"
+  variable_start_string: "{{"
+  variable_end_string: "}}"
+
+# Template metadata
+_metadata:
+  version: "1.0.0"
+  description: "MkDocs documentation site with modern themes and plugins"
+
+# Project information
+project_name:
+  type: str
+  help: "Name of the documentation project"
+  default: "Documentation"
+
+project_slug:
+  type: str
+  help: "Project slug (used for URLs)"
+  default: "{{ project_name | lower | replace(' ', '-') | replace('_', '-') }}"
+
+description:
+  type: str
+  help: "Brief description of the project"
+  default: "Project documentation"
+
+repo_url:
+  type: str
+  help: "Repository URL (optional)"
+  default: ""
+
+repo_name:
+  type: str
+  help: "Repository name (e.g., 'GitHub')"
+  default: "GitHub"
+
+# Theme configuration
+theme:
+  type: str
+  help: "MkDocs theme (material, readthedocs, mkdocs)"
+  choices:
+    - "material"
+    - "readthedocs" 
+    - "mkdocs"
+  default: "material"
+
+# Features
+use_material_features:
+  type: bool
+  help: "Enable Material theme advanced features?"
+  default: true
+  when: "{{ theme == 'material' }}"
+
+include_search:
+  type: bool
+  help: "Include search functionality?"
+  default: true
+
+include_navigation:
+  type: bool
+  help: "Include navigation features?"
+  default: true
+
+include_code_highlighting:
+  type: bool
+  help: "Include code syntax highlighting?"
+  default: true
+
+include_math:
+  type: bool
+  help: "Include math rendering support?"
+  default: false
+
+# Content structure
+include_api_docs:
+  type: bool
+  help: "Include API documentation pages?"
+  default: true
+
+include_user_guide:
+  type: bool
+  help: "Include user guide sections?"
+  default: true
+
+include_examples:
+  type: bool
+  help: "Include examples section?"
+  default: true
+
+# Author information
+author:
+  type: str
+  help: "Author name and email"
+  default: "Andreas Felix Häberle <felix@42sol.eu>"
+
+# Current date
+current_date:
+  type: str
+  help: "Current date (YYYY-MM-DD format)"
+  default: "2025-10-03"
+
+# Site configuration
+site_url:
+  type: str
+  help: "Site URL (for production)"
+  default: ""
+
+copyright:
+  type: str
+  help: "Copyright notice"
+  default: "© 2025 {{ author }}"

@@ -1,0 +1,80 @@
+{% if use_database -%}
+"""
+Database configuration and models for {{ project_name }}.
+
+{{ description }}
+"""
+
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from datetime import datetime
+
+{% if database_type == "sqlite" -%}
+DATABASE_URL = "sqlite:///./{{ project_slug }}.db"
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+{% elif database_type == "postgresql" -%}
+DATABASE_URL = "postgresql://user:password@localhost/{{ project_slug }}"
+engine = create_engine(DATABASE_URL)
+{% elif database_type == "mysql" -%}
+DATABASE_URL = "mysql://user:password@localhost/{{ project_slug }}"
+engine = create_engine(DATABASE_URL)
+{% endif -%}
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+
+def create_tables():
+    """Create database tables."""
+    Base.metadata.create_all(bind=engine)
+
+
+def get_db():
+    """Get database session."""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+# Example model
+class Item(Base):
+    """Item model."""
+    __tablename__ = "items"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(100), index=True)
+    description = Column(String(500))
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+{% if use_auth -%}
+class User(Base):
+    """User model."""
+    __tablename__ = "users"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String(50), unique=True, index=True)
+    email = Column(String(100), unique=True, index=True)
+    hashed_password = Column(String(100))
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+{% endif -%}
+
+{% else -%}
+# Database not configured - using in-memory storage
+from typing import Dict, List
+from datetime import datetime
+
+# In-memory storage (replace with database in production)
+items_storage: Dict[int, dict] = {}
+{% if use_auth -%}
+users_storage: Dict[str, dict] = {}
+{% endif -%}
+next_item_id = 1
+
+{% endif -%}
+
+# [End of file]

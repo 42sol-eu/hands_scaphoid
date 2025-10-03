@@ -1,0 +1,221 @@
+#!/usr/bin/env python3
+"""
+Test module for {{ class_name }} functionality.
+---yaml
+File:
+    name: test_{{ filename }}.py
+    uuid: {% if uuid %}{{ uuid }}{% else %}generated-uuid-placeholder{% endif %}
+    date: {{ current_date }}
+
+Description:
+    Comprehensive tests for {{ class_name }} functionality including initialization,
+    serialization, deserialization, and all instance methods
+
+Project:
+    name: {{ project_name }}
+    uuid: {{ project_uuid }}
+    url: {{ project_url }}
+
+Authors: ["{{ author }}"]
+
+Abbreviations:
+- DUT[testing]: Device Under Test (the class being tested)
+- 42sol[company]: 42 solutions (www.42sol.eu)
+"""
+
+# [Linter config]
+# pyright: reportRedeclaration=false
+# pyright: reportUndefinedVariable=false
+# pyright: reportDefinedOuterName=false
+
+{% if standard_imports %}
+# [Standard library imports]
+{% for import in standard_imports.split(',') -%}
+import {{ import.strip() }}
+{% endfor %}
+{% endif %}
+
+# [Device under test import]
+from {{ module_name }} import {{ class_name }}
+{% if local_imports %}
+{% for import in local_imports.split(',') -%}
+from {{ import.strip() }} import *
+{% endfor %}
+{% endif %}
+
+# [Test imports]
+{% if third_party_imports %}
+{% for import in third_party_imports.split(',') -%}
+import {{ import.strip() }}
+{% endfor %}
+{% else %}
+import pytest
+{% endif %}
+
+# [Test data]
+G_item_name1 = "TEST NAME"  
+G_item_value1 = "TEST VALUE"
+G_item_type1 = ItemType.ITEM if 'ItemType' in globals() else "ITEM"
+G_item_project1 = None
+
+G_item_name2 = "TEST VARIABLE"
+G_item_value2 = "TEST VALUE"
+G_item_type2 = ItemType.VARIABLE if 'ItemType' in globals() else "VARIABLE"
+G_item_project2 = ".env"
+
+@pytest.fixture
+def item():
+    """{{ class_name.lower() }} fixture == item"""
+    return {{ class_name }}(name=G_item_name1, value=G_item_value1)
+
+@pytest.fixture
+def variable():
+    """{{ class_name.lower() }} fixture == variable"""
+    return {{ class_name }}(name=G_item_name2, value=G_item_value2,
+                    item_type=G_item_type2, project=G_item_project2)
+
+@pytest.fixture
+def dictionary_item():
+    """{{ class_name.lower() }} fixture == item as dictionary"""
+    return {
+        "name": G_item_name1,
+        "value": G_item_value1,
+        "item_type": G_item_type1,
+        "project": G_item_project1,
+    }
+
+@pytest.fixture
+def dictionary_variable():
+    """{{ class_name.lower() }} fixture == variable as dictionary"""
+    return {
+        "name": G_item_name2,
+        "value": G_item_value2,
+        "item_type": G_item_type2,
+        "project": G_item_project2,
+    }
+
+@pytest.fixture
+def json_item():
+    """{{ class_name.lower() }} fixture == item as json"""
+    {% raw %}return f'{{"name": "{G_item_name1}", "value": "{G_item_value1}", "item_type": "{G_item_type1}", "project": null}}'{% endraw %}
+
+@pytest.fixture
+def yaml_item():
+    """{{ class_name.lower() }} fixture == item as yaml"""
+    return f"item_type: {G_item_type1}\nname: {G_item_name1}\nproject: null\nvalue: {G_item_value1}\n"
+
+@pytest.fixture
+def toml_item():
+    """{{ class_name.lower() }} fixture == item as toml"""
+    return f'name = "{G_item_name1}"\nvalue = "{G_item_value1}"\nitem_type = "{G_item_type1}"\nproject = ""\n'
+
+@pytest.fixture
+def env_var_item():
+    """{{ class_name.lower() }} fixture == item as environment variable"""
+    return f"{G_item_name1}={G_item_value1}"
+
+# [Test cases]
+def test_{{ class_name }}_initialization(item):
+    """Core elements of {{ class_name }}"""
+    assert item.name == G_item_name1, "Error: {{ class_name }}_item_name"
+    assert item.value == G_item_value1, "Error: {{ class_name }}_item_value"
+    assert item.item_type == G_item_type1, "Error: {{ class_name }}.item_type"
+    assert item.project == G_item_project1, "Error: {{ class_name }}_item_project != None"
+
+def test_{{ class_name }}_set_item_value(item):
+    """Test setting item value"""
+    assert item.value == G_item_value1, "Error: {{ class_name }}_item_value setter"
+    item.value = G_item_value2
+    assert item.value == G_item_value2, "Error: {{ class_name }}_item_value setter"
+    assert item._value == G_item_value2, "Error: {{ class_name }}._value"
+
+def test_{{ class_name }}_str_repr(item):
+    """Test string and repr methods"""
+    assert str(item) == f'{G_item_name1}="{G_item_value1}"', "Error: {{ class_name }}.__str__"
+    expected_repr = f'{{ class_name }}(name={G_item_name1}, value={G_item_value1}, item_type={G_item_type1})'
+    if hasattr(G_item_type1, 'name'):
+        expected_repr = f'{{ class_name }}(name={G_item_name1}, value={G_item_value1}, item_type={G_item_type1.name})'
+    assert repr(item) == expected_repr, "Error: {{ class_name }}.__repr__"
+
+def test_{{ class_name }}_to_dict_json_yaml_env(item, 
+                                        dictionary_item, 
+                                        json_item, 
+                                        yaml_item, 
+                                        env_var_item):
+    """Test conversion methods"""
+    dict_rep = item.to_dict()
+    assert dict_rep == dictionary_item, "Error: {{ class_name }}.to_dict"
+    
+    json_rep = item.to_json()
+    assert json_rep == json_item, "Error: {{ class_name }}.to_json"
+    
+    yaml_rep = item.to_yaml()
+    assert yaml_rep == yaml_item, "Error: {{ class_name }}.to_yaml"
+    
+    env_rep = item.to_env_var()
+    assert env_rep == env_var_item, "Error: {{ class_name }}.to_env_var"
+
+def test_{{ class_name }}_from_dict(item, dictionary_item):
+    """Test from_dict class method"""
+    new_item = {{ class_name }}.from_dict(dictionary_item)
+    assert isinstance(new_item, {{ class_name }}), "Error: {{ class_name }}.from_dict item_type"
+    assert new_item.name == item.name, "Error: {{ class_name }}.from_dict item_name"
+    assert new_item.value == item.value, "Error: {{ class_name }}.from_dict item_value"
+    assert new_item.item_type == item.item_type, "Error: {{ class_name }}.from_dict item_type"
+
+def test_{{ class_name }}_from_json(item, json_item):
+    """Test from_json class method"""
+    new_item = {{ class_name }}.from_json(json_item)
+    assert isinstance(new_item, {{ class_name }}), "Error: {{ class_name }}.from_json item_type"
+    assert new_item.name == item.name, "Error: {{ class_name }}.from_json item_name"
+    assert new_item.value == item.value, "Error: {{ class_name }}.from_json item_value"
+    assert new_item.item_type == item.item_type, "Error: {{ class_name }}.from_json item_type"
+
+def test_{{ class_name }}_from_yaml(item, yaml_item):
+    """Test from_yaml class method"""
+    new_item = {{ class_name }}.from_yaml(yaml_item)
+    assert isinstance(new_item, {{ class_name }}), "Error: {{ class_name }}.from_yaml item_type"
+    assert new_item.name == item.name, "Error: {{ class_name }}.from_yaml item_name"
+    assert new_item.value == item.value, "Error: {{ class_name }}.from_yaml item_value"
+    assert new_item.item_type == item.item_type, "Error: {{ class_name }}.from_yaml item_type"
+
+def test_{{ class_name }}_from_env_var():
+    """Test from_env_var class method"""
+    # Set up environment variable for testing
+    import os
+    test_var_name = "TEST_{{ class_name | upper }}_NAME"
+    test_var_value = "TEST_{{ class_name | upper }}_VALUE"
+    os.environ[test_var_name] = test_var_value
+    
+    new_item = {{ class_name }}.from_env_var(test_var_name)
+    assert isinstance(new_item, {{ class_name }}), "Error: {{ class_name }}.from_env_var item_type"
+    assert new_item.name == test_var_name, "Error: {{ class_name }}.from_env_var item_name"
+    assert new_item.value == test_var_value, "Error: {{ class_name }}.from_env_var item_value"
+    
+    # Clean up
+    del os.environ[test_var_name]
+
+def test_{{ class_name }}_with_integer_value():
+    """Test {{ class_name }} with integer value"""
+    item = {{ class_name }}(name="INT_NAME", value=123)
+    assert item.name == "INT_NAME", "Error: {{ class_name }} with int name"
+    assert item.value == 123, "Error: {{ class_name }} with integer value"
+    assert item.item_type == G_item_type1, "Error: {{ class_name }} with int item_type"
+    
+    item.value = 456
+    assert item.value == 456, "Error: {{ class_name }} set int value"
+
+def test_{{ class_name }}_project_property():
+    """Test project property functionality"""
+    item = {{ class_name }}(name="TEST", value="VALUE", project="TEST_PROJECT")
+    assert item.project is not None, "Error: {{ class_name }} project should not be None"
+    assert isinstance(item.project, {{ class_name }}), "Error: {{ class_name }} project should be {{ class_name }} instance"
+
+def test_{{ class_name }}_to_toml(item, toml_item):
+    """Test to_toml method"""
+    toml_rep = item.to_toml()
+    assert toml_rep == toml_item, "Error: {{ class_name }}.to_toml"
+
+# [Additional test methods can be added here]
+
+# [End of file]

@@ -1,0 +1,61 @@
+"""
+Pydantic schemas for {{ project_name }}.
+"""
+
+from datetime import datetime
+from typing import Optional
+from pydantic import BaseModel, EmailStr, ConfigDict
+
+
+class UserBase(BaseModel):
+    """Base user schema."""
+    
+    email: EmailStr
+    username: str
+    is_active: bool = True
+
+
+class UserCreate(UserBase):
+    """Schema for creating users."""
+    
+    password: str
+
+
+class UserUpdate(BaseModel):
+    """Schema for updating users."""
+    
+    email: Optional[EmailStr] = None
+    username: Optional[str] = None
+    password: Optional[str] = None
+    is_active: Optional[bool] = None
+
+
+class User(UserBase):
+    """Schema for user responses."""
+    
+    model_config = ConfigDict(from_attributes=True)
+    
+    id: int
+    is_superuser: bool
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+
+
+class Token(BaseModel):
+    """Token schema."""
+    
+    access_token: str
+    token_type: str = "bearer"
+
+
+class TokenData(BaseModel):
+    """Token data schema."""
+    
+    username: Optional[str] = None
+
+
+class UserLogin(BaseModel):
+    """User login schema."""
+    
+    username: str
+    password: str

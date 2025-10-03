@@ -1,0 +1,9 @@
+# Local wheel installations
+./dist/copier-9.10.2-py3-none-any.whl
+./dist/rich_cli-1.8.1-py3-none-any.whl
+
+# Or you can specify all dependencies if needed:
+# ./dist/click-8.3.0-py3-none-any.whl
+# ./dist/requests-2.32.5-py3-none-any.whl
+# ./dist/rich-12.6.0-py3-none-any.whl
+# ./dist/pydantic-2.11.9-py3-none-any.whl

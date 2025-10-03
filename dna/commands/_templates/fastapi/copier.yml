@@ -1,0 +1,107 @@
+# Copier template configuration for FastAPI applications
+# This configuration defines prompts for generating FastAPI project structure
+
+_templates_suffix: .jinja
+_envops:
+  block_start_string: "{%"
+  block_end_string: "%}"
+  variable_start_string: "{{"
+  variable_end_string: "}}"
+
+# Template metadata
+_metadata:
+  version: "1.0.0"
+  description: "FastAPI application with modern Python patterns, SQLAlchemy, and comprehensive structure"
+
+# Project information
+project_name:
+  type: str
+  help: "Name of the FastAPI project"
+  default: "FastAPI App"
+
+project_slug:
+  type: str
+  help: "Project slug (used for package names)"
+  default: "{{ project_name | lower | replace(' ', '_') | replace('-', '_') }}"
+
+description:
+  type: str
+  help: "Brief description of the API"
+  default: "A modern FastAPI application"
+
+# API configuration
+api_version:
+  type: str
+  help: "API version"
+  default: "v1"
+
+port:
+  type: int
+  help: "Default port for development server"
+  default: 8000
+
+# Database configuration
+use_database:
+  type: bool
+  help: "Include database integration with SQLAlchemy?"
+  default: true
+
+database_type:
+  type: str
+  help: "Database type (sqlite, postgresql, mysql)"
+  default: "sqlite"
+
+# Authentication
+use_auth:
+  type: bool
+  help: "Include JWT authentication?"
+  default: true
+
+# Features
+use_cors:
+  type: bool
+  help: "Enable CORS middleware?"
+  default: true
+
+use_rate_limiting:
+  type: bool
+  help: "Include rate limiting?"
+  default: true
+
+include_websockets:
+  type: bool
+  help: "Include WebSocket support?"
+  default: false
+
+# Development features
+include_tests:
+  type: bool
+  help: "Include pytest test suite?"
+  default: true
+
+include_docker:
+  type: bool
+  help: "Include Docker configuration?"
+  default: true
+
+# Author information
+author:
+  type: str
+  help: "Author name and email"
+  default: "Andreas Felix Häberle <felix@42sol.eu>"
+
+# Current date
+current_date:
+  type: str
+  help: "Current date (YYYY-MM-DD format)"
+  default: "2025-10-03"
+
+# License
+license:
+  type: str
+  help: "Project license"
+  default: "MIT"
+
+# Template files to generate
+_tasks:
+  - ["mv", "routers_auth.py.jinja", "routers/auth.py"]

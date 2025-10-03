@@ -1,0 +1,7 @@
+[project]
+name = "cells-contexts"
+version = "2025.0.1"
+description = "Cells: Contexts: providing simple access to build your own advanced context manager."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []

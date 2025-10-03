@@ -1,0 +1,87 @@
+# Copier template configuration for ItemCore and test files
+# This configuration defines the prompts and variables for generating ItemCore-style classes
+
+_templates_suffix: .jinja
+_envops:
+  block_start_string: "{%"
+  block_end_string: "%}"
+  variable_start_string: "{{"
+  variable_end_string: "}}"
+
+# Template metadata
+_metadata:
+  version: "1.0.0"
+  description: "Templates for creating ItemCore-style classes and their corresponding test files"
+
+# Questions/prompts for the user
+class_name:
+  type: str
+  help: "Name of the class to create (e.g., ItemCore, FileObject)"
+  default: "MyClass"
+
+description:
+  type: str  
+  help: "Description of what this class does"
+  default: "A new class for the hands_scaphoid package"
+
+filename:
+  type: str
+  help: "Filename without extension (will be used for both .py and test_ files)"
+  default: "{{ class_name }}"
+
+module_name:
+  type: str
+  help: "Module name for imports"
+  default: "{{ filename | lower }}"
+
+# Standard library imports
+standard_imports:
+  type: str
+  help: "Standard library imports (comma-separated, e.g. 'os,sys,json')"
+  default: "os"
+
+# Third party imports  
+third_party_imports:
+  type: str
+  help: "Third party imports (comma-separated, e.g. 'pytest,tomli')"
+  default: ""
+
+# Local imports
+local_imports:
+  type: str
+  help: "Local imports (comma-separated, e.g. '..__base__,..types.ItemType')"
+  default: "..__base__"
+
+# Author information
+author:
+  type: str
+  help: "Author name and email"
+  default: "Andreas Felix Häberle <felix@42sol.eu>"
+
+# UUID generation helper
+uuid:
+  type: str
+  help: "UUID for the file (leave empty to auto-generate)"
+  default: ""
+
+# Project information
+project_name:
+  type: str
+  help: "Project name"
+  default: "hands_scaphoid"
+
+project_uuid:
+  type: str
+  help: "Project UUID"
+  default: "2945ba3b-2d66-4dff-b898-672c386f03f4"
+
+project_url:
+  type: str
+  help: "Project URL"
+  default: "https://github.com/42sol-eu/hands_scaphoid"
+
+# Current date will be auto-filled
+current_date:
+  type: str
+  help: "Current date (YYYY-MM-DD format)"
+  default: "2025-10-03"

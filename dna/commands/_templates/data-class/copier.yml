@@ -1,0 +1,65 @@
+# Copier template configuration for simple data classes
+# This configuration defines prompts for generating simple data classes
+
+_templates_suffix: .jinja
+_envops:
+  block_start_string: "{%"
+  block_end_string: "%}"
+  variable_start_string: "{{"
+  variable_end_string: "}}"
+
+# Template metadata
+_metadata:
+  version: "1.0.0"
+  description: "Simple data class with type hints and basic methods"
+
+# Questions/prompts for the user
+class_name:
+  type: str
+  help: "Name of the data class (e.g., User, Product, Config)"
+  default: "DataClass"
+
+description:
+  type: str  
+  help: "Description of what this data class represents"
+  default: "A simple data class"
+
+# Fields configuration
+fields:
+  type: str
+  help: "Class fields as comma-separated 'name:type' pairs (e.g., 'name:str,age:int,email:str')"
+  default: "name:str,value:str"
+
+# Author information
+author:
+  type: str
+  help: "Author name and email"
+  default: "Andreas Felix Häberle <felix@42sol.eu>"
+
+# Project information
+project_name:
+  type: str
+  help: "Project name"
+  default: "hands_scaphoid"
+
+# Generate methods
+generate_init:
+  type: bool
+  help: "Generate __init__ method"
+  default: true
+
+generate_repr:
+  type: bool
+  help: "Generate __repr__ method"
+  default: true
+
+generate_eq:
+  type: bool
+  help: "Generate __eq__ method"
+  default: true
+
+# Current date
+current_date:
+  type: str
+  help: "Current date (YYYY-MM-DD format)"
+  default: "2025-10-03"

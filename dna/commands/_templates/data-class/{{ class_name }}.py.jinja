@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""
+{{ class_name }} data class.
+
+{{ description }}
+---yaml
+File:
+    name: {{ class_name }}.py
+    uuid: generated-uuid-placeholder
+    date: {{ current_date }}
+
+Description:
+    {{ description }}
+
+Project:
+    name: {{ project_name }}
+
+Authors: ["{{ author }}"]
+"""
+
+from typing import Any
+from dataclasses import dataclass
+
+
+@dataclass
+class {{ class_name }}:
+    """{{ description }}"""
+    
+    # Fields
+    {% for field in fields.split(',') -%}
+    {% set field_parts = field.strip().split(':') -%}
+    {% if field_parts|length == 2 -%}
+    {{ field_parts[0].strip() }}: {{ field_parts[1].strip() }}
+    {% endif -%}
+    {% endfor %}
+    
+    {% if generate_init and not generate_repr and not generate_eq %}
+    def __init__(self{% for field in fields.split(',') %}, {{ field.strip().split(':')[0].strip() }}: {{ field.strip().split(':')[1].strip() }}{% endfor %}):
+        """Initialize {{ class_name }} instance."""
+        {% for field in fields.split(',') -%}
+        {% set field_name = field.strip().split(':')[0].strip() -%}
+        self.{{ field_name }} = {{ field_name }}
+        {% endfor %}
+    {% endif %}
+    
+    {% if generate_repr and not (generate_init and generate_eq) %}
+    def __repr__(self) -> str:
+        """Return string representation."""
+        field_strs = []
+        {% for field in fields.split(',') -%}
+        {% set field_name = field.strip().split(':')[0].strip() -%}
+        field_strs.append(f"{{ field_name }}={self.{{ field_name }}!r}")
+        {% endfor %}
+        return f"{{ class_name }}({', '.join(field_strs)})"
+    {% endif %}
+    
+    {% if generate_eq and not (generate_init and generate_repr) %}
+    def __eq__(self, other: Any) -> bool:
+        """Check equality with another instance."""
+        if not isinstance(other, {{ class_name }}):
+            return False
+        return (
+            {% for field in fields.split(',') -%}
+            {% set field_name = field.strip().split(':')[0].strip() -%}
+            self.{{ field_name }} == other.{{ field_name }}{% if not loop.last %} and{% endif %}
+            {% endfor %}
+        )
+    {% endif %}
+
+# [End of file]

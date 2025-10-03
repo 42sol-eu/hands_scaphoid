@@ -1,0 +1,121 @@
+site_name: {{ project_name }}
+site_description: {{ description }}
+{% if site_url %}site_url: {{ site_url }}{% endif %}
+{% if repo_url %}repo_url: {{ repo_url }}{% endif %}
+{% if repo_name %}repo_name: {{ repo_name }}{% endif %}
+
+# Theme configuration
+theme:
+  name: {{ theme }}
+{% if theme == 'material' %}
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  
+  features:
+{% if use_material_features %}
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - toc.follow
+    - content.code.copy
+{% endif %}
+{% if include_navigation %}
+    - navigation.instant
+{% endif %}
+{% endif %}
+
+# Navigation structure
+nav:
+  - Home: index.md
+{% if include_user_guide %}
+  - User Guide:
+    - Installation: user-guide/installation.md
+    - Quick Start: user-guide/quick-start.md
+    - Configuration: user-guide/configuration.md
+{% endif %}
+{% if include_examples %}
+  - Examples:
+    - Basic Usage: examples/basic-usage.md
+    - Advanced Features: examples/advanced-features.md
+{% endif %}
+{% if include_api_docs %}
+  - API Reference:
+    - Overview: api/overview.md
+    - Functions: api/functions.md
+    - Classes: api/classes.md
+{% endif %}
+  - Contributing: contributing.md
+  - Changelog: changelog.md
+
+# Plugins
+plugins:
+{% if include_search %}
+  - search
+{% endif %}
+{% if theme == 'material' %}
+  - social
+{% endif %}
+
+# Markdown extensions
+markdown_extensions:
+{% if include_code_highlighting %}
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+{% endif %}
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+{% if include_math %}
+  - pymdownx.arithmatex:
+      generic: true
+{% endif %}
+  - footnotes
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.keys
+
+# Extra CSS and JavaScript
+{% if include_math %}
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+{% endif %}
+
+# Copyright
+{% if copyright %}copyright: {{ copyright }}{% endif %}
+
+# Site metadata
+extra:
+  version:
+    provider: mike
+{% if theme == 'material' %}
+  social:
+    - icon: fontawesome/brands/github
+      link: {{ repo_url }}
+{% endif %}

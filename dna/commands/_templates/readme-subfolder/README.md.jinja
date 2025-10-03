@@ -1,0 +1,273 @@
+# README: {{ folder_name }}
+
+{{ folder_description }}
+
+{% if module_type == "commands" -%}
+This directory contains command implementations for the {{ project_name }} CLI tool.
+
+## 📁 Structure
+
+```
+{{ folder_name }}/
+├── __init__.py          # Module initialization and exports
+{% if has_submodules -%}
+├── core_commands.py     # Core functionality commands
+├── utility_commands.py  # Utility and helper commands  
+├── advanced_commands.py # Advanced feature commands
+{% endif -%}
+{% if has_tests -%}
+└── tests/              # Command tests
+    ├── test_core.py
+    └── test_utilities.py
+{% endif %}
+```
+
+## 🔧 Commands Available
+
+{% if has_submodules -%}
+### Core Commands
+- `command1` - Description of command1
+- `command2` - Description of command2
+
+### Utility Commands  
+- `util1` - Description of utility1
+- `util2` - Description of utility2
+
+### Advanced Commands
+- `advanced1` - Description of advanced command1
+{% else -%}
+- `main_command` - Primary command functionality
+{% endif %}
+
+{% elif module_type == "models" -%}
+This directory contains data models and schemas for the {{ project_name }} application.
+
+## 📁 Structure
+
+```
+{{ folder_name }}/
+├── __init__.py          # Model exports
+{% if has_submodules -%}
+├── base.py             # Base model classes
+├── user.py             # User-related models
+├── data.py             # Data models
+└── schemas.py          # Validation schemas
+{% endif -%}
+{% if has_tests -%}
+└── tests/              # Model tests
+    ├── test_user.py
+    └── test_data.py
+{% endif %}
+```
+
+## 📋 Models Available
+
+{% if has_submodules -%}
+### Base Models
+- `BaseModel` - Foundation model with common fields
+- `TimestampedModel` - Model with created/updated timestamps
+
+### User Models
+- `User` - User account model
+- `Profile` - User profile information
+
+### Data Models
+- `DataEntry` - Primary data structure
+- `MetaData` - Associated metadata
+{% else -%}
+- `MainModel` - Primary model class
+{% endif %}
+
+{% elif module_type == "utils" -%}
+This directory contains utility functions and helper modules for {{ project_name }}.
+
+## 📁 Structure
+
+```
+{{ folder_name }}/
+├── __init__.py          # Utility exports
+{% if has_submodules -%}
+├── file_utils.py       # File operations
+├── string_utils.py     # String manipulation
+├── date_utils.py       # Date/time utilities
+└── validation.py       # Validation helpers
+{% endif -%}
+{% if has_tests -%}
+└── tests/              # Utility tests
+    ├── test_file_utils.py
+    └── test_validation.py
+{% endif %}
+```
+
+## 🛠️ Utilities Available
+
+{% if has_submodules -%}
+### File Operations
+- `read_file()` - Safe file reading
+- `write_file()` - File writing with backup
+- `ensure_directory()` - Directory creation
+
+### String Processing
+- `clean_string()` - String cleaning and normalization
+- `format_name()` - Name formatting utilities
+
+### Validation
+- `validate_email()` - Email validation
+- `validate_path()` - Path validation
+{% else -%}
+- `main_utility()` - Primary utility function
+{% endif %}
+
+{% elif module_type == "tests" -%}
+This directory contains tests for the {{ project_name }} project.
+
+## 📁 Structure
+
+```
+{{ folder_name }}/
+├── conftest.py         # Pytest configuration and fixtures
+{% if has_submodules -%}
+├── test_commands/      # Command tests
+├── test_models/        # Model tests
+├── test_utils/         # Utility tests
+└── integration/        # Integration tests
+{% endif -%}
+├── fixtures/           # Test data and fixtures
+└── __init__.py
+```
+
+## 🧪 Test Categories
+
+{% if has_submodules -%}
+### Unit Tests
+- **Commands**: Test individual command functionality
+- **Models**: Test data models and validation
+- **Utils**: Test utility functions
+
+### Integration Tests
+- **End-to-End**: Full workflow testing
+- **API**: API endpoint testing
+- **Database**: Database integration testing
+{% else -%}
+- **Unit Tests**: Individual component testing
+- **Integration Tests**: Component interaction testing
+{% endif %}
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest {{ folder_name }}/
+
+# Run specific test category
+pytest {{ folder_name }}/test_commands/
+
+# Run with coverage
+pytest {{ folder_name }}/ --cov={{ project_name | lower | replace(' ', '_') }}
+```
+
+{% else -%}
+This directory contains {{ module_type }} for the {{ project_name }} project.
+
+## 📁 Structure
+
+```
+{{ folder_name }}/
+├── __init__.py          # Module initialization
+{% if has_submodules -%}
+├── core.py             # Core functionality
+├── helpers.py          # Helper functions
+└── config.py           # Configuration
+{% endif -%}
+{% if has_tests -%}
+└── tests/              # Tests
+    └── test_core.py
+{% endif %}
+```
+
+{% endif -%}
+## 📚 Usage
+
+{% if has_examples -%}
+### Basic Usage
+
+```python
+from {{ project_name | lower | replace(' ', '_') }}.{{ folder_name }} import main_function
+
+# Example usage
+result = main_function()
+print(result)
+```
+
+### Advanced Usage
+
+```python
+from {{ project_name | lower | replace(' ', '_') }}.{{ folder_name }} import AdvancedClass
+
+# Create instance
+instance = AdvancedClass(param1="value1")
+
+# Use methods
+result = instance.process_data(data)
+```
+
+{% endif -%}
+## 🔗 Dependencies
+
+{% if module_type == "commands" -%}
+- `rich-click` - Enhanced CLI interface
+- `rich` - Rich text and beautiful formatting
+{% elif module_type == "models" -%}
+- `pydantic` - Data validation and serialization
+- `sqlalchemy` - Database ORM (if applicable)
+{% elif module_type == "utils" -%}
+- Standard library modules
+- `pathlib` - Path operations
+{% elif module_type == "tests" -%}
+- `pytest` - Testing framework
+- `pytest-cov` - Coverage reporting
+- `pytest-mock` - Mocking utilities
+{% endif %}
+
+## 🤝 Contributing
+
+When contributing to this module:
+
+1. **Add tests** for any new functionality
+2. **Update documentation** for API changes  
+3. **Follow naming conventions** established in the module
+4. **Run tests** before submitting PR
+
+{% if has_tests -%}
+```bash
+# Run module-specific tests
+pytest {{ folder_name }}/tests/
+
+# Check test coverage
+pytest {{ folder_name }}/tests/ --cov={{ folder_name }}
+```
+
+{% endif -%}
+## 📝 API Reference
+
+{% if has_submodules -%}
+### Main Classes
+
+- `MainClass` - Primary class for this module
+  - `method1(param)` - Description of method1
+  - `method2(param)` - Description of method2
+
+### Helper Functions
+
+- `helper_function(args)` - Description of helper function
+- `utility_function(args)` - Description of utility function
+
+{% else -%}
+### Functions
+
+- `main_function(args)` - Primary function of this module
+
+{% endif -%}
+---
+
+**Last Updated**: {{ current_date }} by {{ author_name }}
