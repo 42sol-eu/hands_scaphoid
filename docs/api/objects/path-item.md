@@ -1,8 +1,8 @@
-# PathItem API Reference
+# PathVariable API Reference
 
 ## API documentation
 
-::: hands_scaphoid.objects.PathItem
+::: hands_scaphoid.objects.PathVariable
     options:
       show_root_heading: true
       show_source: true

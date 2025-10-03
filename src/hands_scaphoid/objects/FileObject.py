@@ -7,22 +7,32 @@ without context management.
 
 File:
     name: FileObject.py
+    uuid: 63856607-707d-4e3b-8e15-3d81661086b0
     date: 2025-09-16
 
 Description:
     Pure file operations class - no context management
 
+Project:
+    name: hands_scaphoid
+    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+    url: https://github.com/42sol-eu/hands_scaphoid
+
 Authors: ["Andreas Häberle"]
 """
 
-from .ObjectItem import ObjectItem
-from ..types.ItemType import ItemType
-from pathlib import Path
-from typing import List, Optional, Union
-from ..__base__ import PathLike, console
+# [Standard library imports]
 import shutil
 
+# [Local imports]
+from ..__base__ import *
+from .ObjectItem import ObjectItem
+from ..types.ItemType import ItemType
 
+# [Third party imports]
+# none
+
+# [Code]
 class FileObject(ObjectItem):
     """
     Represents a file in the shell context.
@@ -322,3 +332,5 @@ class FileObject(ObjectItem):
         except Exception as e:
             console.print(f"[red]Error deleting file {path}:[/red] {e}")
             raise
+
+# [End of file]

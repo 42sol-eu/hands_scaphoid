@@ -1,15 +1,37 @@
+#!/usr/bin/env python3
+"""
+ItemCore module for hands-scaphoid package.
+
+This module provides the ItemCore class for pure item operations.
+---yaml
+File:
+    name: ItemCore.py
+    uuid: 268f89e1-abfc-4376-9e19-f6e78372e289
+    date: 2025-10-03
+
+Description:
+    Pure file operations class - no context management
+
+Project:
+    name: hands_scaphoid
+    uuid: 2945ba3b-2d66-4dff-b898-672c386f03f4
+    url: https://github.com/42sol-eu/hands_scaphoid
+
+Authors: ["Andreas Häberle"]
+"""
 
 # [Standard library imports]
 import os
 import yaml
 import json
 
-# [Third party imports]
-import tomli 
-
 # [Local imports]
 from ..__base__ import *
 from ..types.ItemType import ItemType
+
+# [Third party imports]
+import tomli 
+
 
 # [Code]
 

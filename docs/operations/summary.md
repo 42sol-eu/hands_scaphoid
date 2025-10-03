@@ -15,7 +15,7 @@ config:
 graph TD;
     ItemCore@{ shape: rounded} --> ObjectItem@{ shape: rounded}
     ObjectItem --> n1@{ shape: anchor}
-    ItemCore --> PathItem@{ shape: rounded};
+    ItemCore --> PathVariable@{ shape: rounded};
     ItemCore --> System['system']@{ shape: card};
     System['system'] -->|provides| Filesystem['filesystem'];
     ItemCore --> VariableItem@{ shape: rounded};
@@ -26,8 +26,8 @@ graph TD;
 - `ItemCore` is the top most generic items
 - `VariableItem` is a special simple `ItemCore` that hold configuration values like environment settings or default paths they have a `Key` (e.g. `$HOME`, `$PATH`, `$USER`) and a `Value` (e.g. `/home/user`, `/usr/bin:/bin`, `user`)
 - `Environment` holds  `Variable(s)` that hold information about the execution environment (e.g. paths, user info)
-- `PathItem` is a string representation of file system locations
-- `System` is a special `ItemCore` that holds addresses or URLs (`PathItem`) to remote file systems (e.g. network shares, cloud storage or inside containers)
+- `PathVariable` is a string representation of file system locations
+- `System` is a special `ItemCore` that holds addresses or URLs (`PathVariable`) to remote file systems (e.g. network shares, cloud storage or inside containers)
 
 
 ``` mermaid

@@ -4,6 +4,7 @@ from ..types.SimpleCommandType import SimpleCommandType
 from ..types.AccessCommandType import AccessCommandType
 from ..types.CommandType import CommandType
 
+from .ValidatorMixin import ValidationMixin
 from .ItemCore import ItemCore
 from .ObjectItem import ObjectItem
 from .VariableItem import VariableItem
@@ -29,6 +30,7 @@ __all__ = [
     "CommandType",
     
     # Core object classes
+    "ValidatorMixin",
     "ItemCore",
     "ObjectItem", 
     "VariableItem", 

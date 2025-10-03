@@ -24,10 +24,6 @@ import os
 import tempfile
 from pathlib import Path
 
-# Third-party imports
-import pytest
-from unittest import mock
-from unittest.mock import patch
 
 # Project imports
 from hands_scaphoid.commands.core_commands import (
@@ -51,6 +47,14 @@ from hands_scaphoid.commands.core_commands import (
     get_file_extension,
     which,
 )
+
+
+# Third-party imports
+import pytest
+from unittest import mock
+from unittest.mock import patch
+
+# [Code]
 def test_exists(tmp_path):
     file = tmp_path / "file.txt"
     file.write_text("content")

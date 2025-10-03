@@ -21,7 +21,7 @@ nav:
       - Items:
         - ItemCore: api/objects/item-core.md
         - VariableItem: api/objects/variable-item.md
-        - PathItem: api/objects/path-item.md
+        - PathVariable: api/objects/path-item.md
         - ObjectItem: api/objects/object-item.md
       - Core Objects:
         - DirectoryObject: api/objects/directory-object.md

@@ -85,7 +85,7 @@ Base class for all file system items.
 #### [VariableItem](objects/variable-item.md)
 Variable class for all file system items.
 
-#### [PathItem](objects/path-item.md)
+#### [PathVariable](objects/path-item.md)
 Path class for all file system items.
 
 
