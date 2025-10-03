@@ -1,3 +1,12 @@
+[project]
+name = "dna"
+version = "2025.0.1"
+description = "daily python tasks manager."
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Andreas Felix Häberle", email = "felix@42sol.eu"},
+]
 [tool.ruff]
 line-length = 88
 target-version = "py311"
